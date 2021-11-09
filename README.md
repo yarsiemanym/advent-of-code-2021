@@ -1,2 +1,3 @@
-# advent-of-code-2021
-Use Advent of Code 2021 to get better at Go.
+# Advent of Code 2021
+
+Using the [Advent of Code 2021](https://adventofcode.com/2021/) puzzles to become more proficient in [Go](https://golang.org/).
