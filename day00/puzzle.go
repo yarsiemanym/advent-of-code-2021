@@ -3,15 +3,16 @@
 package day00
 
 import (
-	"fmt"
+	"strconv"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
 const shortDateFormat = "2006-01-02"
 
-func Solve(path string) string {
+func Solve(path string) (string, string) {
 	common.InitLogging()
 
 	results := common.ParseFile(path, "\n", parseUser)
@@ -21,15 +22,20 @@ func Solve(path string) string {
 		users = append(users, result.(User))
 	}
 
-	// Do a thing
-
-	var answer string
+	var oldest User
 
 	for index, user := range users {
-		answer = answer + fmt.Sprintf("User %v = { name: %v, email: %v, birthday: %v }\n", index, user.Name, user.Email, user.Birthday.Format(shortDateFormat))
+		user.Age = time.Now().Sub(user.Birthday).Hours() / 24 / 365
+
+		log.Debugf("User %v = { name: %v, email: %v, birthday: %v, age: %v }\n",
+			index, user.Name, user.Email, user.Birthday.Format(shortDateFormat), user.Age)
+
+		if user.Age > oldest.Age {
+			oldest = user
+		}
 	}
 
-	return answer
+	return oldest.Name, strconv.Itoa(int(oldest.Age))
 }
 
 func parseUser(text string) (error, interface{}) {

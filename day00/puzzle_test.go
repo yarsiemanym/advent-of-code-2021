@@ -1,13 +1,28 @@
 package day00
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+	"time"
+
+	"github.com/yarsiemanym/advent-of-code-2021/common"
+)
 
 func Test_Solve_Input1(t *testing.T) {
 	input := "test1.txt"
-	expected := "User 0 = { name: Joe Schmoe, email: joe@email.com, birthday: 1983-11-24 }\nUser 1 = { name: John Q Public, email: johnyq@email.com, birthday: 1997-04-03 }\n"
-	actual := Solve(input)
 
-	if actual != expected {
-		t.Errorf("Expected:\n%v\nActual:\n%v", expected, actual)
+	expectedName := "Joe Schmoe"
+	birthday, err := time.Parse(shortDateFormat, "1983-11-24")
+	common.Check(err)
+	expectedAge := int(time.Now().Sub(birthday).Hours() / 24 / 365)
+
+	actualName, actualAge := Solve(input)
+
+	if actualName != expectedName {
+		t.Errorf("Expected:\n%v\nActual:\n%v", expectedName, actualName)
+	}
+
+	if actualAge != strconv.Itoa(expectedAge) {
+		t.Errorf("Expected:\n%v\nActual:\n%v", expectedAge, actualAge)
 	}
 }

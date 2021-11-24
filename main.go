@@ -11,20 +11,22 @@ import (
 
 func main() {
 	common.InitLogging()
+	common.InitSession()
 
 	day, err := strconv.Atoi(os.Args[1])
 	common.Check(err)
 
-	input := os.Args[2]
+	input := ensureInput(day)
 
-	var answer string
+	var answerPart1, answerPart2 string
 
 	switch day {
 	case 0:
-		answer = day00.Solve(input)
+		answerPart1, answerPart2 = day00.Solve(input)
 	default:
 		panic("Day %v is not implemented.")
 	}
 
-	fmt.Print(answer)
+	fmt.Printf("Part 1: %v\n", answerPart1)
+	fmt.Printf("Part 2: %v\n", answerPart2)
 }
