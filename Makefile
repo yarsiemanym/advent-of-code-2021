@@ -1,10 +1,10 @@
-build: 
+build:
 	- go build -o aoc
-	
-test: 
+
+test:
 	- go test common/*.go
 	- go test day00/*.go
 
-clean: 
+clean:
 	- go clean
 	- rm -f aoc
