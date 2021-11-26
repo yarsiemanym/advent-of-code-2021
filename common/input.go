@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func EnsureInputExists(day int) string {
+func EnsureInputExists(year int, day int) string {
 	log.Debug("Checking existence of input file.")
 	target := fmt.Sprintf("./day%02d/input.txt", day)
 	log.Tracef("target = \"%v\"", target)
@@ -18,7 +18,7 @@ func EnsureInputExists(day int) string {
 
 	if err != nil {
 		log.Debug("Local copy of input file not found.")
-		url := fmt.Sprintf("https://adventofcode.com/2021/day/%v/input", day)
+		url := fmt.Sprintf("https://adventofcode.com/%v/day/%v/input", year, day)
 		Download(url, target)
 	} else {
 		log.Debug("Local copy of input file found.")
@@ -33,7 +33,7 @@ func Download(source string, target string) {
 	log.Tracef("target = \"%v\"", target)
 
 	if len(Session) == 0 {
-		log.Panic("Cannot download puzzle input because the AOC_SESSION environment variable is not set.")
+		log.Panic("Cannot download puzzle input because the AOC_SESSION_TOKEN environment variable is not set.")
 	}
 
 	file, err := os.Create(target)
