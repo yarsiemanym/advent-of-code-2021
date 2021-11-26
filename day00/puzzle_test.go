@@ -12,7 +12,7 @@ func Test_Solve_Input1(t *testing.T) {
 	input := "test1.txt"
 
 	expectedName := "Joe Schmoe"
-	birthday, err := time.Parse(shortDateFormat, "1983-11-24")
+	birthday, err := time.Parse(common.ShortDateFormat, "1983-11-24")
 	common.Check(err)
 	expectedAge := int(time.Now().Sub(birthday).Hours() / 24 / 365)
 

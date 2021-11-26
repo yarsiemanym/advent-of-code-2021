@@ -10,8 +10,6 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-const shortDateFormat = "2006-01-02"
-
 func Solve(path string) (string, string) {
 	common.InitLogging()
 
@@ -28,7 +26,7 @@ func Solve(path string) (string, string) {
 		user.Age = time.Now().Sub(user.Birthday).Hours() / 24 / 365
 
 		log.Debugf("User %v = { name: %v, email: %v, birthday: %v, age: %v }\n",
-			index, user.Name, user.Email, user.Birthday.Format(shortDateFormat), user.Age)
+			index, user.Name, user.Email, user.Birthday.Format(common.ShortDateFormat), user.Age)
 
 		if user.Age > oldest.Age {
 			oldest = user
@@ -46,7 +44,7 @@ func parseUser(text string) interface{} {
 	tokens := common.Split(text, ",")
 	name := tokens[0]
 	email := tokens[1]
-	birthday, err := time.Parse(shortDateFormat, tokens[2])
+	birthday, err := time.Parse(common.ShortDateFormat, tokens[2])
 
 	common.Check(err)
 
