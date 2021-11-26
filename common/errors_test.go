@@ -17,7 +17,7 @@ func Test_check_NoError(t *testing.T) {
 func assertPanic(t *testing.T, fn func()) {
 	defer func() {
 		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
+			t.Errorf("The code did not panic.")
 		}
 	}()
 

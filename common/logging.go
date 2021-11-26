@@ -7,10 +7,10 @@ import (
 )
 
 func InitLogging() {
-	logLevel, err := log.ParseLevel(os.Getenv("AoC_LogLevel"))
+	logLevel, err := log.ParseLevel(os.Getenv("AOC_LOG_LEVEL"))
 
 	if err != nil {
-		logLevel = log.InfoLevel
+		logLevel = log.WarnLevel
 	}
 
 	log.SetLevel(logLevel)

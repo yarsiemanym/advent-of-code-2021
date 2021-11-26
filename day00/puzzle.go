@@ -38,9 +38,9 @@ func Solve(path string) (string, string) {
 	return oldest.Name, strconv.Itoa(int(oldest.Age))
 }
 
-func parseUser(text string) (error, interface{}) {
+func parseUser(text string) interface{} {
 	if text == "" {
-		return nil, nil
+		return nil
 	}
 
 	tokens := common.Split(text, ",")
@@ -48,9 +48,7 @@ func parseUser(text string) (error, interface{}) {
 	email := tokens[1]
 	birthday, err := time.Parse(shortDateFormat, tokens[2])
 
-	if err != nil {
-		return err, nil
-	}
+	common.Check(err)
 
 	result := User{
 		Name:     name,
@@ -58,5 +56,5 @@ func parseUser(text string) (error, interface{}) {
 		Birthday: birthday,
 	}
 
-	return nil, result
+	return result
 }

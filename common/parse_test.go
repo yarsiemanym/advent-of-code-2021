@@ -10,17 +10,15 @@ type Thingamajig struct {
 	stringProp string
 }
 
-func Parse(text string) (error, interface{}) {
+func Parse(text string) interface{} {
 	if text == "" {
-		return nil, nil
+		return nil
 	}
 
 	tokens := Split(text, " ")
-	intProp, err := strconv.Atoi(tokens[0])
 
-	if err != nil {
-		return err, nil
-	}
+	intProp, err := strconv.Atoi(tokens[0])
+	Check(err)
 
 	stringProp := tokens[1]
 
@@ -29,7 +27,7 @@ func Parse(text string) (error, interface{}) {
 		stringProp: stringProp,
 	}
 
-	return nil, result
+	return result
 }
 
 func Test_ParseToken(t *testing.T) {
@@ -37,17 +35,17 @@ func Test_ParseToken(t *testing.T) {
 	result := ParseToken(text, Parse)
 
 	if result == nil {
-		t.Error("Returned nil")
+		t.Error("Returned nil.")
 	}
 
 	thing := result.(Thingamajig)
 
 	if thing.intProp != 1 {
-		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`", thing.intProp)
+		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`.", thing.intProp)
 	}
 
 	if thing.stringProp != "blah" {
-		t.Errorf("Expected `thingamajig.intProp = 'blah'` but got `thingamajig.intProp = '%v'`", thing.stringProp)
+		t.Errorf("Expected `thingamajig.intProp = \"blah\"` but got `thingamajig.intProp = \"%v\"`.", thing.stringProp)
 	}
 }
 
@@ -56,31 +54,31 @@ func Test_ParseText(t *testing.T) {
 	results := ParseText(text, "\n", Parse)
 
 	if results == nil {
-		t.Error("Returned nil")
+		t.Error("Returned nil.")
 	}
 
 	if len(results) != 2 {
-		t.Errorf("Expected 2 results but got %v", len(results))
+		t.Errorf("Expected 2 results but got %v.", len(results))
 	}
 
 	thing := results[0].(Thingamajig)
 
 	if thing.intProp != 1 {
-		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`", thing.intProp)
+		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`.", thing.intProp)
 	}
 
 	if thing.stringProp != "blah" {
-		t.Errorf("Expected `thingamajig.intProp = 'blah'` but got `thingamajig.intProp = '%v'`", thing.stringProp)
+		t.Errorf("Expected `thingamajig.intProp = \"blah\"` but got `thingamajig.intProp = \"%v\"`.", thing.stringProp)
 	}
 
 	thing = results[1].(Thingamajig)
 
 	if thing.intProp != 2 {
-		t.Errorf("Expected `thingamajig.intProp = 2` but got `thingamajig.intProp = %v`", thing.intProp)
+		t.Errorf("Expected `thingamajig.intProp = 2` but got `thingamajig.intProp = %v`.", thing.intProp)
 	}
 
 	if thing.stringProp != "foo" {
-		t.Errorf("Expected `thingamajig.intProp = 'foo'` but got `thingamajig.intProp = '%v'`", thing.stringProp)
+		t.Errorf("Expected `thingamajig.intProp = \"foo\"` but got `thingamajig.intProp = \"%v\"`.", thing.stringProp)
 	}
 }
 
@@ -93,26 +91,26 @@ func Test_ParseFile(t *testing.T) {
 	}
 
 	if len(results) != 2 {
-		t.Errorf("Expected 2 results but got %v", len(results))
+		t.Errorf("Expected 2 results but got %v.", len(results))
 	}
 
 	thing := results[0].(Thingamajig)
 
 	if thing.intProp != 1 {
-		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`", thing.intProp)
+		t.Errorf("Expected `thingamajig.intProp = 1` but got `thingamajig.intProp = %v`.", thing.intProp)
 	}
 
 	if thing.stringProp != "blah" {
-		t.Errorf("Expected `thingamajig.intProp = 'blah'` but got `thingamajig.intProp = '%v'`", thing.stringProp)
+		t.Errorf("Expected `thingamajig.intProp = \"blah\"` but got `thingamajig.intProp = \"%v\"`.", thing.stringProp)
 	}
 
 	thing = results[1].(Thingamajig)
 
 	if thing.intProp != 2 {
-		t.Errorf("Expected `thingamajig.intProp = 2` but got `thingamajig.intProp = %v`", thing.intProp)
+		t.Errorf("Expected `thingamajig.intProp = 2` but got `thingamajig.intProp = %v`.", thing.intProp)
 	}
 
 	if thing.stringProp != "foo" {
-		t.Errorf("Expected `thingamajig.intProp = 'foo'` but got `thingamajig.intProp = '%v'`", thing.stringProp)
+		t.Errorf("Expected `thingamajig.intProp = \"foo\"` but got `thingamajig.intProp = \"%v\"`.", thing.stringProp)
 	}
 }

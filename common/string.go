@@ -21,15 +21,15 @@ func Peek(text string, max int) string {
 }
 
 func Split(text string, delimiter string) []string {
-	log.Debugf("Splitting text on '%v'", strings.Replace(delimiter, "\n", "\\n", -1))
-	log.Debugf("Text is %v characters long", len(text))
-	log.Tracef("Text is '%v'", Peek(text, PEEK_MAX_DEFAULT))
+	log.Debugf("Splitting text on \"%v\".", strings.Replace(delimiter, "\n", "\\n", -1))
+	log.Debugf("Text is %v characters long.", len(text))
+	log.Tracef("Text is \"%v\".", Peek(text, PEEK_MAX_DEFAULT))
 	tokens := strings.Split(text, delimiter)
-	log.Debugf("Resulting in %v tokens", len(tokens))
+	log.Debugf("Resulting in %v tokens.", len(tokens))
 
 	if log.GetLevel() == log.TraceLevel {
 		for index, token := range tokens {
-			log.Tracef("Token %v = %v", index, Peek(token, PEEK_MAX_DEFAULT))
+			log.Tracef("tokens[%v] = \"%v\"", index, Peek(token, PEEK_MAX_DEFAULT))
 		}
 	}
 

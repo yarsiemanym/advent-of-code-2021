@@ -4,21 +4,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type ParseFunc func(string) (error, interface{})
+type ParseFunc func(string) interface{}
 
 func ParseToken(token string, fn ParseFunc) interface{} {
-	log.Debug("Parsing token")
-	log.Debugf("Token is %v characters long", len(token))
-	log.Tracef("Token is '%v'", Peek(token, PEEK_MAX_DEFAULT))
-	err, result := fn(token)
-	Check(err)
+	log.Debug("Parsing token.")
+	log.Debugf("Token is %v characters long.", len(token))
+	log.Tracef("Token is \"%v\".", Peek(token, PEEK_MAX_DEFAULT))
+	result := fn(token)
 	return result
 }
 
 func ParseText(text string, delimiter string, fn ParseFunc) []interface{} {
-	log.Debug("Parsing text")
-	log.Debugf("Text is %v characters long", len(text))
-	log.Tracef("Text is '%v'", Peek(text, PEEK_MAX_DEFAULT))
+	log.Debug("Parsing text.")
+	log.Debugf("Text is %v characters long.", len(text))
+	log.Tracef("Text is \"%v\".", Peek(text, PEEK_MAX_DEFAULT))
 
 	tokens := Split(text, delimiter)
 	var results []interface{}

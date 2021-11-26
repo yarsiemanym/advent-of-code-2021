@@ -10,27 +10,31 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-func ensureInput(day int) string {
+func ensureInputExists(day int) string {
+	log.Debug("Checking existence of input file.")
 	path := fmt.Sprintf("./day%02d/input.txt", day)
-	log.Debug("Checking existence of input file")
-	log.Tracef("path = '%v'", path)
+	log.Tracef("path = \"%v\"", path)
 	_, err := os.Open(path)
 
 	if err != nil {
-		log.Debug("Input file does not exist")
+		log.Debug("Local copy of input file not found.")
 		url := fmt.Sprintf("https://adventofcode.com/2021/day/%v/input", day)
 		download(url, path)
 	} else {
-		log.Debug("Using cached input file")
+		log.Debug("Local copy of input file found.")
 	}
 
 	return path
 }
 
 func download(url string, path string) {
-	log.Info("Downloading input file")
-	log.Tracef("url = '%v'", url)
-	log.Tracef("path = '%v'", path)
+	log.Debug("Downloading input file.")
+	log.Tracef("url = \"%v\"", url)
+	log.Tracef("path = \"%v\"", path)
+
+	if len(common.Session) == 0 {
+		log.Panic("Cannot download puzzle input because the AOC_SESSION environment variable is not set.")
+	}
 
 	file, err := os.Create(path)
 	common.Check(err)
@@ -61,6 +65,6 @@ func download(url string, path string) {
 
 	defer file.Close()
 
-	log.Debugf("%v bytes downloaded", size)
-	log.Debug("Input file saved")
+	log.Debugf("%v bytes downloaded.", size)
+	log.Debug("Input file saved.")
 }
