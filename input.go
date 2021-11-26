@@ -12,31 +12,32 @@ import (
 
 func ensureInputExists(day int) string {
 	log.Debug("Checking existence of input file.")
-	path := fmt.Sprintf("./day%02d/input.txt", day)
-	log.Tracef("path = \"%v\"", path)
-	_, err := os.Open(path)
+	target := fmt.Sprintf("./day%02d/input.txt", day)
+	log.Tracef("target = \"%v\"", target)
+
+	_, err := os.Open(target)
 
 	if err != nil {
 		log.Debug("Local copy of input file not found.")
 		url := fmt.Sprintf("https://adventofcode.com/2021/day/%v/input", day)
-		download(url, path)
+		download(url, target)
 	} else {
 		log.Debug("Local copy of input file found.")
 	}
 
-	return path
+	return target
 }
 
-func download(url string, path string) {
+func download(source string, target string) {
 	log.Debug("Downloading input file.")
-	log.Tracef("url = \"%v\"", url)
-	log.Tracef("path = \"%v\"", path)
+	log.Tracef("source = \"%v\"", source)
+	log.Tracef("target = \"%v\"", target)
 
 	if len(common.Session) == 0 {
 		log.Panic("Cannot download puzzle input because the AOC_SESSION environment variable is not set.")
 	}
 
-	file, err := os.Create(path)
+	file, err := os.Create(target)
 	common.Check(err)
 
 	client := http.Client{}
@@ -50,7 +51,7 @@ func download(url string, path string) {
 		Secure:   true,
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", source, nil)
 	common.Check(err)
 
 	req.AddCookie(cookie)

@@ -27,6 +27,8 @@ func main() {
 		log.Fatalf("'%v' is not an integer", arg1)
 	}
 
+	fmt.Printf("Running day %v.\n", day)
+
 	var input string
 
 	switch day {
