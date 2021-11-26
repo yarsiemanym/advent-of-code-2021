@@ -34,7 +34,7 @@ func main() {
 	switch day {
 	case 0:
 		log.Info("Ensuring input file exists ...")
-		input = ensureInputExists(day)
+		input = common.EnsureInputExists(day)
 		log.Info("Input file exists.")
 	default:
 		log.Fatalf("Day %v has not been implemented.", day)

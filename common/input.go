@@ -1,4 +1,4 @@
-package main
+package common
 
 import (
 	"fmt"
@@ -7,10 +7,9 @@ import (
 	"os"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-func ensureInputExists(day int) string {
+func EnsureInputExists(day int) string {
 	log.Debug("Checking existence of input file.")
 	target := fmt.Sprintf("./day%02d/input.txt", day)
 	log.Tracef("target = \"%v\"", target)
@@ -20,7 +19,7 @@ func ensureInputExists(day int) string {
 	if err != nil {
 		log.Debug("Local copy of input file not found.")
 		url := fmt.Sprintf("https://adventofcode.com/2021/day/%v/input", day)
-		download(url, target)
+		Download(url, target)
 	} else {
 		log.Debug("Local copy of input file found.")
 	}
@@ -28,23 +27,23 @@ func ensureInputExists(day int) string {
 	return target
 }
 
-func download(source string, target string) {
+func Download(source string, target string) {
 	log.Debug("Downloading input file.")
 	log.Tracef("source = \"%v\"", source)
 	log.Tracef("target = \"%v\"", target)
 
-	if len(common.Session) == 0 {
+	if len(Session) == 0 {
 		log.Panic("Cannot download puzzle input because the AOC_SESSION environment variable is not set.")
 	}
 
 	file, err := os.Create(target)
-	common.Check(err)
+	Check(err)
 
 	client := http.Client{}
 
 	cookie := &http.Cookie{
 		Name:     "session",
-		Value:    common.Session,
+		Value:    Session,
 		Domain:   ".adventofcode.com",
 		Path:     "/",
 		HttpOnly: true,
@@ -52,17 +51,17 @@ func download(source string, target string) {
 	}
 
 	req, err := http.NewRequest("GET", source, nil)
-	common.Check(err)
+	Check(err)
 
 	req.AddCookie(cookie)
 
 	resp, err := client.Do(req)
-	common.Check(err)
+	Check(err)
 
 	defer resp.Body.Close()
 
 	size, err := io.Copy(file, resp.Body)
-	common.Check(err)
+	Check(err)
 
 	defer file.Close()
 
