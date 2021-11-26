@@ -23,13 +23,13 @@ func main() {
 		return
 	}
 
-	day := SanitizeDayArg(arg1)
+	day := sanitizeDayArg(arg1)
 
 	fmt.Printf("Running day %v solution.\n", day)
 
 	var input string
 
-	if IsPuzzleUnlocked(day) {
+	if isPuzzleUnlocked(day) {
 		log.Info("Ensuring input file exists ...")
 		input = common.EnsureInputExists(2021, day)
 		log.Info("Input file exists.")
@@ -81,7 +81,7 @@ func printUsage() {
 	fmt.Println("")
 }
 
-func SanitizeDayArg(arg string) int {
+func sanitizeDayArg(arg string) int {
 	log.Debug("Sanitizing day argument.")
 	log.Tracef("arg = \"%v\"", arg)
 
@@ -98,7 +98,7 @@ func SanitizeDayArg(arg string) int {
 	return day
 }
 
-func IsPuzzleUnlocked(day int) bool {
+func isPuzzleUnlocked(day int) bool {
 	log.Debugf("Checking if day %v has been unlocked.", day)
 
 	est, err := time.LoadLocation(("EST"))
