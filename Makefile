@@ -9,7 +9,9 @@ LOG_LEVEL ?= warn
 test: test.log
 
 test.log: $(SOURCE) $(TEST_INPUT)
-	@echo "go test common/*.go" | tee ./test.log
+	@rm -f test.log
+	@touch test.log
+	@echo "go test common/*.go" | tee -a ./test.log
 	@go test common/*.go | tee -a ./test.log
 
 	@echo "go test day00/*.go" | tee -a ./test.log
