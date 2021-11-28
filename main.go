@@ -25,7 +25,7 @@ func main() {
 
 	day := sanitizeDayArg(arg1)
 
-	fmt.Printf("Running day %v solution.\n", day)
+	fmt.Printf("Day %v\n", day)
 
 	var input string
 
@@ -52,11 +52,9 @@ func main() {
 
 	log.Info("Puzzle solved!")
 
+	fmt.Printf("\tPart 1: %v\n", answerPart1)
+	fmt.Printf("\tPart 2: %v\n", answerPart2)
 	fmt.Println("")
-	fmt.Println("Answers")
-	fmt.Println("----------")
-	fmt.Printf("Part 1: %v\n", answerPart1)
-	fmt.Printf("Part 2: %v\n", answerPart2)
 }
 
 func printUsage() {
