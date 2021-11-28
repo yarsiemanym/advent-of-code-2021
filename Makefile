@@ -1,24 +1,29 @@
 .DEFAULT_GOAL := build
-SRC := $(wildcard *.go **/*.go)
+SOURCE := $(wildcard *.go **/*.go)
+TEST_INPUT := $(wildcard test*.txt **/test*.txt)
 GO_PATH := $(shell go env GOPATH)
 INSTALL_PATH := $(GO_PATH)/bin/advent-of-code-2021
 LOG_LEVEL ?= warn
 
 .PHONY:
+test: test.log
+
+test.log: $(SOURCE) $(TEST_INPUT)
+	@echo "go test common/*.go" | tee ./test.log
+	@go test common/*.go | tee -a ./test.log
+
+	@echo "go test day00/*.go" | tee -a ./test.log
+	@go test day00/*.go | tee -a ./test.log
+
+.PHONY:
 build: advent-of-code-2021
 
-advent-of-code-2021: $(SRC)
+advent-of-code-2021: $(SOURCE)
 	go build
 
 .PHONY:
-install: $(INSTALL_PATH)
-
-$(INSTALL_PATH): $(SRC)
-	go install 
-
-.PHONY:
-uninstall:
-	rm -f $(INSTALL_PATH)
+clean: 
+	go clean
 
 .PHONY:
 run: build
@@ -54,41 +59,17 @@ run-all: build
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 25
 
 .PHONY:
-clean: 
-	go clean
+install: $(INSTALL_PATH)
+
+$(INSTALL_PATH): $(SOURCE)
+	go install 
 
 .PHONY:
-test:
-	go test common/*.go
-	go test day00/*.go
-	@#go test day01/*.go
-	@#go test day02/*.go
-	@#go test day03/*.go
-	@#go test day04/*.go
-	@#go test day05/*.go
-	@#go test day06/*.go
-	@#go test day07/*.go
-	@#go test day08/*.go
-	@#go test day09/*.go
-	@#go test day10/*.go
-	@#go test day11/*.go
-	@#go test day12/*.go
-	@#go test day13/*.go
-	@#go test day14/*.go
-	@#go test day15/*.go
-	@#go test day16/*.go
-	@#go test day17/*.go
-	@#go test day18/*.go
-	@#go test day19/*.go
-	@#go test day20/*.go
-	@#go test day21/*.go
-	@#go test day22/*.go
-	@#go test day23/*.go
-	@#go test day24/*.go
-	@#go test day25/*.go
+uninstall:
+	rm -f $(INSTALL_PATH)
 
 .PHONY:
-setup: /usr/local/go/bin/go ~/.go deps day25
+setup: /usr/local/go/bin/go ~/.go deps
 
 .PHONY:
 deps:
@@ -101,6 +82,3 @@ deps:
 ~/.go:
 	echo "export PATH=\$$PATH:/usr/local/go/bin:\$$HOME/go/bin:\$$HOME/.local/bin" | tee $(HOME)/.go
 	echo -e "\n. \$$HOME/.go" | tee -a $(HOME)/.bashrc
-
-day25:
-	for DAY in $$(seq -f "%02g" 1 25); do if [ ! -d "day$$DAY" ]; then mkdir "day$$DAY"; fi; done
