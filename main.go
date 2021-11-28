@@ -34,7 +34,8 @@ func main() {
 		input = common.EnsureInputExists(2021, day)
 		log.Info("Input file exists.")
 	} else {
-		log.Fatalf("Day %v has not been unlocked.", day)
+		log.Warnf("Day %v has not been unlocked.", day)
+		return
 	}
 
 	var answerPart1, answerPart2 string
@@ -45,7 +46,8 @@ func main() {
 	case 0:
 		answerPart1, answerPart2 = day00.Solve(input)
 	default:
-		log.Fatalf("Day %v has not been implemented.", day)
+		log.Warnf("Day %v has not been implemented.", day)
+		return
 	}
 
 	log.Info("Puzzle solved!")

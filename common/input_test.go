@@ -8,8 +8,6 @@ import (
 func Test_EnsureInputExists(t *testing.T) {
 	InitSession()
 
-	os.Mkdir("day01", 0766)
-
 	expectedInputFile := "./day01/input.txt"
 	os.Remove(expectedInputFile)
 

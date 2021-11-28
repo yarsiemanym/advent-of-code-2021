@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -37,6 +38,13 @@ func Download(source string, target string) {
 	}
 
 	file, err := os.Create(target)
+
+	if os.IsNotExist(err) {
+		dir := path.Dir(target)
+		os.Mkdir(dir, 0766)
+		file, err = os.Create(target)
+	}
+
 	Check(err)
 
 	client := http.Client{}
