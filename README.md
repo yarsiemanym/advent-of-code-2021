@@ -8,7 +8,7 @@ Using the [Advent of Code 2021](https://adventofcode.com/2021/) puzzles to becom
 
 Required for this application to automatically download your user-specific input files for each puzzle. You can find your session token in adventofcode.com's session cookie in your browser.
 
-If not set, the application will not be able to automatically download puzzle inputs. You will have to download each manually and save it to the correct location, e.g. `./day01/input.text`.
+If not set, the application will not be able to automatically download puzzle inputs. You will have to download each manually and save it to the correct location, e.g. `./day01/input.txt`.
 
 #### AOC_LOG_LEVEL
 
