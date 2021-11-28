@@ -10,17 +10,15 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-func Solve(path string) (string, string) {
-	common.InitLogging()
+func Solve(puzzle common.Puzzle) common.Answer {
+	results := common.ParseFile(puzzle.InputFile, "\n", parseUser)
 
-	results := common.ParseFile(path, "\n", parseUser)
-
-	var users []User
+	var users []user
 	for _, result := range results {
-		users = append(users, result.(User))
+		users = append(users, result.(user))
 	}
 
-	var oldest User
+	var oldest user
 
 	for index, user := range users {
 		user.Age = time.Now().Sub(user.Birthday).Hours() / 24 / 365
@@ -33,7 +31,13 @@ func Solve(path string) (string, string) {
 		}
 	}
 
-	return oldest.Name, strconv.Itoa(int(oldest.Age))
+	answer := common.Answer{
+		Day:   puzzle.Day,
+		Part1: oldest.Name,
+		Part2: strconv.Itoa(int(oldest.Age)),
+	}
+
+	return answer
 }
 
 func parseUser(text string) interface{} {
@@ -48,7 +52,7 @@ func parseUser(text string) interface{} {
 
 	common.Check(err)
 
-	result := User{
+	result := user{
 		Name:     name,
 		Email:    email,
 		Birthday: birthday,

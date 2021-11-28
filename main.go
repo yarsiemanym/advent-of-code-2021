@@ -15,46 +15,23 @@ import (
 func main() {
 	common.InitLogging()
 	common.InitSession()
+	checkForHelpCommand()
 
+	puzzle := setupPuzzle()
+	fmt.Printf("Day %v\n", puzzle.Day)
+	answer := puzzle.Solve()
+	fmt.Printf("\tPart 1 Answer: %v\n", answer.Part1)
+	fmt.Printf("\tPart 2 Answer: %v\n", answer.Part2)
+	fmt.Println("")
+}
+
+func checkForHelpCommand() {
 	arg1 := os.Args[1]
 
-	if arg1 == "-h" || arg1 == "help" {
+	if arg1 == "-h" || arg1 == "--help" || arg1 == "help" {
 		printUsage()
-		return
+		os.Exit(0)
 	}
-
-	day := sanitizeDayArg(arg1)
-
-	fmt.Printf("Day %v\n", day)
-
-	var input string
-
-	if isPuzzleUnlocked(day) {
-		log.Info("Ensuring input file exists ...")
-		input = common.EnsureInputExists(2021, day)
-		log.Info("Input file exists.")
-	} else {
-		log.Warnf("Day %v has not been unlocked.", day)
-		return
-	}
-
-	var answerPart1, answerPart2 string
-
-	log.Info("Solving puzzle ...")
-
-	switch day {
-	case 0:
-		answerPart1, answerPart2 = day00.Solve(input)
-	default:
-		log.Warnf("Day %v has not been implemented.", day)
-		return
-	}
-
-	log.Info("Puzzle solved!")
-
-	fmt.Printf("\tPart 1: %v\n", answerPart1)
-	fmt.Printf("\tPart 2: %v\n", answerPart2)
-	fmt.Println("")
 }
 
 func printUsage() {
@@ -81,6 +58,37 @@ func printUsage() {
 	fmt.Println("")
 }
 
+func setupPuzzle() common.Puzzle {
+	log.Debug("Setting up puzzle.")
+	day := sanitizeDayArg(os.Args[1])
+
+	var input string
+
+	if isPuzzleUnlocked(day) {
+		log.Info("Ensuring input file exists.")
+		input = common.EnsureInputExists(2021, day)
+		log.Info("Input file exists.")
+	} else {
+		log.Warnf("Day %v has not been unlocked.", day)
+		os.Exit(0)
+	}
+
+	puzzle := common.Puzzle{
+		Day:       day,
+		InputFile: input,
+	}
+
+	switch puzzle.Day {
+	case 0:
+		puzzle.SetSolution(day00.Solve)
+	default:
+		log.Warnf("Day %v has no solution yet.", puzzle.Day)
+		os.Exit(0)
+	}
+
+	return puzzle
+}
+
 func sanitizeDayArg(arg string) int {
 	log.Debug("Sanitizing day argument.")
 	log.Tracef("arg = \"%v\"", arg)
@@ -95,6 +103,7 @@ func sanitizeDayArg(arg string) int {
 		log.Fatalf("%v is not between 0 and 25.", arg)
 	}
 
+	log.Tracef("day = %v", day)
 	return day
 }
 
@@ -105,15 +114,12 @@ func isPuzzleUnlocked(day int) bool {
 	common.Check(err)
 
 	var puzzleUnlockAt time.Time
-
 	if day != 0 {
 		puzzleUnlockAt = time.Date(2021, 11, 30, 0, 0, 0, 0, est).Add(time.Hour * 24 * time.Duration(day))
 	}
-
 	log.Tracef("puzzleUnlockAt = \"%v\"", puzzleUnlockAt)
 
 	isUnlocked := puzzleUnlockAt.Before(time.Now())
-
 	log.Tracef("isUnlocked = %v", isUnlocked)
 
 	return isUnlocked

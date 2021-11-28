@@ -2,7 +2,7 @@ package day00
 
 import "time"
 
-type User struct {
+type user struct {
 	Name     string
 	Email    string
 	Birthday time.Time

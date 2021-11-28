@@ -9,20 +9,23 @@ import (
 )
 
 func Test_Solve_Input1(t *testing.T) {
-	input := "test1.txt"
+	puzzle := common.Puzzle{
+		Day:       0,
+		InputFile: "test1.txt",
+	}
 
 	expectedName := "Joe Schmoe"
 	birthday, err := time.Parse(common.ShortDateFormat, "1983-11-24")
 	common.Check(err)
 	expectedAge := int(time.Now().Sub(birthday).Hours() / 24 / 365)
 
-	actualName, actualAge := Solve(input)
+	answer := Solve(puzzle)
 
-	if actualName != expectedName {
-		t.Errorf("Expected:\n%v\nActual:\n%v", expectedName, actualName)
+	if answer.Part1 != expectedName {
+		t.Errorf("Expected:\n%v\nActual:\n%v", expectedName, answer.Part1)
 	}
 
-	if actualAge != strconv.Itoa(expectedAge) {
-		t.Errorf("Expected:\n%v\nActual:\n%v", expectedAge, actualAge)
+	if answer.Part2 != strconv.Itoa(expectedAge) {
+		t.Errorf("Expected:\n%v\nActual:\n%v", expectedAge, answer.Part2)
 	}
 }
