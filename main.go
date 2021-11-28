@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/mitchellh/go-wordwrap"
 	log "github.com/sirupsen/logrus"
@@ -18,11 +17,9 @@ func main() {
 	checkForHelpCommand()
 
 	puzzle := setupPuzzle()
-	fmt.Printf("Day %v\n", puzzle.Day)
 	answer := puzzle.Solve()
-	fmt.Printf("\tPart 1 Answer: %v\n", answer.Part1)
-	fmt.Printf("\tPart 2 Answer: %v\n", answer.Part2)
-	fmt.Println("")
+	fmt.Printf("Part 1 Answer: %v\n", answer.Part1)
+	fmt.Printf("Part 2 Answer: %v\n", answer.Part2)
 }
 
 func checkForHelpCommand() {
@@ -62,20 +59,9 @@ func setupPuzzle() common.Puzzle {
 	log.Debug("Setting up puzzle.")
 	day := sanitizeDayArg(os.Args[1])
 
-	var input string
-
-	if isPuzzleUnlocked(day) {
-		log.Info("Ensuring input file exists.")
-		input = common.EnsureInputExists(2021, day)
-		log.Info("Input file exists.")
-	} else {
-		log.Warnf("Day %v has not been unlocked.", day)
-		os.Exit(0)
-	}
-
 	puzzle := common.Puzzle{
-		Day:       day,
-		InputFile: input,
+		Year: 2021,
+		Day:  day,
 	}
 
 	switch puzzle.Day {
@@ -105,22 +91,4 @@ func sanitizeDayArg(arg string) int {
 
 	log.Tracef("day = %v", day)
 	return day
-}
-
-func isPuzzleUnlocked(day int) bool {
-	log.Debugf("Checking if day %v has been unlocked.", day)
-
-	est, err := time.LoadLocation(("EST"))
-	common.Check(err)
-
-	var puzzleUnlockAt time.Time
-	if day != 0 {
-		puzzleUnlockAt = time.Date(2021, 11, 30, 0, 0, 0, 0, est).Add(time.Hour * 24 * time.Duration(day))
-	}
-	log.Tracef("puzzleUnlockAt = \"%v\"", puzzleUnlockAt)
-
-	isUnlocked := puzzleUnlockAt.Before(time.Now())
-	log.Tracef("isUnlocked = %v", isUnlocked)
-
-	return isUnlocked
 }
