@@ -2,10 +2,7 @@ package common
 
 import (
 	"fmt"
-	"io"
-	"net/http"
 	"os"
-	"path"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -71,60 +68,11 @@ func (puzzle *Puzzle) EnsureInputFileExists() string {
 	if err != nil {
 		log.Debug("Local copy of input file not found.")
 		url := fmt.Sprintf("https://adventofcode.com/%v/day/%v/input", puzzle.Year, puzzle.Day)
-		downloadInputFile(url, target)
+		DownloadFile(url, target)
 	} else {
 		log.Debug("Local copy of input file found.")
 	}
 
 	puzzle.InputFile = target
 	return target
-}
-
-func downloadInputFile(source string, target string) {
-	log.Debug("Downloading input file.")
-	log.Tracef("source = \"%v\"", source)
-	log.Tracef("target = \"%v\"", target)
-
-	if len(Session) == 0 {
-		log.Panic("Cannot download puzzle input because the AOC_SESSION_TOKEN environment variable is not set.")
-	}
-
-	file, err := os.Create(target)
-
-	if os.IsNotExist(err) {
-		dir := path.Dir(target)
-		os.Mkdir(dir, 0766)
-		file, err = os.Create(target)
-	}
-
-	Check(err)
-
-	client := http.Client{}
-
-	cookie := &http.Cookie{
-		Name:     "session",
-		Value:    Session,
-		Domain:   ".adventofcode.com",
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-	}
-
-	req, err := http.NewRequest("GET", source, nil)
-	Check(err)
-
-	req.AddCookie(cookie)
-
-	resp, err := client.Do(req)
-	Check(err)
-
-	defer resp.Body.Close()
-
-	size, err := io.Copy(file, resp.Body)
-	Check(err)
-
-	defer file.Close()
-
-	log.Debugf("%v bytes downloaded.", size)
-	log.Debug("Input file saved.")
 }
