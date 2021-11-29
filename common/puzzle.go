@@ -21,16 +21,16 @@ func (puzzle *Puzzle) SetSolution(solution Solution) {
 
 func (puzzle Puzzle) Solve() Answer {
 
+	if !puzzle.IsUnlocked() {
+		log.Panicf("Day %v has not been unlocked.", puzzle.Day)
+	}
+
 	log.Info("Ensuring input file exists.")
 	puzzle.EnsureInputFileExists()
 	log.Info("Input file exists.")
 
 	if puzzle.solution == nil {
 		log.Panicf("Solution is not set.")
-	}
-
-	if !puzzle.IsUnlocked() {
-		log.Panicf("Day %v has not been unlocked.", puzzle.Day)
 	}
 
 	log.Info("Solving puzzle.")
