@@ -82,7 +82,7 @@ func sanitizeDayArg(arg string) int {
 	day, err := strconv.Atoi(arg)
 
 	if err != nil {
-		log.Fatalf("'%v' is not an integer.", arg)
+		log.Fatalf("\"%v\" is not an integer.", arg)
 	}
 
 	if day < 0 || day > 25 {
