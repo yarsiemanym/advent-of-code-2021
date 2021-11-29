@@ -17,7 +17,7 @@ func Test_Solve_Input1(t *testing.T) {
 	expectedName := "Joe Schmoe"
 	birthday, err := time.Parse(common.ShortDateFormat, "1983-11-24")
 	common.Check(err)
-	expectedAge := int(time.Now().Sub(birthday).Hours() / 24 / 365)
+	expectedAge := int(time.Since(birthday).Hours() / 24 / 365)
 
 	answer := Solve(puzzle)
 

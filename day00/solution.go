@@ -21,7 +21,7 @@ func Solve(puzzle common.Puzzle) common.Answer {
 	var oldest user
 
 	for index, user := range users {
-		user.Age = time.Now().Sub(user.Birthday).Hours() / 24 / 365
+		user.Age = float64(time.Since(user.Birthday).Hours() / 24 / 365)
 
 		log.Debugf("User %v = { name: %v, email: %v, birthday: %v, age: %v }\n",
 			index, user.Name, user.Email, user.Birthday.Format(common.ShortDateFormat), user.Age)
@@ -32,6 +32,7 @@ func Solve(puzzle common.Puzzle) common.Answer {
 	}
 
 	answer := common.Answer{
+		Year:  puzzle.Year,
 		Day:   puzzle.Day,
 		Part1: oldest.Name,
 		Part2: strconv.Itoa(int(oldest.Age)),
