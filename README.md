@@ -66,7 +66,6 @@ This repo also contains a day 0 mock puzzle to do some integration testing of al
 $ make run DAY=0
 go build
 AOC_LOG_LEVEL=warn ./advent-of-code-2021 0
-Day 0
-	Part 1 Answer: Joe Schmoe
-	Part 2 Answer: 38
+Part 1 Answer: Joe Schmoe
+Part 2 Answer: 38
 ```
