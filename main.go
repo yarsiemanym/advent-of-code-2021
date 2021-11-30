@@ -68,8 +68,7 @@ func setupPuzzle() common.Puzzle {
 	case 0:
 		puzzle.SetSolution(day00.Solve)
 	default:
-		log.Warnf("Day %v has no solution yet.", puzzle.Day)
-		os.Exit(0)
+		log.Fatalf("Day %v has no solution yet.", puzzle.Day)
 	}
 
 	return puzzle
