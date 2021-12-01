@@ -4,15 +4,16 @@ import (
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cast"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
 func Solve(puzzle common.Puzzle) common.Answer {
 	results := common.ParseFile(puzzle.InputFile, "\n", parseDepth)
-	var measurements []int
+	measurements := make([]int, len(results))
 
-	for _, result := range results {
-		measurements = append(measurements, result.(int))
+	for index, result := range results {
+		measurements[index] = cast.ToInt(result)
 	}
 
 	answer := common.Answer{
@@ -39,7 +40,7 @@ func solvePart1(measurements []int) string {
 
 		if previousMeasurement != 0 && measurement > previousMeasurement {
 			log.Debug("Decrease detected.")
-			increases += 1
+			increases++
 		}
 
 		previousMeasurement = measurement
@@ -65,7 +66,7 @@ func solvePart2(measurements []int) string {
 
 		if previousMeasurement != 0 && measurement > previousMeasurement {
 			log.Debug("Decrease detected.")
-			increases += 1
+			increases++
 		}
 
 		previousMeasurement = measurement
