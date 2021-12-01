@@ -6,16 +6,40 @@ INSTALL_PATH := $(GO_PATH)/bin/advent-of-code-2021
 LOG_LEVEL ?= warn
 
 .PHONY:
-test: test.log
+session:
+ifndef AOC_SESSION_TOKEN
+	$(error AOC_SESSION_TOKEN is undefined)
+endif
 
-test.log: $(SOURCE) $(TEST_INPUT)
-	@rm -f test.log
-	@touch test.log
-	@echo "go test common/*.go" | tee -a ./test.log
-	@go test common/*.go | tee -a ./test.log
-
-	@echo "go test day00/*.go" | tee -a ./test.log
-	@go test day00/*.go | tee -a ./test.log
+.PHONY:
+test: session
+	go test common/*.go
+	go test day00/*.go
+	go test day01/*.go
+	@#go test day02/*.go
+	@#go test day03/*.go
+	@#go test day04/*.go
+	@#go test day05/*.go
+	@#go test day06/*.go
+	@#go test day07/*.go
+	@#go test day08/*.go
+	@#go test day09/*.go
+	@#go test day10/*.go
+	@#go test day11/*.go
+	@#go test day12/*.go
+	@#go test day13/*.go
+	@#go test day14/*.go
+	@#go test day15/*.go
+	@#go test day16/*.go
+	@#go test day17/*.go
+	@#go test day18/*.go
+	@#go test day19/*.go
+	@#go test day20/*.go
+	@#go test day21/*.go
+	@#go test day22/*.go
+	@#go test day23/*.go
+	@#go test day24/*.go
+	@#go test day25/*.go
 
 .PHONY:
 build: advent-of-code-2021
@@ -29,13 +53,13 @@ clean:
 	rm -f test.log
 
 .PHONY:
-run: build
+run: build session
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 $(DAY)
 
 .PHONY:
-run-all: build
+run-all: build session
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 0
-	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 1
+	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 1
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 2
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 3
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 4

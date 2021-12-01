@@ -8,8 +8,9 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-func Test_Solve_Input1(t *testing.T) {
+func Test_Solve_Test1(t *testing.T) {
 	puzzle := common.Puzzle{
+		Year:      2021,
 		Day:       0,
 		InputFile: "test1.txt",
 	}
