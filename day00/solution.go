@@ -10,7 +10,7 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
-func Solve(puzzle common.Puzzle) common.Answer {
+func Solve(puzzle *common.Puzzle) common.Answer {
 	results := common.ParseFile(puzzle.InputFile, "\n", parseUser)
 
 	var users []user

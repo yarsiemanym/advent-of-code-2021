@@ -50,7 +50,6 @@ advent-of-code-2021: $(SOURCE)
 .PHONY:
 clean: 
 	go clean
-	rm -f test.log
 
 .PHONY:
 run: build session

@@ -19,7 +19,7 @@ func (puzzle *Puzzle) SetSolution(solution Solution) {
 	puzzle.solution = solution
 }
 
-func (puzzle Puzzle) Solve() Answer {
+func (puzzle *Puzzle) Solve() Answer {
 
 	if !puzzle.IsUnlocked() {
 		log.Panicf("Day %v has not been unlocked.", puzzle.Day)
@@ -40,7 +40,7 @@ func (puzzle Puzzle) Solve() Answer {
 	return answer
 }
 
-func (puzzle Puzzle) IsUnlocked() bool {
+func (puzzle *Puzzle) IsUnlocked() bool {
 	log.Debugf("Checking if day %v has been unlocked.", puzzle.Day)
 
 	est, err := time.LoadLocation(("EST"))
