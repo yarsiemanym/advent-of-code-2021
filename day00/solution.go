@@ -34,11 +34,51 @@ func Solve(puzzle common.Puzzle) common.Answer {
 	answer := common.Answer{
 		Year:  puzzle.Year,
 		Day:   puzzle.Day,
-		Part1: oldest.Name,
-		Part2: strconv.Itoa(int(oldest.Age)),
+		Part1: solvePart1(users),
+		Part2: solvePart2(users),
 	}
 
 	return answer
+}
+
+func solvePart1(users []user) string {
+	log.Debug("Solving part 1.")
+	var oldest user
+
+	for _, user := range users {
+		user.Age = float64(time.Since(user.Birthday).Hours() / 24 / 365)
+
+		if user.Age > oldest.Age {
+			log.Debug("Older user detected.")
+			log.Tracef("oldest = { name: %v, email: %v, birthday: %v, age: %v }\n",
+				user.Name, user.Email, user.Birthday.Format(common.ShortDateFormat), user.Age)
+
+			oldest = user
+		}
+	}
+
+	log.Debug("Part 1 solved.")
+	return oldest.Name
+}
+
+func solvePart2(users []user) string {
+	log.Debug("Solving part 2.")
+	var oldest user
+
+	for _, user := range users {
+		user.Age = float64(time.Since(user.Birthday).Hours() / 24 / 365)
+
+		if user.Age > oldest.Age {
+			log.Debug("Older user detected.")
+			log.Tracef("oldest = { name: %v, email: %v, birthday: %v, age: %v }\n",
+				user.Name, user.Email, user.Birthday.Format(common.ShortDateFormat), user.Age)
+
+			oldest = user
+		}
+	}
+
+	log.Debug("Part 2 solved.")
+	return strconv.Itoa(int(oldest.Age))
 }
 
 func parseUser(text string) interface{} {

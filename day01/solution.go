@@ -8,7 +8,7 @@ import (
 )
 
 func Solve(puzzle common.Puzzle) common.Answer {
-	results := common.ParseFile(puzzle.InputFile, "\n", parseDepths)
+	results := common.ParseFile(puzzle.InputFile, "\n", parseDepth)
 	var measurements []int
 
 	for _, result := range results {
@@ -75,7 +75,7 @@ func solvePart2(measurements []int) string {
 	return strconv.Itoa(decreases)
 }
 
-func parseDepths(text string) interface{} {
+func parseDepth(text string) interface{} {
 	if text == "" {
 		return nil
 	}
