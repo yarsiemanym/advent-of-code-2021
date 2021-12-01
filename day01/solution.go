@@ -29,50 +29,50 @@ func solvePart1(measurements []int) string {
 	log.Debug("Solving part 1.")
 	log.Tracef("measurements = %v", measurements)
 	previousMeasurement := 0
-	decreases := 0
+	increases := 0
 
 	for index, measurement := range measurements {
 		log.Debugf("Checking measurement %v.", index)
 		log.Tracef("previousMeasurement = %v", previousMeasurement)
-		log.Tracef("decreases = %v", decreases)
+		log.Tracef("increases = %v", increases)
 		log.Tracef("measurement = %v", measurement)
 
 		if previousMeasurement != 0 && measurement > previousMeasurement {
 			log.Debug("Decrease detected.")
-			decreases += 1
+			increases += 1
 		}
 
 		previousMeasurement = measurement
 	}
 
 	log.Debug("Part 1 solved.")
-	return strconv.Itoa(decreases)
+	return strconv.Itoa(increases)
 }
 
 func solvePart2(measurements []int) string {
 	log.Debug("Solving part 2.")
 	log.Tracef("measurements = %v", measurements)
 	previousMeasurement := 0
-	decreases := 0
+	increases := 0
 
 	for i := 0; i < len(measurements)-2; i++ {
 		log.Debugf("Checking measurement %v.", i)
 		log.Tracef("previousMeasurement = %v", previousMeasurement)
-		log.Tracef("decreases = %v", decreases)
+		log.Tracef("decreases = %v", increases)
 
 		measurement := measurements[i] + measurements[i+1] + measurements[i+2]
 		log.Tracef("measurement = %v", measurement)
 
 		if previousMeasurement != 0 && measurement > previousMeasurement {
 			log.Debug("Decrease detected.")
-			decreases += 1
+			increases += 1
 		}
 
 		previousMeasurement = measurement
 	}
 
 	log.Debug("Part 2 solved.")
-	return strconv.Itoa(decreases)
+	return strconv.Itoa(increases)
 }
 
 func parseDepth(text string) interface{} {
