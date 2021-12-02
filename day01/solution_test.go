@@ -9,7 +9,7 @@ import (
 func Test_Solve_Test1(t *testing.T) {
 	puzzle := &common.Puzzle{
 		Year:      2021,
-		Day:       0,
+		Day:       1,
 		InputFile: "test1.txt",
 	}
 
