@@ -2,7 +2,6 @@ package common
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -13,7 +12,7 @@ import (
 func ReadFile(path string) string {
 	log.Debug("Reading file.")
 	log.Tracef("path = \"%v\"", path)
-	bytes, err := ioutil.ReadFile(path)
+	bytes, err := os.ReadFile(path)
 	Check(err)
 	log.Debugf("%v bytes read from file.", len(bytes))
 	log.Debug("Converting bytes to text.")

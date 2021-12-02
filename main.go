@@ -18,11 +18,15 @@ func main() {
 	common.InitSession()
 	checkForHelpCommand()
 
+	log.Info("Begin execution.")
+
 	puzzle := setupPuzzle()
 	answer := puzzle.Solve()
 	fmt.Printf("%v Day %v\n", answer.Year, answer.Day)
 	fmt.Printf("Part 1 Answer: %v\n", answer.Part1)
 	fmt.Printf("Part 2 Answer: %v\n", answer.Part2)
+
+	log.Info("End execution.")
 }
 
 func checkForHelpCommand() {

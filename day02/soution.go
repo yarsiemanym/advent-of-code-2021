@@ -33,13 +33,13 @@ func solvePart1(commands []command) string {
 	position := 0
 	depth := 0
 
-	log.Tracef("position = \"%v\"", position)
-	log.Tracef("depth = \"%v\"", depth)
+	log.Tracef("position = %v", position)
+	log.Tracef("depth = %v", depth)
 
 	for _, command := range commands {
 		log.Debug("Inspecting command.")
 		log.Tracef("command.Name = \"%v\"", command.Name)
-		log.Tracef("command.Value = \"%v\"", command.Value)
+		log.Tracef("command.Value = %v", command.Value)
 
 		log.Debug("Executing command.")
 		switch command.Name {
@@ -53,8 +53,8 @@ func solvePart1(commands []command) string {
 			log.Warnf("Unsupported command \"%v %v\".", command.Name, command.Value)
 		}
 
-		log.Tracef("position = \"%v\"", position)
-		log.Tracef("depth = \"%v\"", depth)
+		log.Tracef("position = %v", position)
+		log.Tracef("depth = %v", depth)
 	}
 
 	log.Debug("Part 1 solved.")
@@ -69,14 +69,14 @@ func solvePart2(commands []command) string {
 	depth := 0
 	aim := 0
 
-	log.Tracef("position = \"%v\"", position)
-	log.Tracef("depth = \"%v\"", depth)
-	log.Tracef("aim = \"%v\"", aim)
+	log.Tracef("position = %v", position)
+	log.Tracef("depth = %v", depth)
+	log.Tracef("aim = %v", aim)
 
 	for _, command := range commands {
 		log.Debug("Inspecting command.")
 		log.Tracef("command.Name = \"%v\"", command.Name)
-		log.Tracef("command.Value = \"%v\"", command.Value)
+		log.Tracef("command.Value = %v", command.Value)
 
 		log.Debug("Executing command.")
 		switch command.Name {
@@ -91,9 +91,9 @@ func solvePart2(commands []command) string {
 			log.Warnf("Skipping unsupported command \"%v %v\".", command.Name, command.Value)
 		}
 
-		log.Tracef("position = \"%v\"", position)
-		log.Tracef("depth = \"%v\"", depth)
-		log.Tracef("aim = \"%v\"", aim)
+		log.Tracef("position = %v", position)
+		log.Tracef("depth = %v", depth)
+		log.Tracef("aim = %v", aim)
 	}
 
 	log.Debug("Part 2 solved.")
