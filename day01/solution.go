@@ -61,7 +61,7 @@ func solvePart2(measurements []int) string {
 		log.Tracef("previousMeasurement = %v", previousMeasurement)
 		log.Tracef("decreases = %v", increases)
 
-		measurement := measurements[i] + measurements[i+1] + measurements[i+2]
+		measurement := common.SumIntSlice(measurements[i : i+2])
 		log.Tracef("measurement = %v", measurement)
 
 		if previousMeasurement != 0 && measurement > previousMeasurement {
