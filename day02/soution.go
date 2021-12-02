@@ -28,6 +28,7 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 
 func solvePart1(commands []command) string {
 	log.Debug("Solving part 1.")
+	log.Tracef("commands = %v", commands)
 
 	position := 0
 	depth := 0
@@ -62,6 +63,7 @@ func solvePart1(commands []command) string {
 
 func solvePart2(commands []command) string {
 	log.Debug("Solving part 2.")
+	log.Tracef("commands = %v", commands)
 
 	position := 0
 	depth := 0
@@ -86,7 +88,7 @@ func solvePart2(commands []command) string {
 		case "up":
 			aim -= command.Value
 		default:
-			log.Warnf("Unsupported command \"%v %v\".", command.Name, command.Value)
+			log.Warnf("Skipping unsupported command \"%v %v\".", command.Name, command.Value)
 		}
 
 		log.Tracef("position = \"%v\"", position)
@@ -106,7 +108,7 @@ func parseCommand(text string) interface{} {
 	tokens := common.Split(text, " ")
 
 	if len(tokens) != 2 {
-		log.Panicf("Text \"%v\" when split on \" \" does not yield 2 tokens.", text)
+		log.Panicf("When split on \" \", text \"%v\" does not yield 2 tokens.", text)
 	}
 
 	value, err := strconv.Atoi(tokens[1])
