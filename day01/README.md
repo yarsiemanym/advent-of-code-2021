@@ -1,63 +1,91 @@
-\--- Day 2: Dive! ---
----------------------
+\--- Day 1: Sonar Sweep ---
+---------------------------
 
-Now, you need to figure out how to pilot this thing.
+You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
 
-It seems like the submarine can take a series of commands like `forward 1`, `down 2`, or `up 3`:
+Before you know it, you're inside a submarine the Elves keep ready for situations like this. It's covered in Christmas lights (because of course it is), and it even has an experimental antenna that should be able to track the keys if you can boost its signal strength high enough; there's a little meter that indicates the antenna's signal strength by displaying 0-50 _stars_.
 
-*   `forward X` increases the horizontal position by `X` units.
-*   `down X` _increases_ the depth by `X` units.
-*   `up X` _decreases_ the depth by `X` units.
+Your instincts tell you that in order to save Christmas, you'll need to get all _fifty stars_ by December 25th.
 
-Note that since you're on a submarine, `down` and `up` affect your _depth_, and so they have the opposite result of what you might expect.
+Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants _one star_. Good luck!
 
-The submarine seems to already have a planned course (your puzzle input). You should probably figure out where it's going. For example:
+As the submarine drops below the surface of the ocean, it automatically performs a sonar sweep of the nearby sea floor. On a small screen, the sonar sweep report (your puzzle input) appears: each line is a measurement of the sea floor depth as the sweep looks further and further away from the submarine.
 
-    forward 5
-    down 5
-    forward 8
-    up 3
-    down 8
-    forward 2
+For example, suppose you had the following report:
+
+    199
+    200
+    208
+    210
+    200
+    207
+    240
+    269
+    260
+    263
     
 
-Your horizontal position and depth both start at `0`. The steps above would then modify them as follows:
+This report indicates that, scanning outward from the submarine, the sonar sweep found depths of `199`, `200`, `208`, `210`, and so on.
 
-*   `forward 5` adds `5` to your horizontal position, a total of `5`.
-*   `down 5` adds `5` to your depth, resulting in a value of `5`.
-*   `forward 8` adds `8` to your horizontal position, a total of `13`.
-*   `up 3` decreases your depth by `3`, resulting in a value of `2`.
-*   `down 8` adds `8` to your depth, resulting in a value of `10`.
-*   `forward 2` adds `2` to your horizontal position, a total of `15`.
+The first order of business is to figure out how quickly the depth increases, just so you know what you're dealing with - you never know if the keys will get carried into deeper water by an ocean current or a fish or something.
 
-After following these instructions, you would have a horizontal position of `15` and a depth of `10`. (Multiplying these together produces _`150`_.)
+To do this, count _the number of times a depth measurement increases_ from the previous measurement. (There is no measurement before the first measurement.) In the example above, the changes are as follows:
 
-Calculate the horizontal position and depth you would have after following the planned course. _What do you get if you multiply your final horizontal position by your final depth?_
+    199 (N/A - no previous measurement)
+    200 (increased)
+    208 (increased)
+    210 (increased)
+    200 (decreased)
+    207 (increased)
+    240 (increased)
+    269 (increased)
+    260 (decreased)
+    263 (increased)
+    
+
+In this example, there are _`7`_ measurements that are larger than the previous measurement.
+
+_How many measurements are larger than the previous measurement?_
+
+Your puzzle answer was `1167`.
 
 \--- Part Two ---
 -----------------
 
-Based on your calculations, the planned course doesn't seem to make any sense. You find the submarine manual and discover that the process is actually slightly more complicated.
+Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
 
-In addition to horizontal position and depth, you'll also need to track a third value, _aim_, which also starts at `0`. The commands also mean something entirely different than you first thought:
+Instead, consider sums of a _three-measurement sliding window_. Again considering the above example:
 
-*   `down X` _increases_ your aim by `X` units.
-*   `up X` _decreases_ your aim by `X` units.
-*   `forward X` does two things:
-    *   It increases your horizontal position by `X` units.
-    *   It increases your depth by your aim _multiplied by_ `X`.
+    199  A      
+    200  A B    
+    208  A B C  
+    210    B C D
+    200  E   C D
+    207  E F   D
+    240  E F G  
+    269    F G H
+    260      G H
+    263        H
+    
 
-Again note that since you're on a submarine, `down` and `up` do the opposite of what you might expect: "down" means aiming in the positive direction.
+Start by comparing the first and second three-measurement windows. The measurements in the first window are marked `A` (`199`, `200`, `208`); their sum is `199 + 200 + 208 = 607`. The second window is marked `B` (`200`, `208`, `210`); its sum is `618`. The sum of measurements in the second window is larger than the sum of the first, so this first comparison _increased_.
 
-Now, the above example does something different:
+Your goal now is to count _the number of times the sum of measurements in this sliding window increases_ from the previous sum. So, compare `A` with `B`, then compare `B` with `C`, then `C` with `D`, and so on. Stop when there aren't enough measurements left to create a new three-measurement sum.
 
-*   `forward 5` adds `5` to your horizontal position, a total of `5`. Because your aim is `0`, your depth does not change.
-*   `down 5` adds `5` to your aim, resulting in a value of `5`.
-*   `forward 8` adds `8` to your horizontal position, a total of `13`. Because your aim is `5`, your depth increases by `8*5=40`.
-*   `up 3` decreases your aim by `3`, resulting in a value of `2`.
-*   `down 8` adds `8` to your aim, resulting in a value of `10`.
-*   `forward 2` adds `2` to your horizontal position, a total of `15`. Because your aim is `10`, your depth increases by `2*10=20` to a total of `60`.
+In the above example, the sum of each three-measurement window is as follows:
 
-After following these new instructions, you would have a horizontal position of `15` and a depth of `60`. (Multiplying these produces _`900`_.)
+    A: 607 (N/A - no previous sum)
+    B: 618 (increased)
+    C: 618 (no change)
+    D: 617 (decreased)
+    E: 647 (increased)
+    F: 716 (increased)
+    G: 769 (increased)
+    H: 792 (increased)
+    
 
-Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course. _What do you get if you multiply your final horizontal position by your final depth?_
+In this example, there are _`5`_ sums that are larger than the previous sum.
+
+Consider sums of a three-measurement sliding window. _How many sums are larger than the previous sum?_
+
+Your puzzle answer was `1130`.
