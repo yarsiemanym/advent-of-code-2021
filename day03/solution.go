@@ -1,6 +1,7 @@
 package day03
 
 import (
+	"fmt"
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
@@ -26,7 +27,7 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 
 func solvePart1(diagnotics []diagnostic) string {
 	log.Debug("Solving part 1.")
-	log.Tracef("diagnostics = %v", diagnotics)
+	logDiagnostics("diagnostics", diagnotics)
 
 	gamma := 0
 	epsilon := 0
@@ -105,47 +106,65 @@ func determinCo2ScrubberRating(diagnostics []diagnostic) int {
 func determinLifeSupportRating(diagnostics []diagnostic, keepMostCommon bool) int {
 	log.Debugf("Determining life support rating.")
 	log.Tracef("keepMostCommon = %v", keepMostCommon)
-	size := diagnostics[0].Size // Assume they are all the same size.
 
+	size := diagnostics[0].Size // Assume they are all the same size.
 	remainingDiagnostics := diagnostics
 	for position := size - 1; position >= 0 && len(remainingDiagnostics) > 1; position-- {
-		log.Debugf("Inspecting position %v.", position)
+		log.Debugf("Being inspecting position %v.", position)
 		remainingDiagnostics = filterDiagnostics(remainingDiagnostics, position, keepMostCommon)
+		log.Debugf("End inspecting position %v.", position)
 	}
 
 	return remainingDiagnostics[0].Value
 }
 
-func filterDiagnostics(diagnostics []diagnostic, position int, keepMostCommon bool) []diagnostic {
+func filterDiagnostics(from []diagnostic, position int, keepMostCommon bool) []diagnostic {
 	log.Debugf("Detecting most common bit at position %v.", position)
+	logDiagnostics("from", from)
 
 	mask := 1 << position
-	log.Tracef("inspectionMask = %b", mask)
+	log.Tracef("mask = %b", mask)
 
-	oneIsMostCommon := isOneMostCommon(diagnostics, mask)
+	oneIsMostCommon := isOneMostCommon(from, mask)
 
 	if oneIsMostCommon {
-		log.Trace("1 is most common.")
+		log.Debug("1 is most common.")
+
 	} else {
-		log.Trace("0 is most common.")
+		log.Debug("0 is most common.")
 	}
 
-	log.Debugf("Filtering diagnostics at position %v.", position)
+	log.Debugf("Filtering diagnostics by position %v.", position)
 	log.Tracef("keepMostCommon = %v", keepMostCommon)
 
-	var remainingDiagnostics []diagnostic
-	for _, diagnostic := range diagnostics {
+	var selected []diagnostic
+	for _, diagnostic := range from {
 		if keepDiagnostic(diagnostic, mask, keepMostCommon, oneIsMostCommon) {
-			remainingDiagnostics = append(remainingDiagnostics, diagnostic)
+			selected = append(selected, diagnostic)
 		}
 	}
 
-	log.Tracef("remainingDiagnostics = %v", remainingDiagnostics)
-	return remainingDiagnostics
+	logDiagnostics("selected", selected)
+	return selected
 }
 
 func keepDiagnostic(diagnostic diagnostic, mask int, keepMostCommon bool, oneIsMostCommon bool) bool {
 	return ((diagnostic.Value&mask != 0) == oneIsMostCommon) == keepMostCommon
+}
+
+func logDiagnostics(name string, dianostics []diagnostic) {
+	log.Debugf("len(%v) = %v", name, len(dianostics))
+
+	format := fmt.Sprintf(" %%0%vb", dianostics[0].Size)
+	message := fmt.Sprintf("%v = [", name)
+
+	for _, diagnostic := range dianostics {
+		message += fmt.Sprintf(format, diagnostic.Value)
+	}
+
+	message += " ]\n"
+
+	log.Trace(message)
 }
 
 func parseDiagnotic(text string) interface{} {
