@@ -11,6 +11,7 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/day00"
 	"github.com/yarsiemanym/advent-of-code-2021/day01"
 	"github.com/yarsiemanym/advent-of-code-2021/day02"
+	"github.com/yarsiemanym/advent-of-code-2021/day03"
 )
 
 func main() {
@@ -71,6 +72,10 @@ func setupPuzzle() common.Puzzle {
 		Day:  day,
 	}
 
+	if len(os.Args) >= 3 {
+		puzzle.InputFile = os.Args[2]
+	}
+
 	switch puzzle.Day {
 	case 0:
 		puzzle.SetSolution(day00.Solve)
@@ -78,6 +83,8 @@ func setupPuzzle() common.Puzzle {
 		puzzle.SetSolution(day01.Solve)
 	case 2:
 		puzzle.SetSolution(day02.Solve)
+	case 3:
+		puzzle.SetSolution(day03.Solve)
 	default:
 		log.Fatalf("Day %v has no solution yet.", puzzle.Day)
 	}

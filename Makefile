@@ -17,7 +17,7 @@ test: session
 	go test day00/*.go
 	go test day01/*.go
 	go test day02/*.go
-	@#go test day03/*.go
+	go test day03/*.go
 	@#go test day04/*.go
 	@#go test day05/*.go
 	@#go test day06/*.go
@@ -53,14 +53,14 @@ clean:
 
 .PHONY:
 run: build session
-	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 $(DAY)
+	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 $(DAY) $(INPUT_FILE)
 
 .PHONY:
 run-all: build session
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 0
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 1
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 2
-	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 3
+	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 3
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 4
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 5
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 6
