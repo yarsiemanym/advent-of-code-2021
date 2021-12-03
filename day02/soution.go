@@ -108,7 +108,7 @@ func parseCommand(text string) interface{} {
 	tokens := common.Split(text, " ")
 
 	if len(tokens) != 2 {
-		log.Panicf("When split on \" \", text \"%v\" does not yield 2 tokens.", text)
+		log.Fatalf("When split on \" \", text \"%v\" does not yield 2 tokens.", text)
 	}
 
 	value, err := strconv.Atoi(tokens[1])
