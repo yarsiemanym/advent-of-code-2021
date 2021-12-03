@@ -60,7 +60,12 @@ func (puzzle *Puzzle) IsUnlocked() bool {
 
 func (puzzle *Puzzle) EnsureInputFileExists() string {
 	log.Debug("Checking existence of input file.")
-	target := fmt.Sprintf("./day%02d/input.txt", puzzle.Day)
+
+	if puzzle.InputFile == "" {
+		puzzle.InputFile = fmt.Sprintf("./day%02d/input.txt", puzzle.Day)
+	}
+
+	target := puzzle.InputFile
 	log.Tracef("target = \"%v\"", target)
 
 	_, err := os.Open(target)
