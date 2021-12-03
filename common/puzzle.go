@@ -22,7 +22,7 @@ func (puzzle *Puzzle) SetSolution(solution Solution) {
 func (puzzle *Puzzle) Solve() Answer {
 
 	if !puzzle.IsUnlocked() {
-		log.Fatal("Day %v has not been unlocked.", puzzle.Day)
+		log.Fatalf("Day %v has not been unlocked.", puzzle.Day)
 	}
 
 	log.Info("Ensuring input file exists.")
