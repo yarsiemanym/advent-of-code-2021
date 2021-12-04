@@ -51,6 +51,7 @@ func solvePart1(boards []*bingoBoard, generator numberGenerator) string {
 			if board.IsWinner() {
 				winner = board
 				log.Infof("Winner detected on board %v!", i+1)
+				board.Print()
 
 				log.Infof("Scoring board %v.", i+1)
 				score := winner.Score(calledNumber)
@@ -91,6 +92,7 @@ func solvePart2(boards []*bingoBoard, generator numberGenerator) string {
 
 			if board.IsWinner() {
 				log.Infof("Winner %v detected on board %v!", len(winners)+1, i+1)
+				board.Print()
 				winners = append(winners, board)
 
 				log.Infof("Scoring board %v.", i+1)

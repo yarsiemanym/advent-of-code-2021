@@ -2,6 +2,7 @@ package day04
 
 import (
 	"fmt"
+	"strconv"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
@@ -143,7 +144,12 @@ func (board *bingoBoard) Print() {
 
 	for _, row := range board.Squares {
 		for _, square := range row {
-			message = message + fmt.Sprintf("%02d ", square.Number)
+			if square.IsMarked {
+				message = message + fmt.Sprintf("[%2v] ", strconv.Itoa(square.Number))
+			} else {
+				message = message + fmt.Sprintf(" %2v  ", strconv.Itoa(square.Number))
+			}
+
 		}
 		message += "\n"
 	}
