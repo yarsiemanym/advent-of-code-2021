@@ -43,6 +43,7 @@ func solvePart1(lines []*common.LineSegment) string {
 
 	log.Info("Counting locations with more than 2 lines overlapping.")
 	count := ventMap.CountOverlaps(2)
+	log.Tracef("count = %v", count)
 
 	log.Info("Part 1 solved.")
 	return strconv.Itoa(count)
@@ -57,12 +58,12 @@ func solvePart2(lines []*common.LineSegment) string {
 	log.Info("Applying lines to vent map.")
 	for _, line := range lines {
 
-		log.Debugf("Inspecting line \"(%v,%v) -> (%v,%v)\" to the vent map.", line.Start().X(), line.Start().Y(), line.End().X(), line.End().Y())
 		ventMap.ApplyLine(line)
 	}
 
 	log.Info("Counting locations with more than 2 lines overlapping.")
 	count := ventMap.CountOverlaps(2)
+	log.Tracef("count = %v", count)
 
 	log.Info("Part 2 solved.")
 	return strconv.Itoa(count)
