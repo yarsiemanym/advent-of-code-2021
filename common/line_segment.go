@@ -23,8 +23,8 @@ func (line *LineSegment) End() *Point {
 
 func (line *LineSegment) Slope() *Point {
 	if line.slope == nil {
-		x := line.end.x - line.start.x
-		y := line.end.y - line.start.y
+		x := line.End().X() - line.Start().X()
+		y := line.End().Y() - line.Start().Y()
 
 		x, y = Reduce(x, y)
 
@@ -35,9 +35,9 @@ func (line *LineSegment) Slope() *Point {
 }
 
 func (line *LineSegment) IsVertical() bool {
-	return line.start.x == line.end.x
+	return line.Start().X() == line.End().X()
 }
 
 func (line *LineSegment) IsHorizontal() bool {
-	return line.start.y == line.end.y
+	return line.Start().Y() == line.End().Y()
 }

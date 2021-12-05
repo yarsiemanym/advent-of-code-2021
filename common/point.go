@@ -22,7 +22,7 @@ func (point *Point) Y() int {
 
 func (point *Point) Move(slope *Point) *Point {
 	return &Point{
-		x: point.x + slope.x,
-		y: point.y + slope.y,
+		x: point.X() + slope.X(),
+		y: point.Y() + slope.Y(),
 	}
 }
