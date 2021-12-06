@@ -2,36 +2,62 @@ package day06
 
 import "testing"
 
-func Test_lanternfish_Tick_NoBaby(t *testing.T) {
+func Test_lanternfish_LineageAfterOneDay_NoAncestors(t *testing.T) {
 	fish := &lanternfish{
 		timer: 2,
 	}
 
-	baby := fish.Tick()
+	lineage := fish.AncestorsAfter(1)
 
-	if fish.timer != 1 {
-		t.Errorf("Expected 1 but got %v.", fish.timer)
-	}
-
-	if baby != nil {
-		t.Error("Baby is not nil.")
+	if lineage != 1 {
+		t.Errorf("Expected 1 but got %v.", lineage)
 	}
 }
 
-func Test_lanternfish_Tick_Baby(t *testing.T) {
+func Test_lanternfish_LineageAfterOneDay_TwoFish(t *testing.T) {
 	parent := &lanternfish{
 		timer: 0,
 	}
 
-	baby := parent.Tick()
+	lineage := parent.AncestorsAfter(1)
 
-	if parent.timer != 6 {
-		t.Errorf("Expected 6 but got %v.", parent.timer)
+	if lineage != 2 {
+		t.Errorf("Expected 2 but got %v.", lineage)
+	}
+}
+
+func Test_lanternfish_LineageAfterEightDays_ThreeFish(t *testing.T) {
+	parent := &lanternfish{
+		timer: 0,
 	}
 
-	if baby == nil {
-		t.Error("Baby is nil.")
-	} else if baby.timer != 8 {
-		t.Errorf("Expected 8 but got %v.", baby.timer)
+	lineage := parent.AncestorsAfter(8)
+
+	if lineage != 3 {
+		t.Errorf("Expected 3 but got %v.", lineage)
+	}
+}
+
+func Test_lanternfish_LineageAfterSixteenDays_FiveFish(t *testing.T) {
+	parent := &lanternfish{
+		timer: 1,
+	}
+
+	lineage := parent.AncestorsAfter(16)
+
+	if lineage != 5 {
+		t.Errorf("Expected 5 but got %v.", lineage)
+	}
+}
+
+func Test_lanternfish_LineageAfterSeventeenDays_FiveFish(t *testing.T) {
+	parent := &lanternfish{
+		timer: 1,
+	}
+
+	lineage := parent.AncestorsAfter(17)
+
+	if lineage != 5 {
+		t.Errorf("Expected 5 but got %v.", lineage)
 	}
 }

@@ -44,26 +44,16 @@ func solvePart2(population []*lanternfish) string {
 }
 
 func runSimulation(population []*lanternfish, days int) int {
-	for day := 1; day <= days; day++ {
-		log.Debugf("Simulating day %v.", day)
-		var babies []*lanternfish
+	finalPopulationSize := 0
 
-		for index, fish := range population {
-			log.Tracef("Aging lanternfish %v.", index)
-			baby := fish.Tick()
-
-			if baby != nil {
-				log.Debugf("Lanternfish %v had a baby!", index)
-				babies = append(babies, baby)
-			}
-		}
-
-		log.Tracef("Adding %v babies to the lanternfish population.", len(babies))
-		population = append(population, babies...)
-		log.Debugf("At the end of day %v, the lanternfish population is %v.", day, len(population))
+	for index, fish := range population {
+		log.Debugf("Counting ancestors of fish %v.", index)
+		finalPopulationSize += fish.AncestorsAfter(days)
 	}
 
-	return len(population)
+	log.Tracef("finalPopulationSize = %v", finalPopulationSize)
+
+	return finalPopulationSize
 }
 
 func parseLanternfish(text string) interface{} {
