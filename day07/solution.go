@@ -100,7 +100,6 @@ func parseCrabSubmarinePositions(text string) interface{} {
 	}
 
 	text = strings.Trim(text, "\n")
-
 	position, err := strconv.Atoi(text)
 
 	if err != nil {

@@ -103,7 +103,7 @@ deps:
 	go mod download
 
 /usr/local/go/bin/go:
-	sudo wget -c https://dl.google.com/go/go1.17.3.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+	sudo wget -c https://dl.google.com/go/go1.17.4.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 
 ~/.go:
 	echo "export PATH=\$$PATH:/usr/local/go/bin:\$$HOME/go/bin:\$$HOME/.local/bin" | tee $(HOME)/.go
