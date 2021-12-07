@@ -14,18 +14,18 @@ func (fish *lanternfish) Init(timer int) {
 	fish.timer = timer
 }
 
-func (parent *lanternfish) AncestorsAfter(days int) int {
-	ancestors := 1
+func (parent *lanternfish) DecendantsAfter(days int) int {
+	decendants := 0
 
 	if parent.timer < days {
 		firstBirthAt := days - parent.timer - 1
 
-		log.Debugf("Checking cache for ancestors of fish having first birth with %v days remaining.", firstBirthAt)
-		cachedAncestors, exists := cache[firstBirthAt]
+		log.Debugf("Checking cache for decendants of fish having first birth with %v days remaining.", firstBirthAt)
+		cachedDecendants, exists := cache[firstBirthAt]
 
 		if exists {
 			log.Debugf("Cache hit for key \"%v\".", firstBirthAt)
-			ancestors = cachedAncestors
+			decendants = cachedDecendants
 		} else {
 			log.Debugf("Cache miss for key \"%v\". Calculating value.", firstBirthAt)
 
@@ -36,14 +36,14 @@ func (parent *lanternfish) AncestorsAfter(days int) int {
 				child := &lanternfish{}
 				child.Init(8)
 				remainingDays := firstBirthAt - (i * birthPeriod)
-				log.Debugf("Counting ancestors of child %v with %v days remaining.", i, remainingDays)
-				ancestors += child.AncestorsAfter(remainingDays)
+				log.Debugf("Counting decendants of child %v with %v days remaining.", i, remainingDays)
+				decendants += 1 + child.DecendantsAfter(remainingDays)
 			}
 
-			cache[firstBirthAt] = ancestors
+			cache[firstBirthAt] = decendants
 		}
 	}
 
-	log.Tracef("ancestors = %v", ancestors)
-	return ancestors
+	log.Tracef("decendants = %v", decendants)
+	return decendants
 }

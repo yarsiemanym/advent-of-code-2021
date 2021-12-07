@@ -36,7 +36,6 @@ func solvePart1(population []*lanternfish) string {
 func solvePart2(population []*lanternfish) string {
 	log.Info("Solving part 2.")
 
-	// TODO: Does not finish in a reasonable amount of time.
 	count := runSimulation(population, 256)
 
 	log.Info("Part 2 solved.")
@@ -48,7 +47,7 @@ func runSimulation(population []*lanternfish, days int) int {
 
 	for index, fish := range population {
 		log.Debugf("Counting ancestors of fish %v.", index)
-		finalPopulationSize += fish.AncestorsAfter(days)
+		finalPopulationSize += 1 + fish.DecendantsAfter(days)
 	}
 
 	log.Tracef("finalPopulationSize = %v", finalPopulationSize)
