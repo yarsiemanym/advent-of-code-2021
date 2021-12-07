@@ -69,3 +69,11 @@ func Test_Reduce(t *testing.T) {
 		t.Errorf("Expected 2 but got %v.", denominator)
 	}
 }
+
+func Test_PowInt(t *testing.T) {
+	result := PowInt(2, 3)
+
+	if result != 8 {
+		t.Errorf("Expected 8 but got %v.", result)
+	}
+}

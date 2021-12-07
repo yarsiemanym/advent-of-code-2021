@@ -86,10 +86,7 @@ func calulateFuelCostPart1(distance int) int {
 
 func calulateFuelCostPart2(distance int) int {
 	log.Tracef("Calculating fuel cost to travel distance %v.", distance)
-	fuel := 0
-	for step := 1; step <= distance; step++ {
-		fuel += step
-	}
+	fuel := (common.PowInt(distance, 2) + distance) / 2 // https://en.wikipedia.org/wiki/Triangular_number
 	log.Tracef("Travelling distance %v costs %v fuel.", distance, fuel)
 	return fuel
 }

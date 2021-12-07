@@ -79,3 +79,7 @@ func GreatestCommonDenominator(a int, b int) int {
 		return GreatestCommonDenominator(a, b-a)
 	}
 }
+
+func PowInt(base int, exponent int) int {
+	return int(math.Pow(float64(base), float64(exponent)))
+}
