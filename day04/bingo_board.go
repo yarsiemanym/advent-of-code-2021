@@ -129,7 +129,7 @@ func (board *bingoBoard) Score(lastNumber int) int {
 			}
 		}
 
-		sum := common.SumIntSlice(unmarkedNumbers)
+		sum := common.SumInt(unmarkedNumbers...)
 		board.score = new(int)
 		*board.score = sum * lastNumber
 	} else {

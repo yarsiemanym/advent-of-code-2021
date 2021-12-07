@@ -2,11 +2,7 @@ package common
 
 import "math"
 
-func SumIntVariadic(values ...int) int {
-	return SumIntSlice(values)
-}
-
-func SumIntSlice(values []int) int {
+func SumInt(values ...int) int {
 	sum := 0
 
 	for _, value := range values {
@@ -16,11 +12,7 @@ func SumIntSlice(values []int) int {
 	return sum
 }
 
-func MaxIntVariadic(values ...int) int {
-	return MaxIntSlice(values)
-}
-
-func MaxIntSlice(values []int) int {
+func MaxInt(values ...int) int {
 	maxValue := math.MinInt
 
 	for _, value := range values {
@@ -32,11 +24,7 @@ func MaxIntSlice(values []int) int {
 	return maxValue
 }
 
-func MinIntVariadic(values ...int) int {
-	return MinIntSlice(values)
-}
-
-func MinIntSlice(values []int) int {
+func MinInt(values ...int) int {
 	minValue := math.MaxInt
 
 	for _, value := range values {

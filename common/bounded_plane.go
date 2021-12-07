@@ -11,10 +11,10 @@ func NewBoundedPlaneFromPoints(points []*Point) *BoundedPlane {
 	maxY := 0
 
 	for _, point := range points {
-		minX = MinIntVariadic(minX, point.x)
-		maxX = MaxIntVariadic(maxX, point.x)
-		minY = MinIntVariadic(minY, point.y)
-		maxY = MaxIntVariadic(maxY, point.y)
+		minX = MinInt(minX, point.x)
+		maxX = MaxInt(maxX, point.x)
+		minY = MinInt(minY, point.y)
+		maxY = MaxInt(maxY, point.y)
 	}
 
 	return &BoundedPlane{
@@ -29,10 +29,10 @@ func NewBoundedPlaneFromLines(lines []*LineSegment) *BoundedPlane {
 	maxY := 0
 
 	for _, line := range lines {
-		minX = MinIntVariadic(minX, line.start.x, line.end.x)
-		maxX = MaxIntVariadic(maxX, line.start.x, line.end.x)
-		minY = MinIntVariadic(minY, line.start.y, line.end.y)
-		maxY = MaxIntVariadic(maxY, line.start.y, line.end.y)
+		minX = MinInt(minX, line.start.x, line.end.x)
+		maxX = MaxInt(maxX, line.start.x, line.end.x)
+		minY = MinInt(minY, line.start.y, line.end.y)
+		maxY = MaxInt(maxY, line.start.y, line.end.y)
 	}
 
 	return &BoundedPlane{
