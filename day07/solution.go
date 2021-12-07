@@ -39,7 +39,9 @@ func solvePart2(positions []int) string {
 	return strconv.Itoa(minFuel)
 }
 
-func determineOptimalAlignmentPosition(positions []int, fuelCalculator func(int) int) int {
+type fuelCalculator func(int) int // distance -> fuel
+
+func determineOptimalAlignmentPosition(positions []int, fuelCalculator fuelCalculator) int {
 	log.Debug("Determining optimal alignment position.")
 	max := common.MaxInt(positions...)
 	currentOptimumTarget := 0
