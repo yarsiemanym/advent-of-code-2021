@@ -2,6 +2,10 @@ package common
 
 import "math"
 
+func AbsInt(value int) int {
+	return int(math.Abs(float64(value)))
+}
+
 func SumInt(values ...int) int {
 	sum := 0
 

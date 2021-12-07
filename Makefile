@@ -21,7 +21,7 @@ test: session
 	go test day04/*.go
 	go test day05/*.go
 	go test day06/*.go
-	@#go test day07/*.go
+	go test day07/*.go
 	@#go test day08/*.go
 	@#go test day09/*.go
 	@#go test day10/*.go
@@ -64,7 +64,7 @@ run-all: build session
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 4
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 5
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 6
-	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 7
+	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 7
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 8
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 9
 	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 10
