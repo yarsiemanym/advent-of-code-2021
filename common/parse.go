@@ -1,6 +1,8 @@
 package common
 
 import (
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -23,6 +25,7 @@ func ParseText(text string, delimiter string, fn ParseFunc) []interface{} {
 	var results []interface{}
 
 	for _, token := range tokens {
+		token := strings.Trim(token, " \n\t")
 		result := ParseToken(token, fn)
 
 		if result != nil {

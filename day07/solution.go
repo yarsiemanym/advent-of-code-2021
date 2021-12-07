@@ -27,48 +27,23 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 
 func solvePart1(positions []int) string {
 	log.Info("Solving part 1.")
-
-	max := common.MaxInt(positions...)
-	optimumTarget := 0
-	minFuel := math.MaxInt
-
-	for target := 0; target < max; target++ {
-		log.Debugf("Evaluating position %v.", target)
-		fuel := 0
-
-		for _, position := range positions {
-			log.Tracef("Evaluating travel from position %v to position %v.", position, target)
-			distance := common.AbsInt(position - target)
-			log.Tracef("distance = %v", distance)
-			fuel += distance
-		}
-
-		log.Debugf("Aligning on position %v costs %v fuel.", target, fuel)
-		log.Debug("Checking for new optimum target.")
-		log.Tracef("optimumTarget = %v", optimumTarget)
-		log.Tracef("minFuel = %v", minFuel)
-
-		if fuel < minFuel {
-			log.Debugf("Position %v is the new optimum target. Total fuel consumption is %v.", target, fuel)
-			optimumTarget = target
-			minFuel = fuel
-		} else {
-			log.Debugf("Position %v is still the optimum target. Total fuel consumption is %v.", optimumTarget, minFuel)
-		}
-	}
-
-	log.Tracef("minFuel = %v", minFuel)
-
+	minFuel := determineOptimalAlignmentPosition(positions, calulateFuelCostPart1)
 	log.Info("Part 1 solved.")
 	return strconv.Itoa(minFuel)
 }
 
 func solvePart2(positions []int) string {
 	log.Info("Solving part 2.")
+	minFuel := determineOptimalAlignmentPosition(positions, calulateFuelCostPart2)
+	log.Info("Part 2 solved.")
+	return strconv.Itoa(minFuel)
+}
 
+func determineOptimalAlignmentPosition(positions []int, fuelCalculator func(int) int) int {
+	log.Debug("Determining optimal alignment position.")
 	max := common.MaxInt(positions...)
-	optimumTarget := 0
-	minFuel := math.MaxInt
+	currentOptimumTarget := 0
+	currentMinFuel := math.MaxInt
 
 	for target := 0; target < max; target++ {
 		log.Debugf("Evaluating position %v.", target)
@@ -78,30 +53,36 @@ func solvePart2(positions []int) string {
 			log.Tracef("Evaluating travel from position %v to position %v.", position, target)
 			distance := common.AbsInt(position - target)
 			log.Tracef("distance = %v", distance)
-			fuel += calulateFuelCost(distance)
+			fuel += fuelCalculator(distance)
 		}
 
 		log.Debugf("Aligning on position %v costs %v fuel.", target, fuel)
 		log.Debug("Checking for new optimum target.")
-		log.Tracef("optimumTarget = %v", optimumTarget)
-		log.Tracef("minFuel = %v", minFuel)
+		log.Tracef("currentOptimumTarget = %v", currentOptimumTarget)
+		log.Tracef("currentMinFuel = %v", currentMinFuel)
 
-		if fuel < minFuel {
+		if fuel < currentMinFuel {
 			log.Debugf("Position %v is the new optimum target. Total fuel consumption is %v.", target, fuel)
-			optimumTarget = target
-			minFuel = fuel
+			currentOptimumTarget = target
+			currentMinFuel = fuel
 		} else {
-			log.Debugf("Position %v is still the optimum target. Total fuel consumption is %v.", optimumTarget, minFuel)
+			log.Debugf("Position %v is still the optimum target. Total fuel consumption is %v.", currentOptimumTarget, currentMinFuel)
 		}
 	}
 
-	log.Tracef("minFuel = %v", minFuel)
-
-	log.Info("Part 2 solved.")
-	return strconv.Itoa(minFuel)
+	log.Debug("Evaluation complete.")
+	log.Tracef("The optimum alignment position is %v which costs %v fuel.", currentOptimumTarget, currentMinFuel)
+	return currentMinFuel
 }
 
-func calulateFuelCost(distance int) int {
+func calulateFuelCostPart1(distance int) int {
+	log.Tracef("Calculating fuel cost to travel distance %v.", distance)
+	fuel := distance
+	log.Tracef("Travelling distance %v costs %v fuel.", distance, fuel)
+	return fuel
+}
+
+func calulateFuelCostPart2(distance int) int {
 	log.Tracef("Calculating fuel cost to travel distance %v.", distance)
 	fuel := 0
 	for step := 1; step <= distance; step++ {
