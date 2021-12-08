@@ -55,7 +55,7 @@ func (display *digitDisplay) Clear() {
 
 func (display *digitDisplay) SetSignals(signals string, signalMapper *signalMapper) {
 	if signalMapper != nil {
-		signals = signalMapper.MapSignalPattern(signals)
+		signals = signalMapper.MapSignals(signals)
 	}
 
 	for _, signal := range signals {

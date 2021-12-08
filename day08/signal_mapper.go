@@ -30,36 +30,40 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 	var eightBits bitarray.BitArray
 	var nineBits bitarray.BitArray
 
+	// First pass
 	for _, uniqueSignalPattern := range uniqueSignalPatterns {
 		length := len(uniqueSignalPattern)
 
 		switch length {
-		case 2:
+		case 2: // 1
 			log.Debug("'1' signal pattern deciphered.")
 			log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 			oneBits = signalPatternToBitArray(uniqueSignalPattern)
-		case 3:
+		case 3: // 7
 			log.Debug("'7' signal pattern deciphered.")
 			log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 			sevenBits = signalPatternToBitArray(uniqueSignalPattern)
-		case 4:
+		case 4: // 4
 			log.Debug("'4' signal pattern deciphered.")
 			log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 			fourBits = signalPatternToBitArray(uniqueSignalPattern)
-		case 7:
+		case 7: // 8
 			log.Debug("'8' signal pattern deciphered.")
 			log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 			eightBits = signalPatternToBitArray(uniqueSignalPattern)
 		}
 	}
+	// 1, 4, 7, and 8 are solved.
 
+	// Second pass
 	for _, uniqueSignalPattern := range uniqueSignalPatterns {
 		length := len(uniqueSignalPattern)
 
 		switch length {
 		case 5: // 2, 3, 5
 			unknownBits := signalPatternToBitArray(uniqueSignalPattern)
-			if unknownBits.And(oneBits).Equals(oneBits) {
+
+			if unknownBits.And(oneBits).Equals(oneBits) { // 3
 				log.Debug("'3' signal pattern deciphered.")
 				log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 				threeBits = unknownBits
@@ -67,41 +71,46 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 
 		case 6: // 0, 6, 9
 			unknownBits := signalPatternToBitArray(uniqueSignalPattern)
-			if unknownBits.And(fourBits).Equals(fourBits) {
+
+			if unknownBits.And(fourBits).Equals(fourBits) { // 9
 				log.Debug("'9' signal pattern deciphered.")
 				log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 				nineBits = unknownBits
-			} else if unknownBits.And(sevenBits).Equals(sevenBits) {
+			} else if unknownBits.And(sevenBits).Equals(sevenBits) { // 0
 				log.Debug("'0' signal pattern deciphered.")
 				log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 				zeroBits = unknownBits
-			} else {
+			} else { // 6
 				log.Debug("'6' signal pattern deciphered.")
 				log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 				sixBits = unknownBits
 			}
 		}
 	}
+	// 0, 1, 3, 4, 6, 7, 8, and 9 are solved.
 
+	// Third pass
 	for _, uniqueSignalPattern := range uniqueSignalPatterns {
 		length := len(uniqueSignalPattern)
 
 		switch length {
-		case 5: // 2, 5
+		case 5: // 2, 3, 5
 			unknownBits := signalPatternToBitArray(uniqueSignalPattern)
+
 			if !unknownBits.Equals(threeBits) {
-				if unknownBits.And(nineBits).Equals(unknownBits) {
+				if unknownBits.And(nineBits).Equals(unknownBits) { // 5
 					log.Debug("'5' signal pattern deciphered.")
 					log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 					fiveBits = unknownBits
 				} else {
-					log.Debug("'2' signal pattern deciphered.")
+					log.Debug("'2' signal pattern deciphered.") // 2
 					log.Tracef("signalPattern = \"%v\"", uniqueSignalPattern)
 					twoBits = unknownBits
 				}
 			}
 		}
 	}
+	// All digits are solved.
 
 	aBit := xor(sevenBits, oneBits)
 	bBit := xor(nineBits, threeBits)
@@ -111,6 +120,7 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 	fBit := xor(zeroBits, twoBits).And(oneBits)
 	gBit := xor(xor(nineBits, fourBits), aBit)
 
+	// Create map
 	signalMap := map[rune]rune{
 		rune(bitArrayToSignalPattern(aBit)[0]): 'a',
 		rune(bitArrayToSignalPattern(bBit)[0]): 'b',
@@ -121,10 +131,8 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 		rune(bitArrayToSignalPattern(gBit)[0]): 'g',
 	}
 
-	if log.GetLevel() == log.TraceLevel {
-		for _, signal := range "abcdefg" {
-			log.Tracef("Signal '%c' maps to signal '%c'.", signal, signalMap[signal])
-		}
+	for _, signal := range "abcdefg" {
+		log.Tracef("Signal '%c' maps to signal '%c'.", signal, signalMap[signal])
 	}
 
 	return signalMap
@@ -164,18 +172,18 @@ func bitArrayToSignalPattern(bits bitarray.BitArray) string {
 	return signalPattern
 }
 
-func (signalMapper *signalMapper) MapSignalPattern(scambledSignalPattern string) string {
-	unscrabledSignalPattern := ""
+func (signalMapper *signalMapper) MapSignals(scambledSignals string) string {
+	unscrabledSignals := ""
 
-	for _, scambledSignal := range scambledSignalPattern {
+	for _, scambledSignal := range scambledSignals {
 		unscrabledSignal, exists := signalMapper.signalMap[scambledSignal]
 
 		if exists {
-			unscrabledSignalPattern += string(unscrabledSignal)
+			unscrabledSignals += string(unscrabledSignal)
 		} else {
 			log.Fatalf("No mapping exists for signal '%c'.", scambledSignal)
 		}
 	}
 
-	return unscrabledSignalPattern
+	return unscrabledSignals
 }

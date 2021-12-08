@@ -103,13 +103,13 @@ func Test_signalMapper_MapSignalPattern(t *testing.T) {
 
 	signalMapper := NewSignalMapper(signalPatterns)
 
-	signal := signalMapper.MapSignalPattern("cdfeb")
+	signal := signalMapper.MapSignals("cdfeb")
 
 	if signal != "gadbf" {
 		t.Errorf("Expected \"gadbf\" but got \"%v\".", signal)
 	}
 
-	signal = signalMapper.MapSignalPattern("fcadb")
+	signal = signalMapper.MapSignals("fcadb")
 
 	if signal != "dgcaf" {
 		t.Errorf("Expected \"dgcaf\" but got \"%v\".", signal)
