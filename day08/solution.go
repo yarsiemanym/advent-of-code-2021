@@ -57,6 +57,9 @@ func solvePart2(entries []*entry) string {
 		display := NewValueDisplay()
 		log.Debugf("Setting signals for entry %v.", index)
 		display.SetSignals(entry.ouputValues[0], entry.ouputValues[1], entry.ouputValues[2], entry.ouputValues[3], signalMapper)
+
+		log.Infof("Displayed value for entry %v\n%v", index, display.Render())
+
 		value := display.NumericValue()
 
 		if value == nil {

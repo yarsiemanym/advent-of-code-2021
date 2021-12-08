@@ -53,7 +53,7 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 			eightBits = signalPatternToBitArray(uniqueSignalPattern)
 		}
 	}
-	// 1, 4, 7, and 8 are solved.
+	// 1, 4, 7, and 8 are deciphered.
 
 	// Second pass
 	for _, uniqueSignalPattern := range uniqueSignalPatterns {
@@ -87,7 +87,7 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 			}
 		}
 	}
-	// 0, 1, 3, 4, 6, 7, 8, and 9 are solved.
+	// 0, 1, 3, 4, 6, 7, 8, and 9 are deciphered.
 
 	// Third pass
 	for _, uniqueSignalPattern := range uniqueSignalPatterns {
@@ -110,7 +110,7 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 			}
 		}
 	}
-	// All digits are solved.
+	// All digits are deciphered.
 
 	aBit := xor(sevenBits, oneBits)
 	bBit := xor(nineBits, threeBits)
