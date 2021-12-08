@@ -4,7 +4,7 @@ import "testing"
 
 func Test_digitDisplay_Zero(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(zero)
+	digit.SetSignals(zero, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -16,7 +16,7 @@ func Test_digitDisplay_Zero(t *testing.T) {
 
 func Test_digitDisplay_One(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(one)
+	digit.SetSignals(one, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -28,7 +28,7 @@ func Test_digitDisplay_One(t *testing.T) {
 
 func Test_digitDisplay_Two(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(two)
+	digit.SetSignals(two, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -40,7 +40,7 @@ func Test_digitDisplay_Two(t *testing.T) {
 
 func Test_digitDisplay_Three(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(three)
+	digit.SetSignals(three, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -52,7 +52,7 @@ func Test_digitDisplay_Three(t *testing.T) {
 
 func Test_digitDisplay_Four(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(four)
+	digit.SetSignals(four, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -64,7 +64,7 @@ func Test_digitDisplay_Four(t *testing.T) {
 
 func Test_digitDisplay_Five(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(five)
+	digit.SetSignals(five, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -76,7 +76,7 @@ func Test_digitDisplay_Five(t *testing.T) {
 
 func Test_digitDisplay_Six(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(six)
+	digit.SetSignals(six, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -88,7 +88,7 @@ func Test_digitDisplay_Six(t *testing.T) {
 
 func Test_digitDisplay_Seven(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(seven)
+	digit.SetSignals(seven, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -100,7 +100,7 @@ func Test_digitDisplay_Seven(t *testing.T) {
 
 func Test_digitDisplay_Eight(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(eight)
+	digit.SetSignals(eight, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -112,7 +112,7 @@ func Test_digitDisplay_Eight(t *testing.T) {
 
 func Test_digitDisplay_Nine(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals(nine)
+	digit.SetSignals(nine, nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue == nil {
@@ -124,10 +124,37 @@ func Test_digitDisplay_Nine(t *testing.T) {
 
 func Test_digitDisplay_Nil(t *testing.T) {
 	digit := NewDigitDisplay(0)
-	digit.SetSignals("")
+	digit.SetSignals("", nil)
 	numericValue := digit.NumericValue()
 
 	if numericValue != nil {
 		t.Error("numericValue is not nil.")
+	}
+}
+
+func Test_digitDisplay_Mapped(t *testing.T) {
+	signalPatterns := []string{
+		"acedgfb",
+		"cdfbe",
+		"gcdfa",
+		"fbcad",
+		"dab",
+		"cefabd",
+		"cdfgeb",
+		"eafb",
+		"cagedb",
+		"ab",
+	}
+
+	signalMapper := NewSignalMapper(signalPatterns)
+
+	digit := NewDigitDisplay(0)
+	digit.SetSignals("cdfeb", signalMapper)
+	value := digit.NumericValue()
+
+	if value == nil {
+		t.Error("value is nil.")
+	} else if *value != 5 {
+		t.Errorf("Expected 5 but got %v.", *value)
 	}
 }

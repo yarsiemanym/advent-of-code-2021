@@ -19,18 +19,13 @@ func NewValueDisplay() *valueDisplay {
 	}
 }
 
-func (display *valueDisplay) SetSignals(first string, second string, third string, forth string, signalMapper *signalMapper) {
-	if signalMapper != nil {
-		first = signalMapper.MapSignalPattern(first)
-		second = signalMapper.MapSignalPattern(second)
-		third = signalMapper.MapSignalPattern(third)
-		forth = signalMapper.MapSignalPattern(forth)
-	}
+func (display *valueDisplay) SetSignals(firstDigitSignals string, secondDigitSignals string, thirdDigitSignals string,
+	forthDigitSignals string, signalMapper *signalMapper) {
 
-	display.Digits[0].SetSignals(first)
-	display.Digits[1].SetSignals(second)
-	display.Digits[2].SetSignals(third)
-	display.Digits[3].SetSignals(forth)
+	display.Digits[0].SetSignals(firstDigitSignals, signalMapper)
+	display.Digits[1].SetSignals(secondDigitSignals, signalMapper)
+	display.Digits[2].SetSignals(thirdDigitSignals, signalMapper)
+	display.Digits[3].SetSignals(forthDigitSignals, signalMapper)
 }
 
 func (display *valueDisplay) Render() string {

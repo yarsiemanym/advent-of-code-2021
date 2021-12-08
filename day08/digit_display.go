@@ -53,7 +53,11 @@ func (display *digitDisplay) Clear() {
 	}
 }
 
-func (display *digitDisplay) SetSignals(signals string) {
+func (display *digitDisplay) SetSignals(signals string, signalMapper *signalMapper) {
+	if signalMapper != nil {
+		signals = signalMapper.MapSignalPattern(signals)
+	}
+
 	for _, signal := range signals {
 		for _, segment := range display.segments {
 			if segment.signal == signal {
