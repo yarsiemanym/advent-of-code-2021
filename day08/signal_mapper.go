@@ -139,7 +139,7 @@ func constructSignalMap(uniqueSignalPatterns []string) map[rune]rune {
 }
 
 func xor(a bitarray.BitArray, b bitarray.BitArray) bitarray.BitArray {
-	max := bitarray.NewBitArray(a.Capacity(), true)
+	max := bitarray.NewBitArray(7, true)
 	notA := max.Nand(a)
 	notB := max.Nand(b)
 	return (a.And(notB)).Or(b.And(notA))
