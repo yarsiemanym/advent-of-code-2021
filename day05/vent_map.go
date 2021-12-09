@@ -32,7 +32,7 @@ func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
 	} else {
 		for point := line.Start(); ; point = point.Move(slope) {
 
-			log.Tracef("Incrementing overlaps at location (%v, %v).", point.X(), point.Y())
+			log.Tracef("Incrementing overlaps at location %v.", *point)
 			value := ventMap.plane.GetValueAt(point)
 
 			if value == nil {

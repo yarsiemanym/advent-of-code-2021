@@ -41,8 +41,6 @@ func solvePart1(lines []*common.LineSegment) string {
 		}
 	}
 
-	log.Info(ventMap.Render())
-
 	log.Info("Counting locations with more than 2 lines overlapping.")
 	count := ventMap.CountOverlaps(2)
 	log.Tracef("count = %v", count)
