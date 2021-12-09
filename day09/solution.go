@@ -21,17 +21,17 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 	}
 }
 
-func solvePart1(heightMap *common.BoundedPlane) string {
+func solvePart1(heightMap *heightMap) string {
 	log.Info("Solving part 1.")
 
-	lowPoints := findLowPoints(heightMap)
+	lowPoints := heightMap.FindLowPoints()
 	log.Debugf("%v low points found.", len(lowPoints))
 	totalRiskLevel := 0
 
 	for index, lowPoint := range lowPoints {
 		log.Debugf("Assessing risk level of lowpoint %v.", index)
 		log.Tracef("lowPoint = %v", *lowPoint)
-		risklevel := 1 + heightMap.GetValueAt(lowPoint).(int)
+		risklevel := 1 + heightMap.GetHeightAt(lowPoint)
 		log.Tracef("risklevel = %v", risklevel)
 		totalRiskLevel += risklevel
 	}
@@ -42,42 +42,14 @@ func solvePart1(heightMap *common.BoundedPlane) string {
 	return strconv.Itoa(totalRiskLevel)
 }
 
-func findLowPoints(heightMap *common.BoundedPlane) []*common.Point {
-	var lowPoints []*common.Point
-
-	for _, point := range heightMap.GetAllPoints() {
-		if isLowPoint(point, heightMap) {
-			lowPoints = append(lowPoints, point)
-		}
-	}
-
-	return lowPoints
-}
-
-func isLowPoint(point *common.Point, heightMap *common.BoundedPlane) bool {
-	currentValue := heightMap.GetValueAt(point).(int)
-	adjacentPoints := heightMap.GetPointsAdjacentTo(point)
-	isLow := true
-
-	for _, adjacentPoint := range adjacentPoints {
-		adjacentValue := heightMap.GetValueAt(adjacentPoint).(int)
-		if adjacentValue <= currentValue {
-			isLow = false
-			break
-		}
-	}
-
-	return isLow
-}
-
-func solvePart2(heightMap *common.BoundedPlane) string {
+func solvePart2(heightMap *heightMap) string {
 	log.Info("Solving part 2.")
 
-	lowPoints := findLowPoints(heightMap)
+	lowPoints := heightMap.FindLowPoints()
 	basinSizes := make([]int, len(lowPoints))
 
 	for index, lowPoint := range lowPoints {
-		basinSizes[index] = len(exploreBasin(lowPoint, heightMap, make([]*common.Point, 0)))
+		basinSizes[index] = len(heightMap.ExploreBasin(lowPoint, make([]*common.Point, 0)))
 	}
 
 	sort.Ints(basinSizes)
@@ -91,37 +63,6 @@ func solvePart2(heightMap *common.BoundedPlane) string {
 	return strconv.Itoa(product)
 }
 
-func exploreBasin(lowPoint *common.Point, heightMap *common.BoundedPlane, alreadyExplored []*common.Point) []*common.Point {
-	log.Debugf("Looking for paths uphill from point %v.", *lowPoint)
-	currentValue := heightMap.GetValueAt(lowPoint).(int)
-	adjacentPoints := heightMap.GetPointsAdjacentTo(lowPoint)
-	pointsInBasin := []*common.Point{
-		lowPoint,
-	}
-
-	for _, adjacentPoint := range adjacentPoints {
-		if sliceContainsPoint(alreadyExplored, adjacentPoint) {
-			log.Tracef("Already explored point %v. Skipping.", *adjacentPoint)
-			continue
-		}
-
-		adjacentValue := heightMap.GetValueAt(adjacentPoint).(int)
-
-		if adjacentValue < 9 && adjacentValue >= currentValue {
-			log.Tracef("Point %v is uphill. Climbing.", *adjacentPoint)
-			uphillPoints := exploreBasin(adjacentPoint, heightMap, pointsInBasin)
-
-			for _, uphillPoint := range uphillPoints {
-				if !sliceContainsPoint(pointsInBasin, uphillPoint) {
-					pointsInBasin = append(pointsInBasin, uphillPoint)
-				}
-			}
-		}
-	}
-
-	return pointsInBasin
-}
-
 func sliceContainsPoint(slice []*common.Point, element *common.Point) bool {
 	for _, member := range slice {
 		if *member == *element {
@@ -132,16 +73,16 @@ func sliceContainsPoint(slice []*common.Point, element *common.Point) bool {
 	return false
 }
 
-func parseHeightMap(text string) *common.BoundedPlane {
+func parseHeightMap(text string) *heightMap {
 	lines := common.Split(text, "\n")
-	var heightMap [][]int
+	var heights [][]int
 
 	for row, line := range lines {
 		if line == "" {
 			continue
 		}
 
-		heightMap = append(heightMap, make([]int, len(line)))
+		heights = append(heights, make([]int, len(line)))
 
 		for col, char := range line {
 			height, err := strconv.Atoi(string(char))
@@ -150,17 +91,9 @@ func parseHeightMap(text string) *common.BoundedPlane {
 				log.Fatalf("'%c' is not an integer.", char)
 			}
 
-			heightMap[row][col] = height
+			heights[row][col] = height
 		}
 	}
 
-	plane := common.NewBoundedPlane(len(heightMap), len(heightMap[0]))
-
-	for row := range heightMap {
-		for col := range heightMap[row] {
-			plane.SetValueAt(common.NewPoint(col, row), heightMap[row][col])
-		}
-	}
-
-	return plane
+	return NewHeightMap(heights)
 }
