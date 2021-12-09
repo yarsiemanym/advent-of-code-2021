@@ -8,8 +8,7 @@ import (
 )
 
 type ventMap struct {
-	plane     common.BoundedPlane
-	Locations [][]int
+	plane common.BoundedPlane
 }
 
 func (ventMap *ventMap) Init(lines []*common.LineSegment) {
@@ -18,11 +17,7 @@ func (ventMap *ventMap) Init(lines []*common.LineSegment) {
 	rows := ventMap.plane.Span().End().Y() + 1
 	cols := ventMap.plane.Span().End().X() + 1
 
-	ventMap.Locations = make([][]int, rows)
-
-	for i := 0; i < rows; i++ {
-		ventMap.Locations[i] = make([]int, cols)
-	}
+	ventMap.plane = *common.NewBoundedPlane(rows, cols)
 }
 
 func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
@@ -32,12 +27,19 @@ func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
 	log.Tracef("slope = (%v, %v)", slope.X(), slope.Y())
 
 	if *line.Start() == *line.End() {
-		ventMap.Locations[line.Start().Y()][line.Start().X()] += 1
+		value := ventMap.plane.GetValueAt(line.Start()).(int)
+		ventMap.plane.SetValueAt(line.Start(), value+1)
 	} else {
 		for point := line.Start(); ; point = point.Move(slope) {
 
 			log.Tracef("Incrementing overlaps at location (%v, %v).", point.X(), point.Y())
-			ventMap.Locations[point.Y()][point.X()] += 1
+			value := ventMap.plane.GetValueAt(point)
+
+			if value == nil {
+				value = 0
+			}
+
+			ventMap.plane.SetValueAt(point, value.(int)+1)
 
 			if *point == *line.End() {
 				break
@@ -49,35 +51,38 @@ func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
 func (ventMap *ventMap) CountOverlaps(withMinLines int) int {
 	count := 0
 
-	for y, row := range ventMap.Locations {
-		for x, location := range row {
-			if location >= withMinLines {
-				log.Debugf("Location (%v, %v) has %v overlapping lines. Incrementing count.", x, y, location)
-				count++
-			} else {
-				log.Tracef("Location (%v, %v) has %v overlapping lines. Skipping.", x, y, location)
-			}
+	for _, point := range ventMap.plane.GetAllPoints() {
+		value := ventMap.plane.GetValueAt(point)
+
+		if value == nil {
+			value = 0
+		}
+
+		if value.(int) >= withMinLines {
+			log.Debugf("Location %v has %v overlapping lines. Incrementing count.", *point, value.(int))
+			count++
+		} else {
+			log.Tracef("Location %v has %v overlapping lines. Skipping.", *point, value)
 		}
 	}
 
 	return count
 }
 
-func (ventMap *ventMap) Print() {
-	if log.GetLevel() == log.TraceLevel {
-		message := "Vent Map\n"
+func (ventMap *ventMap) Render() string {
+	message := "Vent Map\n"
 
-		for _, row := range ventMap.Locations {
-			for _, location := range row {
-				if location == 0 {
-					message += "."
-				} else {
-					message += fmt.Sprintf("%v", location)
-				}
+	for row := ventMap.plane.Span().Start().Y(); row <= ventMap.plane.Span().End().Y(); row++ {
+		for col := ventMap.plane.Span().Start().X(); col <= ventMap.plane.Span().End().X(); col++ {
+			value := ventMap.plane.GetValueAt(common.NewPoint(col, row))
+			if value == nil || value.(int) == 0 {
+				message += "."
+			} else {
+				message += fmt.Sprintf("%v", value)
 			}
-			message += "\n"
 		}
-
-		log.Trace(message)
+		message += "\n"
 	}
+
+	return message
 }
