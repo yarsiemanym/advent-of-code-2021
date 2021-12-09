@@ -5,12 +5,12 @@ import (
 )
 
 type valueDisplay struct {
-	Digits []*digitDisplay
+	digits []*digitDisplay
 }
 
 func NewValueDisplay() *valueDisplay {
 	return &valueDisplay{
-		Digits: []*digitDisplay{
+		digits: []*digitDisplay{
 			NewDigitDisplay(0),
 			NewDigitDisplay(1),
 			NewDigitDisplay(2),
@@ -22,16 +22,16 @@ func NewValueDisplay() *valueDisplay {
 func (display *valueDisplay) SetSignals(firstDigitSignals string, secondDigitSignals string, thirdDigitSignals string,
 	forthDigitSignals string, signalMapper *signalMapper) {
 
-	display.Digits[0].SetSignals(firstDigitSignals, signalMapper)
-	display.Digits[1].SetSignals(secondDigitSignals, signalMapper)
-	display.Digits[2].SetSignals(thirdDigitSignals, signalMapper)
-	display.Digits[3].SetSignals(forthDigitSignals, signalMapper)
+	display.digits[0].SetSignals(firstDigitSignals, signalMapper)
+	display.digits[1].SetSignals(secondDigitSignals, signalMapper)
+	display.digits[2].SetSignals(thirdDigitSignals, signalMapper)
+	display.digits[3].SetSignals(forthDigitSignals, signalMapper)
 }
 
 func (display *valueDisplay) Render() string {
 	ouput := ""
 
-	for _, digit := range display.Digits {
+	for _, digit := range display.digits {
 		ouput += fmt.Sprintf("  %v:   ", digit.id)
 	}
 	ouput += "\n"
@@ -39,7 +39,7 @@ func (display *valueDisplay) Render() string {
 	for i := 0; i < 7; i++ {
 		line := ""
 
-		for _, digit := range display.Digits {
+		for _, digit := range display.digits {
 			line += digit.Render(i) + " "
 		}
 		ouput += line + "\n"
@@ -51,7 +51,7 @@ func (display *valueDisplay) Render() string {
 func (display *valueDisplay) NumericValue() *int {
 	numericValue := new(int)
 
-	for _, digit := range display.Digits {
+	for _, digit := range display.digits {
 		digitNumericValue := digit.NumericValue()
 
 		if digitNumericValue == nil {
