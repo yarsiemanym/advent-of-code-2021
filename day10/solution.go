@@ -1,7 +1,6 @@
 package day10
 
 import (
-	"sort"
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
@@ -133,7 +132,6 @@ func solvePart2(lines []string) string {
 		}
 	}
 
-	sort.Ints(scores)
 	finalScore := common.MedianInt(scores...)
 
 	log.Info("Part 2 solved.")

@@ -1,6 +1,9 @@
 package common
 
-import "math"
+import (
+	"math"
+	"sort"
+)
 
 func AbsInt(value int) int {
 	return int(math.Abs(float64(value)))
@@ -25,6 +28,8 @@ func MedianInt(values ...int) int {
 	median := 0
 
 	if length > 0 {
+		sort.Ints(values)
+
 		if length%2 != 0 {
 			median = values[length/2]
 		} else {
