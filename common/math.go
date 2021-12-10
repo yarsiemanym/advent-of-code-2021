@@ -16,14 +16,22 @@ func SumInt(values ...int) int {
 	return sum
 }
 
+func AverageInt(values ...int) int {
+	return SumInt(values...) / len(values)
+}
+
 func MedianInt(values ...int) int {
 	length := len(values)
+	median := 0
 
-	if length == 0 {
-		panic("Cannot determine the median of an empty slice.")
+	if length > 0 {
+		if length%2 != 0 {
+			median = values[length/2]
+		} else {
+			median = AverageInt(values[(length/2)-1], values[length/2])
+		}
 	}
 
-	median := values[(length / 2)]
 	return median
 }
 

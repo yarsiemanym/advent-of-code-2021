@@ -79,7 +79,11 @@ func Test_PowInt(t *testing.T) {
 }
 
 func Test_MedianInt_Empty(t *testing.T) {
-	assertPanic(t, func() { MedianInt([]int{}...) })
+	median := MedianInt([]int{}...)
+
+	if median != 0 {
+		t.Errorf("Expected 0 but got %v.", median)
+	}
 }
 
 func Test_MedianInt_Odd(t *testing.T) {
@@ -92,10 +96,10 @@ func Test_MedianInt_Odd(t *testing.T) {
 }
 
 func Test_MedianInt_Even(t *testing.T) {
-	values := []int{1, 2, 3, 4}
+	values := []int{1, 3, 5, 7}
 	median := MedianInt(values...)
 
-	if median != 3 {
-		t.Errorf("Expected 3 but got %v.", median)
+	if median != 4 {
+		t.Errorf("Expected 4 but got %v.", median)
 	}
 }
