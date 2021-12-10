@@ -51,8 +51,11 @@ func solvePart2(heightMap *heightMap) string {
 	basinSizes := make([]int, len(lowPoints))
 
 	for index, lowPoint := range lowPoints {
+		log.Debugf("Exploring basin around low point %v.", *lowPoint)
 		basins[index] = heightMap.ExploreBasin(lowPoint, NewBasin())
 		basinSizes[index] = basins[index].Size()
+		log.Debugf("Basin explored.")
+		log.Tracef("size = %v", basinSizes[index])
 	}
 
 	log.Debugf("%v basins found.", len(basins))
@@ -62,11 +65,11 @@ func solvePart2(heightMap *heightMap) string {
 	length := len(basinSizes)
 
 	log.Tracef("basinSizes = %v", basinSizes)
-	productOfLargestThreeBasinSizes := basinSizes[length-1] * basinSizes[length-2] * basinSizes[length-3]
-	log.Tracef("productOfLargestThreeBasinSizes = %v", productOfLargestThreeBasinSizes)
+	productOfThreeLargestBasinSizes := basinSizes[length-1] * basinSizes[length-2] * basinSizes[length-3]
+	log.Tracef("productOfThreeLargestBasinSizes = %v", productOfThreeLargestBasinSizes)
 
 	log.Info("Part 2 solved.")
-	return strconv.Itoa(productOfLargestThreeBasinSizes)
+	return strconv.Itoa(productOfThreeLargestBasinSizes)
 }
 
 func parseHeightMap(text string) *heightMap {

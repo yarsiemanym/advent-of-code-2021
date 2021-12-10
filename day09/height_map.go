@@ -68,7 +68,7 @@ func (heightMap *heightMap) GetPointsAdjacentTo(point *common.Point) []*common.P
 }
 
 func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, exploredBasin *basin) *basin {
-	log.Debugf("Looking for paths up hill from point %v.", *lowPoint)
+	log.Tracef("Looking for paths up hill from point %v.", *lowPoint)
 	currentValue := heightMap.GetHeightAt(lowPoint)
 	adjacentPoints := heightMap.GetPointsAdjacentTo(lowPoint)
 	basin := NewBasin()
