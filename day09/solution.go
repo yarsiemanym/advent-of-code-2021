@@ -26,10 +26,11 @@ func solvePart1(heightMap *heightMap) string {
 
 	lowPoints := heightMap.FindLowPoints()
 	log.Debugf("%v low points found.", len(lowPoints))
+	log.Info(heightMap.RenderLowPoints(lowPoints))
 	totalRiskLevel := 0
 
 	for index, lowPoint := range lowPoints {
-		log.Debugf("Assessing risk level of lowpoint %v.", index)
+		log.Debugf("Assessing risk level of low point %v.", index)
 		log.Tracef("lowPoint = %v", *lowPoint)
 		risklevel := 1 + heightMap.GetHeightAt(lowPoint)
 		log.Tracef("risklevel = %v", risklevel)
@@ -46,31 +47,26 @@ func solvePart2(heightMap *heightMap) string {
 	log.Info("Solving part 2.")
 
 	lowPoints := heightMap.FindLowPoints()
+	basins := make([]*basin, len(lowPoints))
 	basinSizes := make([]int, len(lowPoints))
 
 	for index, lowPoint := range lowPoints {
-		basinSizes[index] = len(heightMap.ExploreBasin(lowPoint, make([]*common.Point, 0)))
+		basins[index] = heightMap.ExploreBasin(lowPoint, NewBasin())
+		basinSizes[index] = basins[index].Size()
 	}
+
+	log.Debugf("%v basins found.", len(basins))
+	log.Info(heightMap.RenderBasins(basins))
 
 	sort.Ints(basinSizes)
 	length := len(basinSizes)
 
 	log.Tracef("basinSizes = %v", basinSizes)
-	product := basinSizes[length-1] * basinSizes[length-2] * basinSizes[length-3]
-	log.Tracef("product = %v", product)
+	productOfLargestThreeBasinSizes := basinSizes[length-1] * basinSizes[length-2] * basinSizes[length-3]
+	log.Tracef("productOfLargestThreeBasinSizes = %v", productOfLargestThreeBasinSizes)
 
 	log.Info("Part 2 solved.")
-	return strconv.Itoa(product)
-}
-
-func sliceContainsPoint(slice []*common.Point, element *common.Point) bool {
-	for _, member := range slice {
-		if *member == *element {
-			return true
-		}
-	}
-
-	return false
+	return strconv.Itoa(productOfLargestThreeBasinSizes)
 }
 
 func parseHeightMap(text string) *heightMap {

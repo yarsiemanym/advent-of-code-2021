@@ -1,6 +1,8 @@
 package day09
 
 import (
+	"strconv"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
@@ -65,16 +67,15 @@ func (heightMap *heightMap) GetPointsAdjacentTo(point *common.Point) []*common.P
 	return heightMap.plane.GetPointsAdjacentTo(point)
 }
 
-func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, alreadyExplored []*common.Point) []*common.Point {
-	log.Debugf("Looking for paths uphill from point %v.", *lowPoint)
+func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, exploredBasin *basin) *basin {
+	log.Debugf("Looking for paths up hill from point %v.", *lowPoint)
 	currentValue := heightMap.GetHeightAt(lowPoint)
 	adjacentPoints := heightMap.GetPointsAdjacentTo(lowPoint)
-	pointsInBasin := []*common.Point{
-		lowPoint,
-	}
+	basin := NewBasin()
+	basin.Add(lowPoint)
 
 	for _, adjacentPoint := range adjacentPoints {
-		if sliceContainsPoint(alreadyExplored, adjacentPoint) {
+		if exploredBasin.Contains(adjacentPoint) {
 			log.Tracef("Already explored point %v. Skipping.", *adjacentPoint)
 			continue
 		}
@@ -82,16 +83,67 @@ func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, alreadyExplored
 		adjacentValue := heightMap.GetHeightAt(adjacentPoint)
 
 		if adjacentValue < 9 && adjacentValue >= currentValue {
-			log.Tracef("Point %v is uphill. Climbing.", *adjacentPoint)
-			uphillPoints := heightMap.ExploreBasin(adjacentPoint, pointsInBasin)
+			log.Tracef("Point %v is up hill. Climbing.", *adjacentPoint)
+			newlyExploredBasin := heightMap.ExploreBasin(adjacentPoint, basin)
 
-			for _, uphillPoint := range uphillPoints {
-				if !sliceContainsPoint(pointsInBasin, uphillPoint) {
-					pointsInBasin = append(pointsInBasin, uphillPoint)
-				}
-			}
+			basin.Add(newlyExploredBasin.points...)
 		}
 	}
 
-	return pointsInBasin
+	return basin
+}
+
+func (heightMap *heightMap) RenderLowPoints(points []*common.Point) string {
+	output := "Low Points\n"
+
+	for y := heightMap.plane.Span().Start().Y(); y <= heightMap.plane.Span().End().Y(); y++ {
+		for x := heightMap.plane.Span().Start().X(); x <= heightMap.plane.Span().End().X(); x++ {
+			isLowPoint := false
+
+			for _, point := range points {
+				if point.X() == x && point.Y() == y {
+					isLowPoint = true
+					break
+				}
+			}
+
+			if isLowPoint {
+				output += strconv.Itoa(heightMap.GetHeightAt(common.NewPoint(x, y)))
+			} else {
+				output += "."
+			}
+		}
+
+		output += "\n"
+	}
+
+	return output
+}
+
+func (heightMap *heightMap) RenderBasins(basins []*basin) string {
+	output := "Basins\n"
+
+	for y := heightMap.plane.Span().Start().Y(); y <= heightMap.plane.Span().End().Y(); y++ {
+		for x := heightMap.plane.Span().Start().X(); x <= heightMap.plane.Span().End().X(); x++ {
+			point := common.NewPoint(x, y)
+			pointIsInABasin := false
+
+			for _, basin := range basins {
+				if basin.Contains(point) {
+					pointIsInABasin = true
+					break
+				}
+			}
+
+			if pointIsInABasin {
+				output += strconv.Itoa(heightMap.GetHeightAt(point))
+			} else {
+				output += "."
+			}
+		}
+
+		output += "\n"
+	}
+
+	return output
 }
