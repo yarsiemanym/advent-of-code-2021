@@ -16,6 +16,17 @@ func SumInt(values ...int) int {
 	return sum
 }
 
+func MedianInt(values ...int) int {
+	length := len(values)
+
+	if length == 0 {
+		panic("Cannot determine the median of an empty slice.")
+	}
+
+	median := values[(length / 2)]
+	return median
+}
+
 func MaxInt(values ...int) int {
 	maxValue := math.MinInt
 
