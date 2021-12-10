@@ -159,19 +159,26 @@ func autoCompleteAndScore(incompleteLine string, stack *common.Stack) int {
 }
 
 func scoreAutoCompleteChar(autoCompletedChar rune) int {
+	log.Tracef("Scoring autocompleted character '%c'", autoCompletedChar)
+
+	score := 0
+
 	switch autoCompletedChar {
 	case ')':
-		return 1
+		score = 1
 	case ']':
-		return 2
+		score = 2
 	case '}':
-		return 3
+		score = 3
 	case '>':
-		return 4
+		score = 4
 	default:
 		log.Warningf("Character '%c' does not have a score.", autoCompletedChar)
-		return 0
 	}
+
+	log.Tracef("score = %v", score)
+
+	return score
 }
 
 func parseLine(text string) interface{} {
