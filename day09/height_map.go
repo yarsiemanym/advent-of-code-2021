@@ -26,6 +26,7 @@ func NewHeightMap(heights [][]int) *heightMap {
 }
 
 func (heightMap *heightMap) FindLowPoints() []*common.Point {
+	log.Debug("Seaching for low points.")
 	var lowPoints []*common.Point
 
 	for _, point := range heightMap.plane.GetAllPoints() {
@@ -34,20 +35,35 @@ func (heightMap *heightMap) FindLowPoints() []*common.Point {
 		}
 	}
 
+	log.Debugf("%v low points found.", len(lowPoints))
+
 	return lowPoints
 }
 
 func (heightMap *heightMap) IsLowPoint(point *common.Point) bool {
+	log.Tracef("Determining if point %v is a low point.", *point)
 	currentValue := heightMap.GetHeightAt(point)
+	log.Tracef("height = %v", currentValue)
 	adjacentPoints := heightMap.GetPointsAdjacentTo(point)
 	isLow := true
 
 	for _, adjacentPoint := range adjacentPoints {
+		log.Tracef("Inspecting adjacent point %v.", *adjacentPoint)
 		adjacentValue := heightMap.GetHeightAt(adjacentPoint)
+		log.Tracef("height = %v", adjacentValue)
 		if adjacentValue <= currentValue {
+			log.Tracef("Adjacent point %v is lower.", *adjacentPoint)
 			isLow = false
 			break
+		} else {
+			log.Tracef("Adjacent point %v is not lower.", *adjacentPoint)
 		}
+	}
+
+	if isLow {
+		log.Tracef("Point %v is a low point.", *point)
+	} else {
+		log.Tracef("Point %v is not a low point.", *point)
 	}
 
 	return isLow

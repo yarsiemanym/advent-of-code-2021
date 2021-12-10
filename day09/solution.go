@@ -51,14 +51,14 @@ func solvePart2(heightMap *heightMap) string {
 	basinSizes := make([]int, len(lowPoints))
 
 	for index, lowPoint := range lowPoints {
-		log.Debugf("Exploring basin around low point %v.", *lowPoint)
+		log.Debugf("Exploring basin around low point %v.", index)
 		basins[index] = heightMap.ExploreBasin(lowPoint, NewBasin())
 		basinSizes[index] = basins[index].Size()
 		log.Debugf("Basin explored.")
 		log.Tracef("size = %v", basinSizes[index])
 	}
 
-	log.Debugf("%v basins found.", len(basins))
+	log.Debugf("%v basins explored.", len(basins))
 	log.Info(heightMap.RenderBasins(basins))
 
 	sort.Ints(basinSizes)
