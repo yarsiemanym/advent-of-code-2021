@@ -1,7 +1,5 @@
 package common
 
-import log "github.com/sirupsen/logrus"
-
 type BoundedPlane struct {
 	span      *LineSegment
 	locations [][]interface{}
@@ -80,8 +78,6 @@ func (plane *BoundedPlane) SetValueAt(point *Point, value interface{}) {
 }
 
 func (plane *BoundedPlane) GetPointsOrthoganallyAdjacentTo(point *Point) []*Point {
-	log.Tracef("Getting all points orthoganally adjacent to %v.", *point)
-
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
@@ -100,14 +96,10 @@ func (plane *BoundedPlane) GetPointsOrthoganallyAdjacentTo(point *Point) []*Poin
 		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y-1))
 	}
 
-	log.Tracef("%v orthoganally adjacent points.", len(adjacentPoints))
-
 	return adjacentPoints
 }
 
 func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
-	log.Tracef("Getting all points adjacent to %v.", *point)
-
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
@@ -142,14 +134,10 @@ func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
 		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y-1))
 	}
 
-	log.Tracef("%v adjacent points.", len(adjacentPoints))
-
 	return adjacentPoints
 }
 
 func (plane *BoundedPlane) GetAllPoints() []*Point {
-	log.Tracef("Getting all points in bounded plane.")
-
 	var points []*Point
 
 	for y := plane.span.start.y; y <= plane.span.end.y; y++ {
@@ -157,8 +145,6 @@ func (plane *BoundedPlane) GetAllPoints() []*Point {
 			points = append(points, NewPoint(x, y))
 		}
 	}
-
-	log.Tracef("%v points.", len(points))
 
 	return points
 }
