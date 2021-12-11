@@ -79,8 +79,8 @@ func (plane *BoundedPlane) SetValueAt(point *Point, value interface{}) {
 	plane.locations[row][col] = value
 }
 
-func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
-	log.Tracef("Getting all points adjacent to %v.", *point)
+func (plane *BoundedPlane) GetPointsOrthoganallyAdjacentTo(point *Point) []*Point {
+	log.Tracef("Getting all points orthoganally adjacent to %v.", *point)
 
 	var adjacentPoints []*Point
 
@@ -98,6 +98,48 @@ func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
 
 	if point.y-1 >= plane.span.start.y {
 		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y-1))
+	}
+
+	log.Tracef("%v orthoganally adjacent points.", len(adjacentPoints))
+
+	return adjacentPoints
+}
+
+func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
+	log.Tracef("Getting all points adjacent to %v.", *point)
+
+	var adjacentPoints []*Point
+
+	if point.x+1 <= plane.span.end.x {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y))
+	}
+
+	if point.x+1 <= plane.span.end.x && point.y+1 <= plane.span.end.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y+1))
+	}
+
+	if point.y+1 <= plane.span.end.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y+1))
+	}
+
+	if point.x-1 >= plane.span.start.x && point.y+1 <= plane.span.end.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y+1))
+	}
+
+	if point.x-1 >= plane.span.start.x {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y))
+	}
+
+	if point.x-1 >= plane.span.start.x && point.y-1 >= plane.span.start.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y-1))
+	}
+
+	if point.y-1 >= plane.span.start.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y-1))
+	}
+
+	if point.x+1 <= plane.span.end.x && point.y-1 >= plane.span.start.y {
+		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y-1))
 	}
 
 	log.Tracef("%v adjacent points.", len(adjacentPoints))

@@ -120,6 +120,121 @@ func Test_boundedPlane_SetValueAt(t *testing.T) {
 	}
 }
 
+func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Interior(t *testing.T) {
+	points := []*Point{
+		NewPoint(3, 3),
+		NewPoint(-3, 3),
+		NewPoint(-3, -3),
+		NewPoint(3, -3),
+	}
+
+	plane := NewBoundedPlaneFromPoints(points)
+
+	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(1, 1))
+
+	if len(adjacentPoints) != 4 {
+		t.Errorf("Expected 4 but got %v.", len(adjacentPoints))
+	}
+
+	if adjacentPoints[0] == nil {
+		t.Error("adjacenPoints[0] is nil.")
+	} else if adjacentPoints[0].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[0].y)
+	}
+
+	if adjacentPoints[1] == nil {
+		t.Error("adjacenPoints[1] is nil.")
+	} else if adjacentPoints[1].x != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].y)
+	}
+
+	if adjacentPoints[2] == nil {
+		t.Error("adjacenPoints[2] is nil.")
+	} else if adjacentPoints[2].x != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[2].x)
+	} else if adjacentPoints[2].y != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[2].y)
+	}
+
+	if adjacentPoints[3] == nil {
+		t.Error("adjacenPoints[3] is nil.")
+	} else if adjacentPoints[3].x != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[3].x)
+	} else if adjacentPoints[3].y != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[3].y)
+	}
+}
+
+func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner1(t *testing.T) {
+	points := []*Point{
+		NewPoint(3, 3),
+		NewPoint(-3, 3),
+		NewPoint(-3, -3),
+		NewPoint(3, -3),
+	}
+
+	plane := NewBoundedPlaneFromPoints(points)
+
+	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(-3, -3))
+
+	if len(adjacentPoints) != 2 {
+		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
+	}
+
+	if adjacentPoints[0] == nil {
+		t.Error("adjacenPoints[0] is nil.")
+	} else if adjacentPoints[0].x != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != -3 {
+		t.Errorf("Expected -3 but got %v.", adjacentPoints[0].y)
+	}
+
+	if adjacentPoints[1] == nil {
+		t.Error("adjacenPoints[1] is nil.")
+	} else if adjacentPoints[1].x != -3 {
+		t.Errorf("Expected -3 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[1].y)
+	}
+}
+
+func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner2(t *testing.T) {
+	points := []*Point{
+		NewPoint(3, 3),
+		NewPoint(-3, 3),
+		NewPoint(-3, -3),
+		NewPoint(3, -3),
+	}
+
+	plane := NewBoundedPlaneFromPoints(points)
+
+	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(3, 3))
+
+	if len(adjacentPoints) != 2 {
+		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
+	}
+
+	if adjacentPoints[0] == nil {
+		t.Error("adjacenPoints[0] is nil.")
+	} else if adjacentPoints[0].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != 3 {
+		t.Errorf("Expected 3 but got %v.", adjacentPoints[0].y)
+	}
+
+	if adjacentPoints[1] == nil {
+		t.Error("adjacenPoints[1] is nil.")
+	} else if adjacentPoints[1].x != 3 {
+		t.Errorf("Expected 3 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].y)
+	}
+}
+
 func Test_boundedPlane_GetPointsAdjacentTo_Interior(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
@@ -130,42 +245,74 @@ func Test_boundedPlane_GetPointsAdjacentTo_Interior(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacenPoints := plane.GetPointsAdjacentTo(NewPoint(1, 1))
+	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(1, 1))
 
-	if len(adjacenPoints) != 4 {
-		t.Errorf("Expected 4 but got %v.", len(adjacenPoints))
+	if len(adjacentPoints) != 8 {
+		t.Errorf("Expected 8 but got %v.", len(adjacentPoints))
 	}
 
-	if adjacenPoints[0] == nil {
+	if adjacentPoints[0] == nil {
 		t.Error("adjacenPoints[0] is nil.")
-	} else if adjacenPoints[0].x != 2 {
-		t.Errorf("Expected 2 but got %v.", adjacenPoints[0].x)
-	} else if adjacenPoints[0].y != 1 {
-		t.Errorf("Expected 1 but got %v.", adjacenPoints[0].y)
+	} else if adjacentPoints[0].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[0].y)
 	}
 
-	if adjacenPoints[1] == nil {
+	if adjacentPoints[1] == nil {
 		t.Error("adjacenPoints[1] is nil.")
-	} else if adjacenPoints[1].x != 1 {
-		t.Errorf("Expected 1 but got %v.", adjacenPoints[1].x)
-	} else if adjacenPoints[1].y != 2 {
-		t.Errorf("Expected 2 but got %v.", adjacenPoints[1].y)
+	} else if adjacentPoints[1].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].y)
 	}
 
-	if adjacenPoints[2] == nil {
+	if adjacentPoints[2] == nil {
 		t.Error("adjacenPoints[2] is nil.")
-	} else if adjacenPoints[2].x != 0 {
-		t.Errorf("Expected 0 but got %v.", adjacenPoints[2].x)
-	} else if adjacenPoints[2].y != 1 {
-		t.Errorf("Expected 1 but got %v.", adjacenPoints[2].y)
+	} else if adjacentPoints[2].x != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[2].x)
+	} else if adjacentPoints[2].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[2].y)
 	}
 
-	if adjacenPoints[3] == nil {
+	if adjacentPoints[3] == nil {
 		t.Error("adjacenPoints[3] is nil.")
-	} else if adjacenPoints[3].x != 1 {
-		t.Errorf("Expected 1 but got %v.", adjacenPoints[3].x)
-	} else if adjacenPoints[3].y != 0 {
-		t.Errorf("Expected 0 but got %v.", adjacenPoints[3].y)
+	} else if adjacentPoints[3].x != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[3].x)
+	} else if adjacentPoints[3].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[3].y)
+	}
+
+	if adjacentPoints[4] == nil {
+		t.Error("adjacenPoints[4] is nil.")
+	} else if adjacentPoints[4].x != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[4].x)
+	} else if adjacentPoints[4].y != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[4].y)
+	}
+
+	if adjacentPoints[5] == nil {
+		t.Error("adjacenPoints[5] is nil.")
+	} else if adjacentPoints[5].x != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[5].x)
+	} else if adjacentPoints[5].y != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[5].y)
+	}
+
+	if adjacentPoints[6] == nil {
+		t.Error("adjacenPoints[6] is nil.")
+	} else if adjacentPoints[6].x != 1 {
+		t.Errorf("Expected 1 but got %v.", adjacentPoints[6].x)
+	} else if adjacentPoints[6].y != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[6].y)
+	}
+
+	if adjacentPoints[7] == nil {
+		t.Error("adjacenPoints[7] is nil.")
+	} else if adjacentPoints[7].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[7].x)
+	} else if adjacentPoints[7].y != 0 {
+		t.Errorf("Expected 0 but got %v.", adjacentPoints[7].y)
 	}
 }
 
@@ -179,26 +326,34 @@ func Test_boundedPlane_GetPointsAdjacentTo_Corner1(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacenPoints := plane.GetPointsAdjacentTo(NewPoint(-3, -3))
+	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(-3, -3))
 
-	if len(adjacenPoints) != 2 {
-		t.Errorf("Expected 2 but got %v.", len(adjacenPoints))
+	if len(adjacentPoints) != 3 {
+		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))
 	}
 
-	if adjacenPoints[0] == nil {
+	if adjacentPoints[0] == nil {
 		t.Error("adjacenPoints[0] is nil.")
-	} else if adjacenPoints[0].x != -2 {
-		t.Errorf("Expected -2 but got %v.", adjacenPoints[0].x)
-	} else if adjacenPoints[0].y != -3 {
-		t.Errorf("Expected -2 but got %v.", adjacenPoints[0].y)
+	} else if adjacentPoints[0].x != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != -3 {
+		t.Errorf("Expected -3 but got %v.", adjacentPoints[0].y)
 	}
 
-	if adjacenPoints[1] == nil {
+	if adjacentPoints[1] == nil {
 		t.Error("adjacenPoints[1] is nil.")
-	} else if adjacenPoints[1].x != -3 {
-		t.Errorf("Expected -3 but got %v.", adjacenPoints[1].x)
-	} else if adjacenPoints[1].y != -2 {
-		t.Errorf("Expected -2 but got %v.", adjacenPoints[1].y)
+	} else if adjacentPoints[1].x != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[1].y)
+	}
+
+	if adjacentPoints[2] == nil {
+		t.Error("adjacenPoints[2] is nil.")
+	} else if adjacentPoints[2].x != -3 {
+		t.Errorf("Expected -3 but got %v.", adjacentPoints[2].x)
+	} else if adjacentPoints[2].y != -2 {
+		t.Errorf("Expected -2 but got %v.", adjacentPoints[2].y)
 	}
 }
 
@@ -212,25 +367,33 @@ func Test_boundedPlane_GetPointsAdjacentTo_Corner2(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacenPoints := plane.GetPointsAdjacentTo(NewPoint(3, 3))
+	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(3, 3))
 
-	if len(adjacenPoints) != 2 {
-		t.Errorf("Expected 2 but got %v.", len(adjacenPoints))
+	if len(adjacentPoints) != 3 {
+		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))
 	}
 
-	if adjacenPoints[0] == nil {
+	if adjacentPoints[0] == nil {
 		t.Error("adjacenPoints[0] is nil.")
-	} else if adjacenPoints[0].x != 2 {
-		t.Errorf("Expected 2 but got %v.", adjacenPoints[0].x)
-	} else if adjacenPoints[0].y != 3 {
-		t.Errorf("Expected 2 but got %v.", adjacenPoints[0].y)
+	} else if adjacentPoints[0].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[0].x)
+	} else if adjacentPoints[0].y != 3 {
+		t.Errorf("Expected 3 but got %v.", adjacentPoints[0].y)
 	}
 
-	if adjacenPoints[1] == nil {
+	if adjacentPoints[1] == nil {
 		t.Error("adjacenPoints[1] is nil.")
-	} else if adjacenPoints[1].x != 3 {
-		t.Errorf("Expected 3 but got %v.", adjacenPoints[1].x)
-	} else if adjacenPoints[1].y != 2 {
-		t.Errorf("Expected 2 but got %v.", adjacenPoints[1].y)
+	} else if adjacentPoints[1].x != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].x)
+	} else if adjacentPoints[1].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[1].y)
+	}
+
+	if adjacentPoints[2] == nil {
+		t.Error("adjacenPoints[2] is nil.")
+	} else if adjacentPoints[2].x != 3 {
+		t.Errorf("Expected 3 but got %v.", adjacentPoints[2].x)
+	} else if adjacentPoints[2].y != 2 {
+		t.Errorf("Expected 2 but got %v.", adjacentPoints[2].y)
 	}
 }

@@ -80,7 +80,7 @@ func (heightMap *heightMap) GetHeightAt(point *common.Point) int {
 }
 
 func (heightMap *heightMap) GetPointsAdjacentTo(point *common.Point) []*common.Point {
-	return heightMap.plane.GetPointsAdjacentTo(point)
+	return heightMap.plane.GetPointsOrthoganallyAdjacentTo(point)
 }
 
 func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, exploredBasin *basin) *basin {
