@@ -30,8 +30,10 @@ func solvePart1(caveMap map[string]*Cave) string {
 	scanner := NewScanner()
 	paths := scanner.Scan(NewPath([]*Cave{start}), end, false)
 
-	for _, path := range paths {
-		log.Info(path.Render())
+	if log.GetLevel() >= log.DebugLevel {
+		for _, path := range paths {
+			log.Info(path.Render())
+		}
 	}
 
 	pathCount := len(paths)
@@ -48,8 +50,10 @@ func solvePart2(caveMap map[string]*Cave) string {
 	scanner := NewScanner()
 	paths := scanner.Scan(NewPath([]*Cave{start}), end, true)
 
-	for _, path := range paths {
-		log.Info(path.Render())
+	if log.GetLevel() >= log.DebugLevel {
+		for _, path := range paths {
+			log.Debug(path.Render())
+		}
 	}
 
 	pathCount := len(paths)
@@ -96,7 +100,7 @@ func parseCaveSystem(text string) map[string]*Cave {
 		}
 	}
 
-	log.Info(renderCaveMap(caveMap))
+	log.Debug(renderCaveMap(caveMap))
 
 	return caveMap
 }

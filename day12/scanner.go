@@ -33,11 +33,9 @@ func (scanner *scanner) Scan(trunk *Path, destination *Cave, allowRevisitToSmall
 			branches := scanner.Scan(newTrunk, destination, keepAllowingRevisitToSmallCaves)
 
 			for _, branch := range branches {
-				if branch.End() == destination {
-					newPath := NewPath([]*Cave{connectedCave})
-					newPath.Add(branch.nodes...)
-					paths = append(paths, newPath)
-				}
+				newPath := NewPath([]*Cave{connectedCave})
+				newPath.Add(branch.nodes...)
+				paths = append(paths, newPath)
 			}
 		}
 	}

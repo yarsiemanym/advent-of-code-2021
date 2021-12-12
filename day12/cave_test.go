@@ -37,6 +37,7 @@ func Test_Cave_GetExplorableConnectedCaves_DoNotRevisitSmallCaves(t *testing.T) 
 	caveD := NewCave("d")
 	caveE := NewCave("e")
 
+	start.Connect(caveA)
 	caveA.Connect(caveB)
 	caveA.Connect(caveC)
 	caveA.Connect(caveD)
@@ -71,6 +72,7 @@ func Test_Cave_GetExplorableConnectedCaves_RevisitSmallCaves(t *testing.T) {
 	caveD := NewCave("d")
 	caveE := NewCave("e")
 
+	start.Connect(caveA)
 	caveA.Connect(caveB)
 	caveA.Connect(caveC)
 	caveA.Connect(caveD)

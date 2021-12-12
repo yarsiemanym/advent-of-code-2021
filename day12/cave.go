@@ -42,14 +42,14 @@ func (cave *Cave) IsBig() bool {
 	return cave.name[0] >= 65 && cave.name[0] <= 90
 }
 
-func (cave *Cave) GetExplorableConnectedCaves(path *Path, allowRevisitToSmallCaves bool) []*Cave {
-	explorableCaves := []*Cave{}
+func (cave *Cave) GetExplorableConnectedCaves(trunk *Path, allowRevisitToSmallCaves bool) []*Cave {
+	branches := []*Cave{}
 
 	for _, connectedCave := range cave.ConnectedCaves() {
-		if connectedCave != cave && (allowRevisitToSmallCaves || !path.Contains(connectedCave) || connectedCave.IsBig()) {
-			explorableCaves = append(explorableCaves, connectedCave)
+		if connectedCave != cave && (allowRevisitToSmallCaves || !trunk.Contains(connectedCave) || connectedCave.IsBig()) {
+			branches = append(branches, connectedCave)
 		}
 	}
 
-	return explorableCaves
+	return branches
 }
