@@ -34,7 +34,10 @@ func (puzzle *Puzzle) Solve() Answer {
 	}
 
 	log.Info("Solving puzzle.")
+	startTime := time.Now()
 	answer := puzzle.solution(puzzle)
+	elapsedTime := time.Since(startTime)
+	answer.ExecutionTime = elapsedTime
 	log.Info("Puzzle solved!")
 
 	return answer

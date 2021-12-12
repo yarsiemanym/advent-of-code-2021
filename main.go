@@ -29,12 +29,12 @@ func main() {
 	checkForHelpCommand()
 
 	log.Info("Begin execution.")
-
 	puzzle := setupPuzzle()
 	answer := puzzle.Solve()
-	fmt.Printf("%v Day %v\n", answer.Year, answer.Day)
-	fmt.Printf("Part 1 Answer: %v\n", answer.Part1)
-	fmt.Printf("Part 2 Answer: %v\n", answer.Part2)
+	fmt.Printf("%d Day %d\n", answer.Year, answer.Day)
+	fmt.Printf("Part 1 Answer: %s\n", answer.Part1)
+	fmt.Printf("Part 2 Answer: %s\n", answer.Part2)
+	fmt.Printf("Total Execution Time: %s\n", answer.ExecutionTime)
 
 	log.Info("End execution.")
 }
