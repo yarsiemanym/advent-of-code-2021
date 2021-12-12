@@ -14,7 +14,7 @@ endif
 .PHONY:
 test: session
 	go test common/*.go
-	go test day00/*.go
+	@#go test day00/*.go
 	go test day01/*.go
 	go test day02/*.go
 	go test day03/*.go
@@ -57,7 +57,7 @@ run: build session
 
 .PHONY:
 run-all: build session
-	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 0
+	@#AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 0
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 1
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 2
 	AOC_LOG_LEVEL=$(LOG_LEVEL) ./advent-of-code-2021 3
