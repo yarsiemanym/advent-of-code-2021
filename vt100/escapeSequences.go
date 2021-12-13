@@ -33,12 +33,7 @@ const CyanBackgroundAttribute = "46"
 const WhiteBackgroundAttribute = "47"
 
 func Print(text string, attributes ...string) {
-	attributeString := ""
-	for _, attribute := range attributes {
-		attributeString += fmt.Sprintf("%s;", attribute)
-	}
-	attributeString = strings.Trim(attributeString, ";")
-
+	attributeString := strings.Join(attributes, ";")
 	fmt.Printf("\x1b[%sm%s\x1b[0m", attributeString, text)
 }
 
