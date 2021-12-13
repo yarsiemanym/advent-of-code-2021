@@ -45,11 +45,6 @@ func main() {
 	vt100.Print("Total Execution Time: ", vt100.DimAttribute)
 	vt100.Println(answer.ExecutionTime.String(), vt100.RedForegroundAttribute)
 
-	/* fmt.Printf("%d Day %d\n", answer.Year, answer.Day)
-	fmt.Printf("Part 1 Answer: %s\n", answer.Part1)
-	fmt.Printf("Part 2 Answer: %s\n", answer.Part2)
-	fmt.Printf("Total Execution Time: %s\n", answer.ExecutionTime) */
-
 	log.Info("End execution.")
 }
 
