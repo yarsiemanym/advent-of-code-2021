@@ -7,6 +7,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
+	"github.com/yarsiemanym/advent-of-code-2021/vt100"
 )
 
 func Solve(puzzle *common.Puzzle) common.Answer {
@@ -44,7 +45,7 @@ func solvePart2(points []*common.Point, creases []*Crease) string {
 	}
 
 	output := "\n" + paper.Render()
-	output = strings.Replace(output, "#", "\x1b[43m \x1b[0m", -1)
+	output = strings.Replace(output, "#", "\x1b["+vt100.YellowBackgroundAttribute+"m \x1b[0m", -1)
 	output = strings.Replace(output, ".", " ", -1)
 
 	log.Info("Part 2 solved.")
