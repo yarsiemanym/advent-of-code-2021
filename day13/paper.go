@@ -53,75 +53,40 @@ func (paper *Paper) DrawMark(point *common.Point) {
 func (paper *Paper) Fold(crease *Crease) *Paper {
 	log.Debugf("Folding paper along %c=%d.", crease.Axis, crease.Position)
 
-	var foldedPaper *Paper = nil
+	newHeight := paper.Height()
+	newWidth := paper.Width()
 
 	switch crease.Axis {
 	case 'x':
-		foldedPaper = paper.foldLeft(crease.Position)
+		newWidth /= 2
 	case 'y':
-		foldedPaper = paper.foldUp(crease.Position)
+		newHeight /= 2
 	default:
 		log.Fatalf("'%c' is not a valid axis.", crease.Axis)
 	}
 
-	return foldedPaper
-}
-
-func (paper *Paper) foldUp(y int) *Paper {
-	foldedPaper := NewPaper(y, paper.Width())
+	var foldedPaper *Paper = NewPaper(newHeight, newWidth)
 
 	for _, point := range paper.GetMarkedPoints() {
+		newX := point.X()
+		newY := point.Y()
 
-		if point.Y() > y {
-			newY := point.Y() - (2 * common.MaxInt(0, point.Y()-y))
-			foldedPoint := common.NewPoint(point.X(), newY)
-
-			log.Tracef("Folding point (%d, %d) into (%d, %d). ", point.X(), point.Y(), foldedPoint.X(), foldedPoint.Y())
-
-			mark := paper.GetMarkAt(point)
-			if mark == '#' {
-				foldedPaper.DrawMark(foldedPoint)
-			}
-		} else if point.Y() < y {
-			log.Tracef("Point (%d, %d) doesn't need to be folded.", point.X(), point.Y())
-
-			mark := paper.GetMarkAt(point)
-			if mark == '#' {
-				foldedPaper.DrawMark(point)
-			}
-		} else {
-			log.Tracef("Point (%d, %d) is on the fold line. Skipping.", point.X(), point.Y())
+		if crease.Axis == 'x' && newX >= newWidth {
+			newX = point.X() - (2 * common.MaxInt(0, point.X()-newWidth))
 		}
-	}
 
-	return foldedPaper
-}
-
-func (paper *Paper) foldLeft(x int) *Paper {
-	foldedPaper := NewPaper(paper.Height(), x)
-
-	for _, point := range paper.GetMarkedPoints() {
-
-		if point.X() > x {
-			newX := point.X() - (2 * common.MaxInt(0, point.X()-x))
-			foldedPoint := common.NewPoint(newX, point.Y())
-
-			log.Tracef("Folding point (%d, %d) into (%d, %d). ", point.X(), point.Y(), foldedPoint.X(), foldedPoint.Y())
-
-			mark := paper.GetMarkAt(point)
-			if mark == '#' {
-				foldedPaper.DrawMark(foldedPoint)
-			}
-		} else if point.X() < x {
-			log.Tracef("Point (%d, %d) doesn't need to be folded.", point.X(), point.Y())
-
-			mark := paper.GetMarkAt(point)
-			if mark == '#' {
-				foldedPaper.DrawMark(point)
-			}
-		} else {
-			log.Tracef("Point (%d, %d) is on the fold line. Skipping.", point.X(), point.Y())
+		if crease.Axis == 'y' && newY >= newHeight {
+			newY = point.Y() - (2 * common.MaxInt(0, point.Y()-newHeight))
 		}
+
+		foldedPoint := common.NewPoint(newX, newY)
+
+		log.Tracef("Folding point (%d, %d) into (%d, %d). ", point.X(), point.Y(), foldedPoint.X(), foldedPoint.Y())
+		mark := paper.GetMarkAt(point)
+		if mark == '#' {
+			foldedPaper.DrawMark(foldedPoint)
+		}
+
 	}
 
 	return foldedPaper

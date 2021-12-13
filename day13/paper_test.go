@@ -23,13 +23,17 @@ func Test_Paper_GetMarkAt(t *testing.T) {
 	}
 }
 
-func Test_Paper_FoldUp(t *testing.T) {
+func Test_Paper_Fold_Up(t *testing.T) {
 	paper := NewPaper(5, 5)
 	paper.DrawMark(common.NewPoint(1, 1))
 	paper.DrawMark(common.NewPoint(2, 1))
 	paper.DrawMark(common.NewPoint(2, 3))
 	paper.DrawMark(common.NewPoint(3, 3))
-	foldedPaper := paper.foldUp(2)
+	crease := &Crease{
+		Axis:     'y',
+		Position: 2,
+	}
+	foldedPaper := paper.Fold(crease)
 
 	if foldedPaper == nil {
 		t.Error("foldedPaper is nil.")
@@ -59,13 +63,17 @@ func Test_Paper_FoldUp(t *testing.T) {
 	}
 }
 
-func Test_Paper_FoldLeft(t *testing.T) {
+func Test_Paper_Fold_Left(t *testing.T) {
 	paper := NewPaper(5, 5)
 	paper.DrawMark(common.NewPoint(1, 1))
 	paper.DrawMark(common.NewPoint(1, 2))
 	paper.DrawMark(common.NewPoint(3, 2))
 	paper.DrawMark(common.NewPoint(3, 3))
-	foldedPaper := paper.foldLeft(2)
+	crease := &Crease{
+		Axis:     'x',
+		Position: 2,
+	}
+	foldedPaper := paper.Fold(crease)
 
 	if foldedPaper == nil {
 		t.Error("foldedPaper is nil.")
