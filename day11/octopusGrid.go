@@ -58,7 +58,7 @@ func (grid *octopusGrid) flash(step int) {
 }
 
 func (grid *octopusGrid) propagateFlashFrom(point *common.Point, step int) {
-	adjacentPoints := grid.plane.GetPointsAdjacentTo(point)
+	adjacentPoints := grid.plane.GetMooreNeighbors(point)
 
 	for _, adjacentPoint := range adjacentPoints {
 		octopus := grid.GetOctopusAt(adjacentPoint)

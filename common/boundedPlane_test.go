@@ -130,7 +130,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Interior(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(1, 1))
+	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(1, 1))
 
 	if len(adjacentPoints) != 4 {
 		t.Errorf("Expected 4 but got %v.", len(adjacentPoints))
@@ -179,7 +179,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner1(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(-3, -3))
+	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(-3, -3))
 
 	if len(adjacentPoints) != 2 {
 		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
@@ -212,7 +212,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner2(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsOrthoganallyAdjacentTo(NewPoint(3, 3))
+	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(3, 3))
 
 	if len(adjacentPoints) != 2 {
 		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
@@ -245,7 +245,7 @@ func Test_boundedPlane_GetPointsAdjacentTo_Interior(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(1, 1))
+	adjacentPoints := plane.GetMooreNeighbors(NewPoint(1, 1))
 
 	if len(adjacentPoints) != 8 {
 		t.Errorf("Expected 8 but got %v.", len(adjacentPoints))
@@ -326,7 +326,7 @@ func Test_boundedPlane_GetPointsAdjacentTo_Corner1(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(-3, -3))
+	adjacentPoints := plane.GetMooreNeighbors(NewPoint(-3, -3))
 
 	if len(adjacentPoints) != 3 {
 		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))
@@ -367,7 +367,7 @@ func Test_boundedPlane_GetPointsAdjacentTo_Corner2(t *testing.T) {
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetPointsAdjacentTo(NewPoint(3, 3))
+	adjacentPoints := plane.GetMooreNeighbors(NewPoint(3, 3))
 
 	if len(adjacentPoints) != 3 {
 		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))

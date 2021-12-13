@@ -77,7 +77,8 @@ func (plane *BoundedPlane) SetValueAt(point *Point, value interface{}) {
 	plane.locations[row][col] = value
 }
 
-func (plane *BoundedPlane) GetPointsOrthoganallyAdjacentTo(point *Point) []*Point {
+// Only orthagonally adjacent.
+func (plane *BoundedPlane) GetVonNeumannNeighbors(point *Point) []*Point {
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
@@ -99,7 +100,8 @@ func (plane *BoundedPlane) GetPointsOrthoganallyAdjacentTo(point *Point) []*Poin
 	return adjacentPoints
 }
 
-func (plane *BoundedPlane) GetPointsAdjacentTo(point *Point) []*Point {
+// Both orthagonally and diagonally adjacent.
+func (plane *BoundedPlane) GetMooreNeighbors(point *Point) []*Point {
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
