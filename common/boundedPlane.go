@@ -27,7 +27,7 @@ func NewBoundedPlaneFromPoints(points []*Point) *BoundedPlane {
 
 	return &BoundedPlane{
 		span:      NewLineSegment(NewPoint(minX, minY), NewPoint(maxX, maxY)),
-		locations: initializeLocations(maxY-minY, maxX-minX),
+		locations: initializeLocations(maxY-minY+1, maxX-minX+1),
 	}
 }
 
@@ -46,7 +46,7 @@ func NewBoundedPlaneFromLines(lines []*LineSegment) *BoundedPlane {
 
 	return &BoundedPlane{
 		span:      NewLineSegment(NewPoint(minX, minY), NewPoint(maxX, maxY)),
-		locations: initializeLocations(maxY-minY, maxX-minX),
+		locations: initializeLocations(maxY-minY+1, maxX-minX+1),
 	}
 }
 

@@ -28,13 +28,13 @@ func Test_NewBoundedPlaneFromPoints(t *testing.T) {
 		t.Errorf("Expected 3 but got %v.", plane.span.end.y)
 	}
 
-	if len(plane.locations) != 6 {
-		t.Errorf("Expected 6 but got %v.", len(plane.locations))
+	if len(plane.locations) != 7 {
+		t.Errorf("Expected 7 but got %v.", len(plane.locations))
 	}
 
 	for _, row := range plane.locations {
-		if len(row) != 6 {
-			t.Errorf("Expected 6 but got %v.", len(row))
+		if len(row) != 7 {
+			t.Errorf("Expected 7 but got %v.", len(row))
 		}
 	}
 }
@@ -63,13 +63,13 @@ func Test_NewBoundedPlaneFromLines(t *testing.T) {
 		t.Errorf("Expected 3 but got %v.", plane.span.end.y)
 	}
 
-	if len(plane.locations) != 6 {
-		t.Errorf("Expected 6 but got %v.", len(plane.locations))
+	if len(plane.locations) != 7 {
+		t.Errorf("Expected 7 but got %v.", len(plane.locations))
 	}
 
 	for _, row := range plane.locations {
-		if len(row) != 6 {
-			t.Errorf("Expected 6 but got %v.", len(row))
+		if len(row) != 7 {
+			t.Errorf("Expected 7 but got %v.", len(row))
 		}
 	}
 }
