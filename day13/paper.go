@@ -1,6 +1,8 @@
 package day13
 
 import (
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
@@ -93,7 +95,7 @@ func (paper *Paper) Fold(crease *Crease) *Paper {
 }
 
 func (paper *Paper) Render() string {
-	output := "Paper\n"
+	output := ""
 
 	for y := 0; y < paper.Height(); y++ {
 		for x := 0; x < paper.Width(); x++ {
@@ -102,6 +104,8 @@ func (paper *Paper) Render() string {
 		}
 		output += "\n"
 	}
+
+	output = strings.Trim(output, "\n")
 
 	return output
 }

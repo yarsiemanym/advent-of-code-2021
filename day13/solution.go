@@ -3,6 +3,7 @@ package day13
 import (
 	"regexp"
 	"strconv"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
@@ -42,7 +43,9 @@ func solvePart2(points []*common.Point, creases []*Crease) string {
 		paper = paper.Fold(crease)
 	}
 
-	output := paper.Render()
+	output := "\n" + paper.Render()
+	output = strings.Replace(output, "#", "\x1b[43m \x1b[0m", -1)
+	output = strings.Replace(output, ".", " ", -1)
 
 	log.Info("Part 2 solved.")
 	return output
@@ -74,7 +77,6 @@ func parsePoints(text string) []*common.Point {
 	}
 
 	log.Debugf("%v points parsed.", len(points))
-
 	return points
 }
 
@@ -86,19 +88,16 @@ func parsePoint(text string) *common.Point {
 	log.Debugf("Parsing point from \"%s\".", text)
 
 	tokens := common.Split(text, ",")
-
 	if len(tokens) != 2 {
 		log.Fatalf("Splitting \"%s\" on ',' yielded %v tokens.", text, len(tokens))
 	}
 
 	x, err := strconv.Atoi(tokens[0])
-
 	if err != nil {
 		log.Fatalf("\"%s\" is not an integer.", tokens[0])
 	}
 
 	y, err := strconv.Atoi(tokens[1])
-
 	if err != nil {
 		log.Fatalf("\"%s\" is not an integer.", tokens[1])
 	}
@@ -122,7 +121,6 @@ func parseCreases(text string) []*Crease {
 	}
 
 	log.Debugf("%v creases parsed.", len(creases))
-
 	return creases
 }
 
@@ -137,8 +135,8 @@ func parseCrease(text string) *Crease {
 	match := pattern.FindStringSubmatch(text)
 
 	axis := rune(match[1][0])
-	position, err := strconv.Atoi(match[2])
 
+	position, err := strconv.Atoi(match[2])
 	if err != nil {
 		log.Fatalf("\"%s\" is not an integer.", match[1])
 	}
@@ -148,6 +146,5 @@ func parseCrease(text string) *Crease {
 		Position: position,
 	}
 	log.Tracef("Crease %c=%d parsed.", crease.Axis, crease.Position)
-
 	return crease
 }

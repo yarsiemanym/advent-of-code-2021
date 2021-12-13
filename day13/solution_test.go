@@ -1,10 +1,14 @@
 package day13
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/yarsiemanym/advent-of-code-2021/common"
+	"github.com/yarsiemanym/advent-of-code-2021/vt100"
 )
+
+const yellowBlock = "\x1b[" + vt100.YellowBackgroundAttribute + "m \x1b[0m"
 
 func Test_Solve_Test1(t *testing.T) {
 	puzzle := &common.Puzzle{
@@ -14,14 +18,16 @@ func Test_Solve_Test1(t *testing.T) {
 	}
 
 	expectedPart1 := "17"
-	expectedPart2 := "Paper\n" +
+	expectedPart2 := "\n" +
 		"#####\n" +
 		"#...#\n" +
 		"#...#\n" +
 		"#...#\n" +
 		"#####\n" +
 		".....\n" +
-		".....\n"
+		"....."
+	expectedPart2 = strings.Replace(expectedPart2, "#", yellowBlock, -1)
+	expectedPart2 = strings.Replace(expectedPart2, ".", " ", -1)
 
 	answer := Solve(puzzle)
 

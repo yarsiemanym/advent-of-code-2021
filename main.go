@@ -22,6 +22,7 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/day11"
 	"github.com/yarsiemanym/advent-of-code-2021/day12"
 	"github.com/yarsiemanym/advent-of-code-2021/day13"
+	"github.com/yarsiemanym/advent-of-code-2021/vt100"
 )
 
 func main() {
@@ -32,10 +33,22 @@ func main() {
 	log.Info("Begin execution.")
 	puzzle := setupPuzzle()
 	answer := puzzle.Solve()
-	fmt.Printf("%d Day %d\n", answer.Year, answer.Day)
+
+	vt100.Println(fmt.Sprintf("%d Day %d", answer.Year, answer.Day), vt100.GreenForegroundAttribute)
+
+	vt100.Print("Part 1 Answer: ", vt100.DimAttribute)
+	vt100.Println(answer.Part1, vt100.YellowForegroundAttribute)
+
+	vt100.Print("Part 2 Answer: ", vt100.DimAttribute)
+	vt100.Println(answer.Part2, vt100.YellowForegroundAttribute)
+
+	vt100.Print("Total Execution Time: ", vt100.DimAttribute)
+	vt100.Println(answer.ExecutionTime.String(), vt100.RedForegroundAttribute)
+
+	/* fmt.Printf("%d Day %d\n", answer.Year, answer.Day)
 	fmt.Printf("Part 1 Answer: %s\n", answer.Part1)
 	fmt.Printf("Part 2 Answer: %s\n", answer.Part2)
-	fmt.Printf("Total Execution Time: %s\n", answer.ExecutionTime)
+	fmt.Printf("Total Execution Time: %s\n", answer.ExecutionTime) */
 
 	log.Info("End execution.")
 }
