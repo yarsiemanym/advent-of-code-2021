@@ -8,7 +8,7 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/vt100"
 )
 
-const yellowBlock = "\x1b[" + vt100.YellowBackgroundAttribute + "m \x1b[0m"
+var yellowBlock = vt100.Sprint(" ", vt100.YellowBackgroundAttribute)
 
 func Test_Solve_Test1(t *testing.T) {
 	puzzle := &common.Puzzle{
