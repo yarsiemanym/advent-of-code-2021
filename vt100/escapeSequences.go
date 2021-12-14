@@ -34,7 +34,7 @@ const WhiteBackgroundAttribute = "47"
 
 func Sprint(text string, attributes ...string) string {
 	attributeString := strings.Join(attributes, ";")
-	output := fmt.Sprintf("\x1b[%sm%s\x1b[0m", attributeString, text)
+	output := fmt.Sprintf("\x1b[%sm%s\x1b[%sm", attributeString, text, ResetAttributes)
 	return output
 }
 
