@@ -9,7 +9,7 @@ const ResetAttributes = "0"
 
 const BrightAttribute = "1"
 const DimAttribute = "2"
-const UndescoreAttribute = "4"
+const UnderscoreAttribute = "4"
 const BlinkAttribute = "5"
 const ReverseAttribute = "7"
 const HiddenAttribute = "8"
@@ -32,9 +32,29 @@ const MagentaBackgroundAttribute = "45"
 const CyanBackgroundAttribute = "46"
 const WhiteBackgroundAttribute = "47"
 
-func Print(text string, attributes ...string) {
+func Sprint(text string, attributes ...string) string {
 	attributeString := strings.Join(attributes, ";")
-	fmt.Printf("\x1b[%sm%s\x1b[0m", attributeString, text)
+	output := fmt.Sprintf("\x1b[%sm%s\x1b[0m", attributeString, text)
+	return output
+}
+
+func Sprintf(format string, values []interface{}, attributes ...string) string {
+	text := fmt.Sprintf(format, values...)
+	return Sprint(text, attributes...)
+}
+
+func Sprintln(text string, attributes ...string) string {
+	text += "\n"
+	return Sprint(text, attributes...)
+}
+
+func Printf(format string, values []interface{}, attributes ...string) {
+	text := fmt.Sprintf(format, values...)
+	Print(text, attributes...)
+}
+
+func Print(text string, attributes ...string) {
+	fmt.Print(Sprint(text, attributes...))
 }
 
 func Println(text string, attributes ...string) {

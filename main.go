@@ -34,7 +34,7 @@ func main() {
 	puzzle := setupPuzzle()
 	answer := puzzle.Solve()
 
-	vt100.Println(fmt.Sprintf("%d Day %d", answer.Year, answer.Day), vt100.GreenForegroundAttribute)
+	vt100.Printf("%d Day %d\n", []interface{}{answer.Year, answer.Day}, vt100.GreenForegroundAttribute)
 
 	vt100.Print("Part 1 Answer: ", vt100.DimAttribute)
 	vt100.Println(answer.Part1, vt100.YellowForegroundAttribute)

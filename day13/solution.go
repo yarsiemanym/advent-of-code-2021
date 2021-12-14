@@ -45,7 +45,7 @@ func solvePart2(points []*common.Point, creases []*Crease) string {
 	}
 
 	output := "\n" + paper.Render()
-	output = strings.Replace(output, "#", "\x1b["+vt100.YellowBackgroundAttribute+"m \x1b[0m", -1)
+	output = strings.Replace(output, "#", vt100.Sprint(" ", vt100.YellowBackgroundAttribute), -1)
 	output = strings.Replace(output, ".", " ", -1)
 
 	log.Info("Part 2 solved.")
@@ -56,7 +56,7 @@ func parseInput(text string) ([]*common.Point, []*Crease) {
 	chunks := common.Split(text, "\n\n")
 
 	if len(chunks) != 2 {
-		log.Fatalf("Splitting \"%s\" on \"\\n\\n\" yielded %v tokens.", common.Peek(text, common.PEEK_MAX_DEFAULT), len(chunks))
+		log.Fatalf("Splitting \"%s\" on \"\\n\\n\" yielded %d tokens.", common.Peek(text, common.PEEK_MAX_DEFAULT), len(chunks))
 	}
 
 	points := parsePoints(chunks[0])
