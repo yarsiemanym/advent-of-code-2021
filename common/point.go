@@ -29,6 +29,10 @@ func (point *Point) Move(slope *Point) *Point {
 	}
 }
 
+func (point *Point) ManhattanDistance(otherPoint *Point) int {
+	return AbsInt(point.x-otherPoint.x) + AbsInt(point.y-otherPoint.y)
+}
+
 func (point *Point) String() string {
 	return fmt.Sprintf("(%d,%d)", point.x, point.y)
 }
