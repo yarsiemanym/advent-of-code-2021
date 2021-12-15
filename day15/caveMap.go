@@ -53,20 +53,11 @@ func (caveMap *CaveMap) Width() int {
 	return caveMap.plane.Span().End().X() + 1
 }
 
-func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point, excludePath *Path) []*common.Point {
+func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point) []*common.Point {
 	adjacentPoints := []*common.Point{}
 
 	for _, adjacentPoint := range caveMap.plane.GetVonNeumannNeighbors(point) {
-		exclude := false
-
-		for _, excludedPoint := range excludePath.Points() {
-			if *adjacentPoint == *excludedPoint {
-				exclude = true
-				break
-			}
-		}
-
-		if !exclude {
+		if adjacentPoint.X() >= point.X() && adjacentPoint.Y() >= point.Y() {
 			adjacentPoints = append(adjacentPoints, adjacentPoint)
 		}
 	}
@@ -74,34 +65,50 @@ func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point, excludePath *Pa
 	return adjacentPoints
 }
 
-func (caveMap *CaveMap) FindLowestRiskLevel(trunk *Path, end *common.Point) *Path {
-	tip := trunk.End()
-	log.Debugf("Finding lowest risk path from %s to %s.", tip, end)
+var memos = map[common.Point]*Path{}
+
+func (caveMap *CaveMap) FindLowestRiskPath(stem *Path, end *common.Point, resetMemos bool) *Path {
+	if resetMemos {
+		memos = map[common.Point]*Path{}
+	}
+
+	here := stem.End()
+	log.Debugf("Finding lowest risk path from %s to %s.", here, end)
 
 	var optimalPath *Path
-	for _, adjacentPoint := range caveMap.GetPointsAdjacentTo(tip, trunk) {
-		log.Debugf("Inspecting adjacent point %s.", adjacentPoint)
-		var branchOptimalPath *Path
-		if *adjacentPoint == *end {
-			log.Debug("Destination found!")
-			branchOptimalPath = NewPath()
-			branchOptimalPath.Append(adjacentPoint)
-		} else {
-			log.Debug("Destination not found.")
-			newTrunk := trunk.Clone()
-			newTrunk.Append(adjacentPoint)
-			branchOptimalPath = caveMap.FindLowestRiskLevel(newTrunk, end)
-			if branchOptimalPath != nil {
-				branchOptimalPath.Prepend(adjacentPoint)
+	memoizedOptimalPath, exists := memos[*here]
+
+	if exists {
+		log.Debug("Optimal path memoized.")
+		optimalPath = memoizedOptimalPath
+	} else {
+		for _, adjacentPoint := range caveMap.GetPointsAdjacentTo(here) {
+			log.Debugf("Inspecting adjacent point %s.", adjacentPoint)
+			var branchOptimalPath *Path
+			if *adjacentPoint == *end {
+				log.Debug("Destination found!")
+				branchOptimalPath = NewPath()
+				branchOptimalPath.Append(adjacentPoint)
+			} else {
+				log.Debug("Destination not found.")
+				log.Debug("Exploring adjacent point.")
+				newStem := stem.Clone()
+				newStem.Append(adjacentPoint)
+				branchOptimalPath = caveMap.FindLowestRiskPath(newStem, end, false)
+				if branchOptimalPath != nil {
+					branchOptimalPath.Prepend(adjacentPoint)
+				}
+			}
+
+			if caveMap.RiskLevelOf(branchOptimalPath) < caveMap.RiskLevelOf(optimalPath) {
+				optimalPath = branchOptimalPath
 			}
 		}
 
-		if caveMap.RiskLevelOf(branchOptimalPath) < caveMap.RiskLevelOf(optimalPath) {
-			optimalPath = branchOptimalPath
-		}
+		memos[*here] = optimalPath.Clone()
 	}
 
-	log.Debugf("Lowest risk path from %s to %s is %s", tip, end, optimalPath)
+	log.Debugf("Lowest risk path from %s to %s is %s", here, end, optimalPath)
 	return optimalPath
 }
 

@@ -78,7 +78,7 @@ func (path *Path) String() string {
 	output := "["
 
 	for _, point := range path.points {
-		output += fmt.Sprintf("%s =>", point)
+		output += fmt.Sprintf("%s => ", point)
 	}
 
 	output = strings.Trim(output, " =>") + "]"

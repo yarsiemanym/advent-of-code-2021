@@ -29,10 +29,10 @@ func solvePart1(caveMap *CaveMap) string {
 	log.Infof("start = %s", start)
 	log.Infof("end = %s", end)
 
-	initialPath := NewPath()
-	initialPath.Append(start)
+	stem := NewPath()
+	stem.Append(start)
 
-	optimalPath := caveMap.FindLowestRiskLevel(initialPath, end)
+	optimalPath := caveMap.FindLowestRiskPath(stem, end, true)
 	log.Infof("optimalPath = %s", optimalPath)
 
 	riskValue := caveMap.RiskLevelOf(optimalPath)
