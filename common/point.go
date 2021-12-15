@@ -1,5 +1,7 @@
 package common
 
+import "fmt"
+
 type Point struct {
 	x int
 	y int
@@ -25,4 +27,8 @@ func (point *Point) Move(slope *Point) *Point {
 		x: point.X() + slope.X(),
 		y: point.Y() + slope.Y(),
 	}
+}
+
+func (point *Point) String() string {
+	return fmt.Sprintf("(%d,%d)", point.x, point.y)
 }

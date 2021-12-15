@@ -12,6 +12,16 @@ func NewBoundedPlane(height int, width int) *BoundedPlane {
 	}
 }
 
+func NewBoundedPlaneFromValues(values [][]interface{}) *BoundedPlane {
+	maxY := len(values) - 1
+	maxX := len(values[0]) - 1
+
+	return &BoundedPlane{
+		span:      NewLineSegment(NewPoint(0, 0), NewPoint(maxX, maxY)),
+		locations: values,
+	}
+}
+
 func NewBoundedPlaneFromPoints(points []*Point) *BoundedPlane {
 	minX := 0
 	maxX := 0
