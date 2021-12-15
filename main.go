@@ -23,6 +23,7 @@ import (
 	"github.com/yarsiemanym/advent-of-code-2021/day12"
 	"github.com/yarsiemanym/advent-of-code-2021/day13"
 	"github.com/yarsiemanym/advent-of-code-2021/day14"
+	"github.com/yarsiemanym/advent-of-code-2021/day15"
 	"github.com/yarsiemanym/advent-of-code-2021/vt100"
 )
 
@@ -126,8 +127,10 @@ func setupPuzzle() common.Puzzle {
 		puzzle.SetSolution(day13.Solve)
 	case 14:
 		puzzle.SetSolution(day14.Solve)
+	case 15:
+		puzzle.SetSolution(day15.Solve)
 	default:
-		log.Fatalf("Day %v has no solution yet.", puzzle.Day)
+		log.Fatalf("Day %d has no solution yet.", puzzle.Day)
 	}
 
 	return puzzle
@@ -135,18 +138,18 @@ func setupPuzzle() common.Puzzle {
 
 func sanitizeDayArg(arg string) int {
 	log.Debug("Sanitizing day argument.")
-	log.Tracef("arg = \"%v\"", arg)
+	log.Tracef("arg = \"%s\"", arg)
 
 	day, err := strconv.Atoi(arg)
 
 	if err != nil {
-		log.Fatalf("\"%v\" is not an integer.", arg)
+		log.Fatalf("\"%s\" is not an integer.", arg)
 	}
 
 	if day < 0 || day > 25 {
-		log.Fatalf("%v is not between 0 and 25.", arg)
+		log.Fatalf("%d is not between 0 and 25.", day)
 	}
 
-	log.Tracef("day = %v", day)
+	log.Tracef("day = %d", day)
 	return day
 }
