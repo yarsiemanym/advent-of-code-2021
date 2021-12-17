@@ -16,6 +16,10 @@ func NewPath() *Path {
 }
 
 func (path *Path) Clone() *Path {
+	if path == nil {
+		return nil
+	}
+
 	clone := &Path{
 		points: make([]*common.Point, len(path.points)),
 	}
@@ -24,14 +28,26 @@ func (path *Path) Clone() *Path {
 }
 
 func (path *Path) Append(point *common.Point) {
+	if path == nil {
+		return
+	}
+
 	path.points = append(path.points, point)
 }
 
 func (path *Path) Prepend(point *common.Point) {
+	if path == nil {
+		return
+	}
+
 	path.points = append([]*common.Point{point}, path.points...)
 }
 
 func (path *Path) Contains(point *common.Point) bool {
+	if path == nil {
+		return false
+	}
+
 	exists := false
 
 	for _, pathPoint := range path.points {
@@ -44,37 +60,43 @@ func (path *Path) Contains(point *common.Point) bool {
 	return exists
 }
 
-func (path *Path) Overlaps(otherPath *Path) bool {
-	for _, point := range otherPath.points {
-		if path.Contains(point) {
-			return true
-		}
+func (path *Path) Length() int {
+	if path == nil {
+		return 0
 	}
 
-	return false
+	return len(path.points)
 }
 
 func (path *Path) Start() *common.Point {
-	if len(path.points) > 0 {
-		return path.points[0]
+	if path == nil || len(path.points) == 0 {
+		return nil
 	}
 
-	return nil
+	return path.points[0]
 }
 
 func (path *Path) Points() []*common.Point {
+	if path == nil {
+		return nil
+	}
+
 	return path.points
 }
 
 func (path *Path) End() *common.Point {
-	if len(path.points) > 0 {
-		return path.points[len(path.points)-1]
+	if path == nil || len(path.points) == 0 {
+		return nil
 	}
 
-	return nil
+	return path.points[len(path.points)-1]
 }
 
 func (path *Path) String() string {
+	if path == nil {
+		return "[]"
+	}
+
 	output := "["
 
 	for _, point := range path.points {

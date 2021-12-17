@@ -4,6 +4,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/ahrtr/gocontainer/queue/priorityqueue"
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
@@ -53,11 +54,34 @@ func (caveMap *CaveMap) Width() int {
 	return caveMap.plane.Span().End().X() + 1
 }
 
-func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point) []*common.Point {
+func (caveMap *CaveMap) StraightPath() *Path {
+	path := NewPath()
+
+	for x, y := 0, 0; x < caveMap.Width()-1 && y < caveMap.Height()-1; {
+
+		path.Append(common.NewPoint(x, y))
+		x++
+		path.Append(common.NewPoint(x, y))
+		y++
+	}
+
+	return path
+}
+
+func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point, excludePath *Path) []*common.Point {
 	adjacentPoints := []*common.Point{}
 
 	for _, adjacentPoint := range caveMap.plane.GetVonNeumannNeighbors(point) {
-		if adjacentPoint.X() >= point.X() && adjacentPoint.Y() >= point.Y() {
+		exclude := false
+
+		for _, excludedPoint := range excludePath.Points() {
+			if *adjacentPoint == *excludedPoint {
+				exclude = true
+				break
+			}
+		}
+
+		if !exclude {
 			adjacentPoints = append(adjacentPoints, adjacentPoint)
 		}
 	}
@@ -65,61 +89,92 @@ func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point) []*common.Point
 	return adjacentPoints
 }
 
-var memos = map[common.Point]*Path{}
+func (caveMap *CaveMap) FindLowestRiskPath() *Path {
+	start := common.NewPoint(0, 0)
+	end := common.NewPoint(caveMap.Width()-1, caveMap.Height()-1)
+	_, prev := caveMap.dijkstra(start, end)
 
-func (caveMap *CaveMap) FindLowestRiskPath(stem *Path, end *common.Point, resetMemos bool) *Path {
-	if resetMemos {
-		memos = map[common.Point]*Path{}
+	path := NewPath()
+	here := end
+	for here != nil {
+		path.Prepend(here)
+		here = prev[*here]
 	}
 
-	here := stem.End()
-	log.Debugf("Finding lowest risk path from %s to %s.", here, end)
-
-	var optimalPath *Path
-	memoizedOptimalPath, exists := memos[*here]
-
-	if exists {
-		log.Debug("Optimal path memoized.")
-		optimalPath = memoizedOptimalPath
-	} else {
-		for _, adjacentPoint := range caveMap.GetPointsAdjacentTo(here) {
-			log.Debugf("Inspecting adjacent point %s.", adjacentPoint)
-			var branchOptimalPath *Path
-			if *adjacentPoint == *end {
-				log.Debug("Destination found!")
-				branchOptimalPath = NewPath()
-				branchOptimalPath.Append(adjacentPoint)
-			} else {
-				log.Debug("Destination not found.")
-				log.Debug("Exploring adjacent point.")
-				newStem := stem.Clone()
-				newStem.Append(adjacentPoint)
-				branchOptimalPath = caveMap.FindLowestRiskPath(newStem, end, false)
-				if branchOptimalPath != nil {
-					branchOptimalPath.Prepend(adjacentPoint)
-				}
-			}
-
-			if caveMap.RiskLevelOf(branchOptimalPath) < caveMap.RiskLevelOf(optimalPath) {
-				optimalPath = branchOptimalPath
-			}
-		}
-
-		memos[*here] = optimalPath.Clone()
+	if path.Start() != start && path.End() != end {
+		log.Errorf("Path does not reach from %s to %s.", start, end)
+		log.Tracef("path = %s", path)
+		return nil
 	}
 
-	log.Debugf("Lowest risk path from %s to %s is %s", here, end, optimalPath)
-	return optimalPath
+	return path
 }
 
-func (caveMap *CaveMap) RiskLevelOf(path *Path) int {
+func (caveMap *CaveMap) Compare(v1 interface{}, v2 interface{}) (int, error) {
+	point1 := v1.(common.Point)
+	point2 := v2.(common.Point)
+	riskLevel1 := caveMap.GetRiskLevelAt(&point1)
+	riskLevel2 := caveMap.GetRiskLevelAt(&point2)
+	if riskLevel1 < riskLevel2 {
+		return -1, nil
+	} else if riskLevel1 > riskLevel2 {
+		return 1, nil
+	} else {
+		return 0, nil
+	}
+}
+
+var distances map[common.Point]int
+var previous map[common.Point]*common.Point
+
+// https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+func (caveMap *CaveMap) dijkstra(start *common.Point, end *common.Point) (map[common.Point]int, map[common.Point]*common.Point) {
+	log.Debug("Begin Dijkstra.")
+
+	ceiling := caveMap.GetRiskLevelOf(caveMap.StraightPath())
+	unvisited := priorityqueue.New().WithComparator(caveMap)
+	distances = map[common.Point]int{}
+	previous = map[common.Point]*common.Point{}
+
+	unvisited.Add(*start)
+	distances[*start] = 0
+
+	for !unvisited.IsEmpty() {
+		log.Debugf("%d points left to visit.", unvisited.Size())
+		here := unvisited.Poll().(common.Point)
+
+		for _, neighbor := range caveMap.plane.GetVonNeumannNeighbors(&here) {
+			alternateDistance := distances[here] + caveMap.GetRiskLevelAt(neighbor)
+
+			neightborDistance, exists := distances[*neighbor]
+
+			if !exists {
+				neightborDistance = math.MaxInt
+			}
+
+			if alternateDistance > ceiling {
+				unvisited.Remove(*neighbor)
+			} else if alternateDistance < neightborDistance {
+				distances[*neighbor] = alternateDistance
+				previous[*neighbor] = &here
+				unvisited.Add(*neighbor)
+			}
+		}
+	}
+
+	log.Debug("End Dijkstra.")
+
+	return distances, previous
+}
+
+func (caveMap *CaveMap) GetRiskLevelOf(path *Path) int {
 	if path == nil {
 		return math.MaxInt
 	}
 
 	riskLevel := 0
 
-	for _, point := range path.Points() {
+	for _, point := range path.Points()[1:] {
 		riskLevel += caveMap.GetRiskLevelAt(point)
 	}
 
@@ -140,4 +195,27 @@ func (caveMap *CaveMap) String() string {
 	}
 
 	return output
+}
+
+func (caveMap *CaveMap) Expand(coefficient int) *CaveMap {
+	originalHeight := caveMap.Height()
+	originalWidth := caveMap.Width()
+	expandedHeight := originalHeight * coefficient
+	expandedWidth := originalWidth * coefficient
+
+	expandedRiskLevels := make([][]int, expandedHeight)
+	for row := range expandedRiskLevels {
+		expandedRiskLevels[row] = make([]int, expandedWidth)
+
+		for col := range expandedRiskLevels[row] {
+			riskLevel := caveMap.GetRiskLevelAt(common.NewPoint(col%originalWidth, row%originalHeight))
+			expandedRiskLevel := (riskLevel + (row / originalHeight) + (col / originalWidth))
+			if expandedRiskLevel > 9 {
+				expandedRiskLevel -= 9
+			}
+			expandedRiskLevels[row][col] = expandedRiskLevel
+		}
+	}
+
+	return NewCaveMapFromValues(expandedRiskLevels)
 }
