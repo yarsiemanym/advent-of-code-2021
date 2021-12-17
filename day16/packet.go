@@ -83,7 +83,7 @@ func popBits(bits bitarray.BitArray, length uint64) (uint64, bitarray.BitArray) 
 
 	remainingBits := bitarray.NewBitArray(bits.Capacity() - length)
 
-	for i := uint64(length); i < bits.Capacity(); i++ {
+	for i := length; i < bits.Capacity(); i++ {
 		isSet, err := bits.GetBit(i)
 		common.Check(err)
 

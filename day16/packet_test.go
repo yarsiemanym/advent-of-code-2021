@@ -28,7 +28,7 @@ func Test_nextByte(t *testing.T) {
 	text := "D2FE28"
 	bits := hexStringToBitArray(text)
 	version, bits := popBits(bits, 3)
-	typeId, bits := popBits(bits, 3)
+	typeId, _ := popBits(bits, 3)
 
 	if version != 6 {
 		t.Errorf("Expected 6 but got %d.", version)
