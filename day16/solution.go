@@ -26,10 +26,10 @@ func solvePart1(text string) string {
 
 	var packet Packet
 	packet, _ = ParsePacket(bits)
-	checkSum := packet.CheckSum()
+	versionSum := packet.VersionSum()
 
 	log.Info("Part 1 solved.")
-	return strconv.FormatUint(checkSum, 10)
+	return strconv.FormatUint(versionSum, 10)
 }
 
 func solvePart2(text string) string {

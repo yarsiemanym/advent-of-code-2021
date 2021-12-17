@@ -81,14 +81,14 @@ func (packet operatorPacket) Value() uint64 {
 	}
 }
 
-func (packet operatorPacket) CheckSum() uint64 {
-	checkSum := uint64(packet.version)
+func (packet operatorPacket) VersionSum() uint64 {
+	sum := uint64(packet.version)
 
 	for _, subPacket := range packet.subPackets {
-		checkSum += subPacket.CheckSum()
+		sum += subPacket.VersionSum()
 	}
 
-	return checkSum
+	return sum
 }
 
 func parseOperatorPacket(version uint64, typeId uint64, payload bitarray.BitArray) (Packet, bitarray.BitArray) {

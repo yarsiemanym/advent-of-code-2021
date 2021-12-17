@@ -13,7 +13,7 @@ type Packet interface {
 	Version() uint64
 	TypeId() uint64
 	Value() uint64
-	CheckSum() uint64
+	VersionSum() uint64
 }
 
 func ParsePacket(payload bitarray.BitArray) (Packet, bitarray.BitArray) {

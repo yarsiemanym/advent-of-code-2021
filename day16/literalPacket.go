@@ -23,7 +23,7 @@ func (packet literalPacket) Value() uint64 {
 	return packet.value
 }
 
-func (packet literalPacket) CheckSum() uint64 {
+func (packet literalPacket) VersionSum() uint64 {
 	return packet.version
 }
 

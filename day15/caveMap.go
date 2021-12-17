@@ -110,77 +110,6 @@ func (caveMap *CaveMap) FindLowestRiskPath() *Path {
 	return path
 }
 
-type priorityQueueItem struct {
-	distance int
-	point    common.Point
-}
-
-func (caveMap *CaveMap) Compare(v1 interface{}, v2 interface{}) (int, error) {
-	item1 := v1.(priorityQueueItem)
-	item2 := v2.(priorityQueueItem)
-	if item1.distance < item2.distance {
-		return -1, nil
-	} else if item1.distance > item2.distance {
-		return 1, nil
-	} else {
-		return 0, nil
-	}
-}
-
-var distances map[common.Point]int
-var previous map[common.Point]*common.Point
-
-// https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
-func (caveMap *CaveMap) dijkstra(start *common.Point, end *common.Point) (map[common.Point]int, map[common.Point]*common.Point) {
-	log.Debug("Begin Dijkstra.")
-
-	ceiling := caveMap.GetRiskLevelOf(caveMap.StraightPath())
-	unvisited := priorityqueue.New().WithComparator(caveMap)
-	distances = map[common.Point]int{}
-	previous = map[common.Point]*common.Point{}
-
-	unvisited.Add(priorityQueueItem{
-		distance: 0,
-		point:    *start,
-	})
-	distances[*start] = 0
-
-	for !unvisited.IsEmpty() {
-		log.Debugf("%d points left to visit.", unvisited.Size())
-		here := unvisited.Poll().(priorityQueueItem).point
-
-		for _, neighbor := range caveMap.plane.GetVonNeumannNeighbors(&here) {
-			alternateDistance := distances[here] + caveMap.GetRiskLevelAt(neighbor)
-
-			neightborDistance, exists := distances[*neighbor]
-
-			if !exists {
-				neightborDistance = math.MaxInt
-			}
-
-			if alternateDistance > ceiling {
-				item := priorityQueueItem{
-					distance: distances[*neighbor],
-					point:    *neighbor,
-				}
-				unvisited.Remove(item)
-			} else if alternateDistance < neightborDistance {
-				distances[*neighbor] = alternateDistance
-				previous[*neighbor] = &here
-				item := priorityQueueItem{
-					distance: distances[*neighbor],
-					point:    *neighbor,
-				}
-				unvisited.Add(item)
-			}
-		}
-	}
-
-	log.Debug("End Dijkstra.")
-
-	return distances, previous
-}
-
 func (caveMap *CaveMap) GetRiskLevelOf(path *Path) int {
 	if path == nil {
 		return math.MaxInt
@@ -232,4 +161,80 @@ func (caveMap *CaveMap) Expand(coefficient int) *CaveMap {
 	}
 
 	return NewCaveMapFromValues(expandedRiskLevels)
+}
+
+/**************************************************************************************************
+ * Dijkstra shenanigans below this point.
+ *
+ * https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+ *************************************************************************************************/
+
+type priorityQueueItem struct {
+	distance int
+	point    common.Point
+}
+
+func (caveMap *CaveMap) Compare(v1 interface{}, v2 interface{}) (int, error) {
+	item1 := v1.(priorityQueueItem)
+	item2 := v2.(priorityQueueItem)
+	if item1.distance < item2.distance {
+		return -1, nil
+	} else if item1.distance > item2.distance {
+		return 1, nil
+	} else {
+		return 0, nil
+	}
+}
+
+var distances map[common.Point]int
+var previous map[common.Point]*common.Point
+
+func (caveMap *CaveMap) dijkstra(start *common.Point, end *common.Point) (map[common.Point]int, map[common.Point]*common.Point) {
+	log.Debug("Begin Dijkstra.")
+
+	ceiling := caveMap.GetRiskLevelOf(caveMap.StraightPath())
+	unvisited := priorityqueue.New().WithComparator(caveMap)
+	distances = map[common.Point]int{}
+	previous = map[common.Point]*common.Point{}
+
+	unvisited.Add(priorityQueueItem{
+		distance: 0,
+		point:    *start,
+	})
+	distances[*start] = 0
+
+	for !unvisited.IsEmpty() {
+		log.Debugf("%d points left to visit.", unvisited.Size())
+		here := unvisited.Poll().(priorityQueueItem).point
+
+		for _, neighbor := range caveMap.plane.GetVonNeumannNeighbors(&here) {
+			alternateDistance := distances[here] + caveMap.GetRiskLevelAt(neighbor)
+
+			neightborDistance, exists := distances[*neighbor]
+
+			if !exists {
+				neightborDistance = math.MaxInt
+			}
+
+			if alternateDistance > ceiling {
+				item := priorityQueueItem{
+					distance: distances[*neighbor],
+					point:    *neighbor,
+				}
+				unvisited.Remove(item)
+			} else if alternateDistance < neightborDistance {
+				distances[*neighbor] = alternateDistance
+				previous[*neighbor] = &here
+				item := priorityQueueItem{
+					distance: distances[*neighbor],
+					point:    *neighbor,
+				}
+				unvisited.Add(item)
+			}
+		}
+	}
+
+	log.Debug("End Dijkstra.")
+
+	return distances, previous
 }
