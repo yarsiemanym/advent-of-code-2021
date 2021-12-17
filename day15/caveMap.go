@@ -110,14 +110,17 @@ func (caveMap *CaveMap) FindLowestRiskPath() *Path {
 	return path
 }
 
+type priorityQueueItem struct {
+	distance int
+	point    common.Point
+}
+
 func (caveMap *CaveMap) Compare(v1 interface{}, v2 interface{}) (int, error) {
-	point1 := v1.(common.Point)
-	point2 := v2.(common.Point)
-	riskLevel1 := caveMap.GetRiskLevelAt(&point1)
-	riskLevel2 := caveMap.GetRiskLevelAt(&point2)
-	if riskLevel1 < riskLevel2 {
+	item1 := v1.(priorityQueueItem)
+	item2 := v2.(priorityQueueItem)
+	if item1.distance < item2.distance {
 		return -1, nil
-	} else if riskLevel1 > riskLevel2 {
+	} else if item1.distance > item2.distance {
 		return 1, nil
 	} else {
 		return 0, nil
@@ -136,12 +139,15 @@ func (caveMap *CaveMap) dijkstra(start *common.Point, end *common.Point) (map[co
 	distances = map[common.Point]int{}
 	previous = map[common.Point]*common.Point{}
 
-	unvisited.Add(*start)
+	unvisited.Add(priorityQueueItem{
+		distance: 0,
+		point:    *start,
+	})
 	distances[*start] = 0
 
 	for !unvisited.IsEmpty() {
 		log.Debugf("%d points left to visit.", unvisited.Size())
-		here := unvisited.Poll().(common.Point)
+		here := unvisited.Poll().(priorityQueueItem).point
 
 		for _, neighbor := range caveMap.plane.GetVonNeumannNeighbors(&here) {
 			alternateDistance := distances[here] + caveMap.GetRiskLevelAt(neighbor)
@@ -153,11 +159,19 @@ func (caveMap *CaveMap) dijkstra(start *common.Point, end *common.Point) (map[co
 			}
 
 			if alternateDistance > ceiling {
-				unvisited.Remove(*neighbor)
+				item := priorityQueueItem{
+					distance: distances[*neighbor],
+					point:    *neighbor,
+				}
+				unvisited.Remove(item)
 			} else if alternateDistance < neightborDistance {
 				distances[*neighbor] = alternateDistance
 				previous[*neighbor] = &here
-				unvisited.Add(*neighbor)
+				item := priorityQueueItem{
+					distance: distances[*neighbor],
+					point:    *neighbor,
+				}
+				unvisited.Add(item)
 			}
 		}
 	}
