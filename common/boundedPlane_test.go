@@ -120,7 +120,7 @@ func Test_boundedPlane_SetValueAt(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Interior(t *testing.T) {
+func Test_boundedPlane_GetVonNeumannNeighbors_Interior(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
@@ -169,7 +169,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Interior(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner1(t *testing.T) {
+func Test_boundedPlane_GetVonNeumannNeighbors_Corner1(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
@@ -202,7 +202,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner1(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner2(t *testing.T) {
+func Test_boundedPlane_GetVonNeumannNeighbors_Corner2(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
@@ -235,7 +235,7 @@ func Test_boundedPlane_GetPointsOrthoganallyAdjacentTo_Corner2(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsAdjacentTo_Interior(t *testing.T) {
+func Test_boundedPlane_GetMooreNeighbors_Interior(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
@@ -316,7 +316,7 @@ func Test_boundedPlane_GetPointsAdjacentTo_Interior(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsAdjacentTo_Corner1(t *testing.T) {
+func Test_boundedPlane_GetMooreNeighbors_Corner1(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
@@ -357,7 +357,7 @@ func Test_boundedPlane_GetPointsAdjacentTo_Corner1(t *testing.T) {
 	}
 }
 
-func Test_boundedPlane_GetPointsAdjacentTo_Corner2(t *testing.T) {
+func Test_boundedPlane_GetMooreNeighbors_Corner2(t *testing.T) {
 	points := []*Point{
 		NewPoint(3, 3),
 		NewPoint(-3, 3),
