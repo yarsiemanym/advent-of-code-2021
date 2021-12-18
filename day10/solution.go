@@ -3,6 +3,7 @@ package day10
 import (
 	"strconv"
 
+	"github.com/ahrtr/gocontainer/stack"
 	log "github.com/sirupsen/logrus"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
@@ -39,7 +40,7 @@ func solvePart1(lines []string) string {
 	for i, line := range lines {
 		hasSyntaxError := false
 		score := 0
-		stack := common.NewStack()
+		stack := stack.New()
 
 		for j, char := range line {
 			switch char {
@@ -101,7 +102,7 @@ func solvePart2(lines []string) string {
 
 	for i, line := range lines {
 		isCorrupted := false
-		stack := common.NewStack()
+		stack := stack.New()
 
 		for j, char := range line {
 			switch char {
@@ -138,7 +139,7 @@ func solvePart2(lines []string) string {
 	return strconv.Itoa(finalScore)
 }
 
-func autoCompleteAndScore(incompleteLine string, stack *common.Stack) int {
+func autoCompleteAndScore(incompleteLine string, stack stack.Interface) int {
 	log.Tracef("Autocompleting line.")
 	log.Tracef("incompleteLine = \"%v\"", incompleteLine)
 	score := 0
