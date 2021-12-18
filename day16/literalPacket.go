@@ -34,7 +34,6 @@ func parseLiteralPacket(version uint64, typeId uint64, payload bitarray.BitArray
 
 	isLastGroup := false
 	groupValues := []uint64{}
-	length := uint64(6)
 	for !isLastGroup {
 		log.Debug("Parsing value group.")
 		var bits uint64
@@ -47,7 +46,6 @@ func parseLiteralPacket(version uint64, typeId uint64, payload bitarray.BitArray
 		groupValue, payload = popBits(payload, 4)
 		log.Tracef("groupValue = %d", groupValue)
 		groupValues = append(groupValues, groupValue)
-		length += 5
 	}
 
 	literalValue := uint64(0)

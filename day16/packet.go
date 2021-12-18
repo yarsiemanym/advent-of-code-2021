@@ -96,16 +96,17 @@ func popBits(bits bitarray.BitArray, length uint64) (uint64, bitarray.BitArray) 
 }
 
 func popBitsAsBitArray(bits bitarray.BitArray, length uint64) (bitarray.BitArray, bitarray.BitArray) {
-	newBits := bitarray.NewBitArray(length)
+	frontBits := bitarray.NewBitArray(length)
+	remainingBits := bits
 
 	for i := uint64(0); i < length; i++ {
 		var bit uint64
-		bit, bits = popBits(bits, 1)
+		bit, remainingBits = popBits(remainingBits, 1)
 
 		if bit != 0 {
-			newBits.SetBit(i)
+			frontBits.SetBit(i)
 		}
 	}
 
-	return newBits, bits
+	return frontBits, remainingBits
 }

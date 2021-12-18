@@ -26,6 +26,8 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 func solvePart1(targetLeft int, targetRight int, targetBottom int, targetTop int) string {
 	log.Info("Solving part 1.")
 
+	// There is no drag on the Y axis so what goes up must reach Y=0 with the same Y velocity as it
+	// started with and the next step must not overshoot the target area.
 	maximumVelocity := common.AbsInt(targetBottom) - 1
 	maxHeight := triangularSum(maximumVelocity)
 
@@ -67,6 +69,7 @@ func solvePart2(targetLeft int, targetRight int, targetBottom int, targetTop int
 	return strconv.Itoa(trajectoriesThatHit)
 }
 
+// https://en.wikipedia.org/wiki/Triangular_number
 func triangularSum(number int) int {
 	return (number * (number + 1)) / 2
 }

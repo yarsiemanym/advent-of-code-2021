@@ -100,7 +100,7 @@ func parseOperatorPacket(version uint64, typeId uint64, payload bitarray.BitArra
 	lengthTypeId, payload = popBits(payload, 1)
 
 	switch lengthTypeId {
-	case 0:
+	case 0: // total length of subpacket bits
 		var totalLength uint64
 		totalLength, payload = popBits(payload, 15)
 
@@ -121,7 +121,7 @@ func parseOperatorPacket(version uint64, typeId uint64, payload bitarray.BitArra
 		}
 
 		return packet, payload
-	case 1:
+	case 1: // number of subpackets
 		var subPacketCount uint64
 		subPacketCount, payload = popBits(payload, 11)
 
