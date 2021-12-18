@@ -87,10 +87,10 @@ func isHit(xVelocity int, yVelocity int, targetLeft int, targetRight int, target
 		log.Tracef("yPosition = %d", yPosition)
 
 		if xPosition >= targetLeft && xPosition <= targetRight && yPosition >= targetBottom && yPosition <= targetTop {
-			log.Debugf("Hit!")
+			log.Debug("Hit!")
 			return true
 		} else if xPosition > targetRight || yPosition < targetBottom {
-			log.Debugf("Miss.")
+			log.Debug("Miss.")
 			return false
 		}
 	}
