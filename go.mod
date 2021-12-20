@@ -10,7 +10,4 @@ require (
 	github.com/spf13/cast v1.4.1
 )
 
-require (
-	github.com/fxtlabs/primes v0.0.0-20150821004651-dad82d10a449 // indirect
-	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
-)
+require golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
