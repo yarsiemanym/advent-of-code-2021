@@ -59,9 +59,9 @@ func (caveMap *CaveMap) StraightPath() *Path {
 
 	for x, y := 0, 0; x < caveMap.Width()-1 && y < caveMap.Height()-1; {
 
-		path.Append(common.NewPoint(x, y))
+		path.Append(common.New2DPoint(x, y))
 		x++
-		path.Append(common.NewPoint(x, y))
+		path.Append(common.New2DPoint(x, y))
 		y++
 	}
 
@@ -90,8 +90,8 @@ func (caveMap *CaveMap) GetPointsAdjacentTo(point *common.Point, excludePath *Pa
 }
 
 func (caveMap *CaveMap) FindLowestRiskPath() *Path {
-	start := common.NewPoint(0, 0)
-	end := common.NewPoint(caveMap.Width()-1, caveMap.Height()-1)
+	start := common.New2DPoint(0, 0)
+	end := common.New2DPoint(caveMap.Width()-1, caveMap.Height()-1)
 	_, prev := caveMap.dijkstra(start, end)
 
 	path := NewPath()
@@ -129,7 +129,7 @@ func (caveMap *CaveMap) String() string {
 
 	for y := 0; y < caveMap.Height(); y++ {
 		for x := 0; x < caveMap.Width(); x++ {
-			point := common.NewPoint(x, y)
+			point := common.New2DPoint(x, y)
 			riskLevel := caveMap.GetRiskLevelAt(point)
 			output += strconv.Itoa(riskLevel)
 		}
@@ -151,7 +151,7 @@ func (caveMap *CaveMap) Expand(coefficient int) *CaveMap {
 		expandedRiskLevels[row] = make([]int, expandedWidth)
 
 		for col := range expandedRiskLevels[row] {
-			riskLevel := caveMap.GetRiskLevelAt(common.NewPoint(col%originalWidth, row%originalHeight))
+			riskLevel := caveMap.GetRiskLevelAt(common.New2DPoint(col%originalWidth, row%originalHeight))
 			expandedRiskLevel := (riskLevel + (row / originalHeight) + (col / originalWidth))
 			if expandedRiskLevel > 9 {
 				expandedRiskLevel -= 9

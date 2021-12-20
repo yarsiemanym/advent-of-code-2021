@@ -16,7 +16,7 @@ func NewOctopusGrid(octopuses [][]*octopus) *octopusGrid {
 
 	for row := range octopuses {
 		for col := range octopuses[row] {
-			plane.SetValueAt(common.NewPoint(col, row), octopuses[row][col])
+			plane.SetValueAt(common.New2DPoint(col, row), octopuses[row][col])
 		}
 	}
 
@@ -51,7 +51,7 @@ func (grid *octopusGrid) flash(step int) {
 		octopus := grid.GetOctopusAt(point)
 
 		if octopus.FlashIfAble(step) {
-			log.Tracef("Octopus at %v has flashed. Boosting neighbors.", *point)
+			log.Tracef("Octopus at %s has flashed. Boosting neighbors.", point)
 			grid.propagateFlashFrom(point, step)
 		}
 	}
@@ -65,7 +65,7 @@ func (grid *octopusGrid) propagateFlashFrom(point *common.Point, step int) {
 		octopus.Charge()
 
 		if octopus.FlashIfAble(step) {
-			log.Tracef("Octopus at %v has flashed. Boosting neighbors.", *adjacentPoint)
+			log.Tracef("Octopus at %s has flashed. Boosting neighbors.", adjacentPoint)
 			grid.propagateFlashFrom(adjacentPoint, step)
 		}
 	}
@@ -99,7 +99,7 @@ func (grid *octopusGrid) Render() string {
 
 	for y := grid.plane.Span().Start().Y(); y <= grid.plane.Span().End().Y(); y++ {
 		for x := grid.plane.Span().Start().X(); x <= grid.plane.Span().End().X(); x++ {
-			octopus := grid.GetOctopusAt(common.NewPoint(x, y))
+			octopus := grid.GetOctopusAt(common.New2DPoint(x, y))
 			output += strconv.Itoa(octopus.energyLevel % 10)
 		}
 		output += "\n"

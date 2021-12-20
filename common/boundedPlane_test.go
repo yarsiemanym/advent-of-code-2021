@@ -4,10 +4,10 @@ import "testing"
 
 func Test_NewBoundedPlaneFromPoints(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
@@ -41,8 +41,8 @@ func Test_NewBoundedPlaneFromPoints(t *testing.T) {
 
 func Test_NewBoundedPlaneFromLines(t *testing.T) {
 	lines := []*LineSegment{
-		NewLineSegment(NewPoint(3, 1), NewPoint(1, -3)),
-		NewLineSegment(NewPoint(-3, -1), NewPoint(-1, 3)),
+		NewLineSegment(New2DPoint(3, 1), New2DPoint(1, -3)),
+		NewLineSegment(New2DPoint(-3, -1), New2DPoint(-1, 3)),
 	}
 
 	plane := NewBoundedPlaneFromLines(lines)
@@ -76,17 +76,17 @@ func Test_NewBoundedPlaneFromLines(t *testing.T) {
 
 func Test_boundedPlane_GetValueAt(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 	plane.locations[1][1] = true
 
-	value1 := plane.GetValueAt(NewPoint(-2, -2)).(bool)
-	value2 := plane.GetValueAt(NewPoint(1, 1))
+	value1 := plane.GetValueAt(New2DPoint(-2, -2)).(bool)
+	value2 := plane.GetValueAt(New2DPoint(1, 1))
 
 	if !value1 {
 		t.Errorf("Expected true but got %v.", value1)
@@ -99,17 +99,17 @@ func Test_boundedPlane_GetValueAt(t *testing.T) {
 
 func Test_boundedPlane_SetValueAt(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
-	plane.SetValueAt(NewPoint(-2, -2), true)
+	plane.SetValueAt(New2DPoint(-2, -2), true)
 
 	value1 := plane.locations[1][1].(bool)
-	value2 := plane.GetValueAt(NewPoint(1, 1))
+	value2 := plane.GetValueAt(New2DPoint(1, 1))
 
 	if !value1 {
 		t.Errorf("Expected true but got %v.", value1)
@@ -122,15 +122,15 @@ func Test_boundedPlane_SetValueAt(t *testing.T) {
 
 func Test_boundedPlane_GetVonNeumannNeighbors_Interior(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(1, 1))
+	adjacentPoints := plane.GetVonNeumannNeighbors(New2DPoint(1, 1))
 
 	if len(adjacentPoints) != 4 {
 		t.Errorf("Expected 4 but got %v.", len(adjacentPoints))
@@ -171,15 +171,15 @@ func Test_boundedPlane_GetVonNeumannNeighbors_Interior(t *testing.T) {
 
 func Test_boundedPlane_GetVonNeumannNeighbors_Corner1(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(-3, -3))
+	adjacentPoints := plane.GetVonNeumannNeighbors(New2DPoint(-3, -3))
 
 	if len(adjacentPoints) != 2 {
 		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
@@ -204,15 +204,15 @@ func Test_boundedPlane_GetVonNeumannNeighbors_Corner1(t *testing.T) {
 
 func Test_boundedPlane_GetVonNeumannNeighbors_Corner2(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetVonNeumannNeighbors(NewPoint(3, 3))
+	adjacentPoints := plane.GetVonNeumannNeighbors(New2DPoint(3, 3))
 
 	if len(adjacentPoints) != 2 {
 		t.Errorf("Expected 2 but got %v.", len(adjacentPoints))
@@ -237,15 +237,15 @@ func Test_boundedPlane_GetVonNeumannNeighbors_Corner2(t *testing.T) {
 
 func Test_boundedPlane_GetMooreNeighbors_Interior(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetMooreNeighbors(NewPoint(1, 1))
+	adjacentPoints := plane.GetMooreNeighbors(New2DPoint(1, 1))
 
 	if len(adjacentPoints) != 8 {
 		t.Errorf("Expected 8 but got %v.", len(adjacentPoints))
@@ -318,15 +318,15 @@ func Test_boundedPlane_GetMooreNeighbors_Interior(t *testing.T) {
 
 func Test_boundedPlane_GetMooreNeighbors_Corner1(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetMooreNeighbors(NewPoint(-3, -3))
+	adjacentPoints := plane.GetMooreNeighbors(New2DPoint(-3, -3))
 
 	if len(adjacentPoints) != 3 {
 		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))
@@ -359,15 +359,15 @@ func Test_boundedPlane_GetMooreNeighbors_Corner1(t *testing.T) {
 
 func Test_boundedPlane_GetMooreNeighbors_Corner2(t *testing.T) {
 	points := []*Point{
-		NewPoint(3, 3),
-		NewPoint(-3, 3),
-		NewPoint(-3, -3),
-		NewPoint(3, -3),
+		New2DPoint(3, 3),
+		New2DPoint(-3, 3),
+		New2DPoint(-3, -3),
+		New2DPoint(3, -3),
 	}
 
 	plane := NewBoundedPlaneFromPoints(points)
 
-	adjacentPoints := plane.GetMooreNeighbors(NewPoint(3, 3))
+	adjacentPoints := plane.GetMooreNeighbors(New2DPoint(3, 3))
 
 	if len(adjacentPoints) != 3 {
 		t.Errorf("Expected 3 but got %v.", len(adjacentPoints))

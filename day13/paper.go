@@ -48,7 +48,7 @@ func (paper *Paper) GetMarkAt(point *common.Point) rune {
 }
 
 func (paper *Paper) DrawMark(point *common.Point) {
-	log.Tracef("Drawing mark on point (%d, %d).", point.X(), point.Y())
+	log.Tracef("Drawing mark on point %s.", point)
 	paper.plane.SetValueAt(point, '#')
 }
 
@@ -81,9 +81,9 @@ func (paper *Paper) Fold(crease *Crease) *Paper {
 			newY = point.Y() - (2 * common.MaxInt(0, point.Y()-newHeight))
 		}
 
-		foldedPoint := common.NewPoint(newX, newY)
+		foldedPoint := common.New2DPoint(newX, newY)
 
-		log.Tracef("Folding point (%d, %d) into (%d, %d). ", point.X(), point.Y(), foldedPoint.X(), foldedPoint.Y())
+		log.Tracef("Folding point %s into %s. ", point, foldedPoint)
 		mark := paper.GetMarkAt(point)
 		if mark == '#' {
 			foldedPaper.DrawMark(foldedPoint)
@@ -99,7 +99,7 @@ func (paper *Paper) Render() string {
 
 	for y := 0; y < paper.Height(); y++ {
 		for x := 0; x < paper.Width(); x++ {
-			point := common.NewPoint(x, y)
+			point := common.New2DPoint(x, y)
 			output += string(paper.GetMarkAt(point))
 		}
 		output += "\n"

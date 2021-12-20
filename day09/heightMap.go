@@ -16,7 +16,7 @@ func NewHeightMap(heights [][]int) *heightMap {
 
 	for row := range heights {
 		for col := range heights[row] {
-			plane.SetValueAt(common.NewPoint(col, row), heights[row][col])
+			plane.SetValueAt(common.New2DPoint(col, row), heights[row][col])
 		}
 	}
 
@@ -41,29 +41,29 @@ func (heightMap *heightMap) FindLowPoints() []*common.Point {
 }
 
 func (heightMap *heightMap) IsLowPoint(point *common.Point) bool {
-	log.Tracef("Determining if point %v is a low point.", *point)
+	log.Tracef("Determining if point %s is a low point.", point)
 	currentValue := heightMap.GetHeightAt(point)
-	log.Tracef("height = %v", currentValue)
+	log.Tracef("height = %d", currentValue)
 	adjacentPoints := heightMap.GetPointsAdjacentTo(point)
 	isLow := true
 
 	for _, adjacentPoint := range adjacentPoints {
-		log.Tracef("Inspecting adjacent point %v.", *adjacentPoint)
+		log.Tracef("Inspecting adjacent point %s.", adjacentPoint)
 		adjacentValue := heightMap.GetHeightAt(adjacentPoint)
 		log.Tracef("height = %v", adjacentValue)
 		if adjacentValue <= currentValue {
-			log.Tracef("Adjacent point %v is lower.", *adjacentPoint)
+			log.Tracef("Adjacent point %s is lower.", adjacentPoint)
 			isLow = false
 			break
 		} else {
-			log.Tracef("Adjacent point %v is not lower.", *adjacentPoint)
+			log.Tracef("Adjacent point %s is not lower.", adjacentPoint)
 		}
 	}
 
 	if isLow {
-		log.Tracef("Point %v is a low point.", *point)
+		log.Tracef("Point %s is a low point.", point)
 	} else {
-		log.Tracef("Point %v is not a low point.", *point)
+		log.Tracef("Point %s is not a low point.", point)
 	}
 
 	return isLow
@@ -84,7 +84,7 @@ func (heightMap *heightMap) GetPointsAdjacentTo(point *common.Point) []*common.P
 }
 
 func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, exploredBasin *basin) *basin {
-	log.Tracef("Looking for paths up hill from point %v.", *lowPoint)
+	log.Tracef("Looking for paths up hill from point %s.", lowPoint)
 	currentValue := heightMap.GetHeightAt(lowPoint)
 	adjacentPoints := heightMap.GetPointsAdjacentTo(lowPoint)
 	basin := NewBasin()
@@ -92,14 +92,14 @@ func (heightMap *heightMap) ExploreBasin(lowPoint *common.Point, exploredBasin *
 
 	for _, adjacentPoint := range adjacentPoints {
 		if exploredBasin.Contains(adjacentPoint) {
-			log.Tracef("Already explored point %v. Skipping.", *adjacentPoint)
+			log.Tracef("Already explored point %s. Skipping.", adjacentPoint)
 			continue
 		}
 
 		adjacentValue := heightMap.GetHeightAt(adjacentPoint)
 
 		if adjacentValue < 9 && adjacentValue >= currentValue {
-			log.Tracef("Point %v is up hill. Climbing.", *adjacentPoint)
+			log.Tracef("Point %s is up hill. Climbing.", adjacentPoint)
 			newlyExploredBasin := heightMap.ExploreBasin(adjacentPoint, basin)
 
 			basin.Add(newlyExploredBasin.points...)
@@ -124,7 +124,7 @@ func (heightMap *heightMap) RenderLowPoints(points []*common.Point) string {
 			}
 
 			if isLowPoint {
-				output += strconv.Itoa(heightMap.GetHeightAt(common.NewPoint(x, y)))
+				output += strconv.Itoa(heightMap.GetHeightAt(common.New2DPoint(x, y)))
 			} else {
 				output += "."
 			}
@@ -141,7 +141,7 @@ func (heightMap *heightMap) RenderBasins(basins []*basin) string {
 
 	for y := heightMap.plane.Span().Start().Y(); y <= heightMap.plane.Span().End().Y(); y++ {
 		for x := heightMap.plane.Span().Start().X(); x <= heightMap.plane.Span().End().X(); x++ {
-			point := common.NewPoint(x, y)
+			point := common.New2DPoint(x, y)
 			pointIsInABasin := false
 
 			for _, basin := range basins {

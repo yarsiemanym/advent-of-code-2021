@@ -27,11 +27,11 @@ func solvePart1(grid *octopusGrid) string {
 	totalFlashes := 0
 
 	for i := 1; i <= 100; i++ {
-		log.Debugf("Simulating step %v.", i)
+		log.Debugf("Simulating step %d.", i)
 		stepFlashes := grid.Step(i)
-		log.Debugf("%v flashes during this step.", stepFlashes)
+		log.Debugf("%d flashes during this step.", stepFlashes)
 		totalFlashes += stepFlashes
-		log.Debugf("%v total flashes.", totalFlashes)
+		log.Debugf("%d total flashes.", totalFlashes)
 		log.Trace(grid.Render())
 	}
 
@@ -47,7 +47,7 @@ func solvePart2(grid *octopusGrid) string {
 	for i := 1; allFlashingStep == 0; i++ {
 		log.Debugf("Simulating step %v.", i)
 		stepFlashes := grid.Step(i)
-		log.Debugf("%v flashes during this step.", stepFlashes)
+		log.Debugf("%d flashes during this step.", stepFlashes)
 		if stepFlashes == 100 {
 			log.Debug("All octopuses are flashing!")
 			allFlashingStep = i

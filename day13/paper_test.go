@@ -8,8 +8,8 @@ import (
 
 func Test_Paper_GetMarkAt(t *testing.T) {
 	paper := NewPaper(2, 1)
-	point00 := common.NewPoint(0, 0)
-	point01 := common.NewPoint(0, 1)
+	point00 := common.New2DPoint(0, 0)
+	point01 := common.New2DPoint(0, 1)
 	paper.DrawMark(point01)
 
 	mark := paper.GetMarkAt(point00)
@@ -25,10 +25,10 @@ func Test_Paper_GetMarkAt(t *testing.T) {
 
 func Test_Paper_Fold_Up(t *testing.T) {
 	paper := NewPaper(5, 5)
-	paper.DrawMark(common.NewPoint(1, 1))
-	paper.DrawMark(common.NewPoint(2, 1))
-	paper.DrawMark(common.NewPoint(2, 3))
-	paper.DrawMark(common.NewPoint(3, 3))
+	paper.DrawMark(common.New2DPoint(1, 1))
+	paper.DrawMark(common.New2DPoint(2, 1))
+	paper.DrawMark(common.New2DPoint(2, 3))
+	paper.DrawMark(common.New2DPoint(3, 3))
 	crease := &Crease{
 		Axis:     'y',
 		Position: 2,
@@ -65,10 +65,10 @@ func Test_Paper_Fold_Up(t *testing.T) {
 
 func Test_Paper_Fold_Left(t *testing.T) {
 	paper := NewPaper(5, 5)
-	paper.DrawMark(common.NewPoint(1, 1))
-	paper.DrawMark(common.NewPoint(1, 2))
-	paper.DrawMark(common.NewPoint(3, 2))
-	paper.DrawMark(common.NewPoint(3, 3))
+	paper.DrawMark(common.New2DPoint(1, 1))
+	paper.DrawMark(common.New2DPoint(1, 2))
+	paper.DrawMark(common.New2DPoint(3, 2))
+	paper.DrawMark(common.New2DPoint(3, 3))
 	crease := &Crease{
 		Axis:     'x',
 		Position: 2,

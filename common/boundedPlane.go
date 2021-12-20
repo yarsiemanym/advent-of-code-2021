@@ -7,7 +7,7 @@ type BoundedPlane struct {
 
 func NewBoundedPlane(height int, width int) *BoundedPlane {
 	return &BoundedPlane{
-		span:      NewLineSegment(NewPoint(0, 0), NewPoint(width-1, height-1)),
+		span:      NewLineSegment(New2DPoint(0, 0), New2DPoint(width-1, height-1)),
 		locations: initializeLocations(height, width),
 	}
 }
@@ -17,7 +17,7 @@ func NewBoundedPlaneFromValues(values [][]interface{}) *BoundedPlane {
 	maxX := len(values[0]) - 1
 
 	return &BoundedPlane{
-		span:      NewLineSegment(NewPoint(0, 0), NewPoint(maxX, maxY)),
+		span:      NewLineSegment(New2DPoint(0, 0), New2DPoint(maxX, maxY)),
 		locations: values,
 	}
 }
@@ -36,7 +36,7 @@ func NewBoundedPlaneFromPoints(points []*Point) *BoundedPlane {
 	}
 
 	return &BoundedPlane{
-		span:      NewLineSegment(NewPoint(minX, minY), NewPoint(maxX, maxY)),
+		span:      NewLineSegment(New2DPoint(minX, minY), New2DPoint(maxX, maxY)),
 		locations: initializeLocations(maxY-minY+1, maxX-minX+1),
 	}
 }
@@ -55,7 +55,7 @@ func NewBoundedPlaneFromLines(lines []*LineSegment) *BoundedPlane {
 	}
 
 	return &BoundedPlane{
-		span:      NewLineSegment(NewPoint(minX, minY), NewPoint(maxX, maxY)),
+		span:      NewLineSegment(New2DPoint(minX, minY), New2DPoint(maxX, maxY)),
 		locations: initializeLocations(maxY-minY+1, maxX-minX+1),
 	}
 }
@@ -92,19 +92,19 @@ func (plane *BoundedPlane) GetVonNeumannNeighbors(point *Point) []*Point {
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x+1, point.y))
 	}
 
 	if point.y+1 <= plane.span.end.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y+1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x, point.y+1))
 	}
 
 	if point.x-1 >= plane.span.start.x {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x-1, point.y))
 	}
 
 	if point.y-1 >= plane.span.start.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y-1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x, point.y-1))
 	}
 
 	return adjacentPoints
@@ -115,35 +115,35 @@ func (plane *BoundedPlane) GetMooreNeighbors(point *Point) []*Point {
 	var adjacentPoints []*Point
 
 	if point.x+1 <= plane.span.end.x {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x+1, point.y))
 	}
 
 	if point.x+1 <= plane.span.end.x && point.y+1 <= plane.span.end.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y+1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x+1, point.y+1))
 	}
 
 	if point.y+1 <= plane.span.end.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y+1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x, point.y+1))
 	}
 
 	if point.x-1 >= plane.span.start.x && point.y+1 <= plane.span.end.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y+1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x-1, point.y+1))
 	}
 
 	if point.x-1 >= plane.span.start.x {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x-1, point.y))
 	}
 
 	if point.x-1 >= plane.span.start.x && point.y-1 >= plane.span.start.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x-1, point.y-1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x-1, point.y-1))
 	}
 
 	if point.y-1 >= plane.span.start.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x, point.y-1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x, point.y-1))
 	}
 
 	if point.x+1 <= plane.span.end.x && point.y-1 >= plane.span.start.y {
-		adjacentPoints = append(adjacentPoints, NewPoint(point.x+1, point.y-1))
+		adjacentPoints = append(adjacentPoints, New2DPoint(point.x+1, point.y-1))
 	}
 
 	return adjacentPoints
@@ -154,7 +154,7 @@ func (plane *BoundedPlane) GetAllPoints() []*Point {
 
 	for y := plane.span.start.y; y <= plane.span.end.y; y++ {
 		for x := plane.span.start.x; x <= plane.span.end.x; x++ {
-			points = append(points, NewPoint(x, y))
+			points = append(points, New2DPoint(x, y))
 		}
 	}
 

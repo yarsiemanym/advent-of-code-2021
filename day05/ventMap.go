@@ -13,11 +13,6 @@ type ventMap struct {
 
 func (ventMap *ventMap) Init(lines []*common.LineSegment) {
 	ventMap.plane = *common.NewBoundedPlaneFromLines(lines)
-
-	rows := ventMap.plane.Span().End().Y() + 1
-	cols := ventMap.plane.Span().End().X() + 1
-
-	ventMap.plane = *common.NewBoundedPlane(rows, cols)
 }
 
 func (ventMap *ventMap) GetOverlapsAt(point *common.Point) int {
@@ -31,10 +26,10 @@ func (ventMap *ventMap) GetOverlapsAt(point *common.Point) int {
 }
 
 func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
-	log.Debugf("Applying line \"(%v,%v) -> (%v,%v)\" to the vent map.", line.Start().X(), line.Start().Y(), line.End().X(), line.End().Y())
+	log.Debugf("Applying line \"%s -> %s\" to the vent map.", line.Start(), line.End())
 
 	slope := line.Slope()
-	log.Tracef("slope = (%v, %v)", slope.X(), slope.Y())
+	log.Tracef("slope = %s", slope)
 
 	if *line.Start() == *line.End() {
 		value := ventMap.GetOverlapsAt(line.Start())
@@ -42,7 +37,7 @@ func (ventMap *ventMap) ApplyLine(line *common.LineSegment) {
 	} else {
 		for point := line.Start(); ; point = point.Move(slope) {
 
-			log.Tracef("Incrementing overlaps at location %v.", *point)
+			log.Tracef("Incrementing overlaps at location %s.", point)
 			value := ventMap.GetOverlapsAt(point)
 			ventMap.plane.SetValueAt(point, value+1)
 
@@ -60,10 +55,10 @@ func (ventMap *ventMap) CountOverlaps(withMinLines int) int {
 		value := ventMap.GetOverlapsAt(point)
 
 		if value >= withMinLines {
-			log.Debugf("Location %v has %v overlapping lines. Incrementing count.", *point, value)
+			log.Debugf("Location %s has %d overlapping lines. Incrementing count.", point, value)
 			count++
 		} else {
-			log.Tracef("Location %v has %v overlapping lines. Skipping.", *point, value)
+			log.Tracef("Location %s has %d overlapping lines. Skipping.", point, value)
 		}
 	}
 
@@ -75,7 +70,7 @@ func (ventMap *ventMap) Render() string {
 
 	for row := ventMap.plane.Span().Start().Y(); row <= ventMap.plane.Span().End().Y(); row++ {
 		for col := ventMap.plane.Span().Start().X(); col <= ventMap.plane.Span().End().X(); col++ {
-			value := ventMap.GetOverlapsAt(common.NewPoint(col, row))
+			value := ventMap.GetOverlapsAt(common.New2DPoint(col, row))
 			if value == 0 {
 				message += "."
 			} else {

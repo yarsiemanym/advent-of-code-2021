@@ -25,10 +25,11 @@ func (line *LineSegment) Slope() *Point {
 	if line.slope == nil {
 		x := line.End().X() - line.Start().X()
 		y := line.End().Y() - line.Start().Y()
+		z := line.End().Z() - line.Start().Z()
 
-		x, y = Reduce(x, y)
+		reducesNumbers := Reduce(x, y, z)
 
-		line.slope = NewPoint(x, y)
+		line.slope = New3DPoint(reducesNumbers[0], reducesNumbers[1], reducesNumbers[2])
 	}
 
 	return line.slope
@@ -40,4 +41,8 @@ func (line *LineSegment) IsVertical() bool {
 
 func (line *LineSegment) IsHorizontal() bool {
 	return line.Start().Y() == line.End().Y()
+}
+
+func (line *LineSegment) IsStacked() bool {
+	return line.Start().Z() == line.End().Z()
 }

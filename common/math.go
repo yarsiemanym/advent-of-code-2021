@@ -64,31 +64,42 @@ func MinInt(values ...int) int {
 	return minValue
 }
 
-func Reduce(numerator int, denominator int) (int, int) {
-	if numerator == 0 {
-		return 0, int(math.Copysign(1, float64(denominator)))
+func Reduce(numbers ...int) []int {
+	if len(numbers) == 0 {
+		return []int{}
+	} else if len(numbers) == 1 {
+		return numbers
 	}
 
-	if denominator == 0 {
-		return int(math.Copysign(1, float64(numerator))), 0
+	gcf := numbers[0]
+
+	for i := 1; i < len(numbers); i++ {
+		gcf = GreatestCommonFactor(gcf, numbers[i])
 	}
 
-	gcd := GreatestCommonDenominator(numerator, denominator)
-	return numerator / gcd, denominator / gcd
+	for i := 0; i < len(numbers); i++ {
+		numbers[i] = numbers[i] / gcf
+	}
+
+	return numbers
 }
 
-func GreatestCommonDenominator(a int, b int) int {
-
-	if a == 0 || b == 0 {
-		return 1
-	}
+func GreatestCommonFactor(a int, b int) int {
 
 	if a < 0 {
-		a = int(math.Abs(float64(a)))
+		a = AbsInt(a)
 	}
 
 	if b < 0 {
-		b = int(math.Abs(float64(b)))
+		b = AbsInt(b)
+	}
+
+	if a == 0 {
+		return b
+	}
+
+	if b == 0 {
+		return a
 	}
 
 	if a > b {
@@ -98,9 +109,9 @@ func GreatestCommonDenominator(a int, b int) int {
 	if b%a == 0 {
 		return a
 	} else if a > b {
-		return GreatestCommonDenominator(a-b, b)
+		return GreatestCommonFactor(a-b, b)
 	} else {
-		return GreatestCommonDenominator(a, b-a)
+		return GreatestCommonFactor(a, b-a)
 	}
 }
 

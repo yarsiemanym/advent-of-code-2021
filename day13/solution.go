@@ -103,8 +103,8 @@ func parsePoint(text string) *common.Point {
 		log.Fatalf("\"%s\" is not an integer.", tokens[1])
 	}
 
-	point := common.NewPoint(x, y)
-	log.Tracef("Point (%d, %d) parsed.", point.X(), point.Y())
+	point := common.New2DPoint(x, y)
+	log.Tracef("Point %s parsed.", point)
 
 	return point
 }
@@ -121,7 +121,7 @@ func parseCreases(text string) []*Crease {
 		}
 	}
 
-	log.Debugf("%v creases parsed.", len(creases))
+	log.Debugf("%d creases parsed.", len(creases))
 	return creases
 }
 
