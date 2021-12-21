@@ -1,6 +1,8 @@
 package common
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Point struct {
 	x int
@@ -44,10 +46,34 @@ func (point *Point) Move(slope *Point) *Point {
 	}
 }
 
+func (point *Point) Difference(other *Point) *Point {
+	return &Point{
+		x: point.X() - other.X(),
+		y: point.Y() - other.Y(),
+		z: point.Z() - other.Z(),
+	}
+}
+
 func (point *Point) ManhattanDistance(otherPoint *Point) int {
 	return AbsInt(point.x-otherPoint.x) + AbsInt(point.y-otherPoint.y) + AbsInt(point.z-otherPoint.z)
 }
 
+func (point *Point) RotateX() *Point {
+	return New3DPoint(point.X(), point.Z(), 0-point.Y())
+}
+
+func (point *Point) RotateY() *Point {
+	return New3DPoint(0-point.Z(), point.Y(), point.X())
+}
+
+func (point *Point) RotateZ() *Point {
+	return New3DPoint(point.Y(), 0-point.X(), point.Z())
+}
+
 func (point *Point) String() string {
 	return fmt.Sprintf("(%d,%d,%d)", point.x, point.y, point.z)
+}
+
+func (point *Point) Hash() int64 {
+	return int64((point.X())<<42 + (point.Y() << 21) + point.Z())
 }
