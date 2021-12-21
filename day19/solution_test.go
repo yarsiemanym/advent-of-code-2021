@@ -14,7 +14,7 @@ func Test_Solve_Test1(t *testing.T) {
 	}
 
 	expectedPart1 := "79"
-	expectedPart2 := "Not implemented." //3621"
+	expectedPart2 := "3621"
 
 	answer := Solve(puzzle)
 

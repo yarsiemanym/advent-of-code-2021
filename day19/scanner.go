@@ -24,31 +24,61 @@ func (scanner *Scanner) Beacons() []*common.Point {
 	return scanner.beacons
 }
 
-func (scanner *Scanner) RotateX() *Scanner {
+func (scanner *Scanner) RotateXClockwise() *Scanner {
 	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
 
 	for i, point := range scanner.Beacons() {
-		rotatedPoints[i] = point.RotateX()
+		rotatedPoints[i] = point.RotateXClockwise()
 	}
 
 	return NewScanner(scanner.Id(), rotatedPoints)
 }
 
-func (scanner *Scanner) RotateY() *Scanner {
+func (scanner *Scanner) RotateXCounterClockwise() *Scanner {
 	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
 
 	for i, point := range scanner.Beacons() {
-		rotatedPoints[i] = point.RotateY()
+		rotatedPoints[i] = point.RotateXCounterClockwise()
 	}
 
 	return NewScanner(scanner.Id(), rotatedPoints)
 }
 
-func (scanner *Scanner) RotateZ() *Scanner {
+func (scanner *Scanner) RotateYClockwise() *Scanner {
 	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
 
 	for i, point := range scanner.Beacons() {
-		rotatedPoints[i] = point.RotateZ()
+		rotatedPoints[i] = point.RotateYClockwise()
+	}
+
+	return NewScanner(scanner.Id(), rotatedPoints)
+}
+
+func (scanner *Scanner) RotateYCounterClockwise() *Scanner {
+	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
+
+	for i, point := range scanner.Beacons() {
+		rotatedPoints[i] = point.RotateYCounterClockwise()
+	}
+
+	return NewScanner(scanner.Id(), rotatedPoints)
+}
+
+func (scanner *Scanner) RotateZClockwise() *Scanner {
+	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
+
+	for i, point := range scanner.Beacons() {
+		rotatedPoints[i] = point.RotateZClockwise()
+	}
+
+	return NewScanner(scanner.Id(), rotatedPoints)
+}
+
+func (scanner *Scanner) RotateZCounterClockwise() *Scanner {
+	rotatedPoints := make([]*common.Point, len(scanner.Beacons()))
+
+	for i, point := range scanner.Beacons() {
+		rotatedPoints[i] = point.RotateZCounterClockwise()
 	}
 
 	return NewScanner(scanner.Id(), rotatedPoints)

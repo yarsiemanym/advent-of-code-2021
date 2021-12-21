@@ -47,20 +47,20 @@ func solvePart1(scanners []*Scanner) string {
 						knownRegion = knownRegion.Merge(unknownRegion, difference)
 						break
 					}
-					unknownRegion = unknownRegion.RotateZ()
+					unknownRegion = unknownRegion.RotateZClockwise()
 
 				}
 
 				if overplaps {
 					break
 				}
-				unknownRegion = unknownRegion.RotateY()
+				unknownRegion = unknownRegion.RotateYClockwise()
 			}
 
 			if overplaps {
 				break
 			}
-			unknownRegion = unknownRegion.RotateX()
+			unknownRegion = unknownRegion.RotateXClockwise()
 		}
 
 		if !overplaps {
@@ -80,10 +80,64 @@ func solvePart1(scanners []*Scanner) string {
 func solvePart2(scanners []*Scanner) string {
 	log.Info("Solving part 2.")
 
-	// TODO: implement part 2 solution
+	gobalMap := scanners[0]
+	unknownScanners := scanners[1:]
+	knownScanners := map[int]*common.Point{}
+
+	for len(unknownScanners) > 0 {
+		unknownScanner := unknownScanners[0]
+		log.Debugf("Analyzing scanner %d.", unknownScanner.Id())
+		overplaps := false
+
+		for x := 0; x < 4; x++ {
+			for y := 0; y < 4; y++ {
+				for z := 0; z < 4; z++ {
+					var difference *common.Point
+					overplaps, difference = gobalMap.DetectBeaconOverlap(unknownScanner)
+					if overplaps {
+						log.Debug("Overlap detected! Merging beacons.")
+						gobalMap = gobalMap.Merge(unknownScanner, difference)
+						knownScanners[unknownScanner.Id()] = difference
+						break
+					}
+					unknownScanner = unknownScanner.RotateZClockwise()
+
+				}
+
+				if overplaps {
+					break
+				}
+				unknownScanner = unknownScanner.RotateYClockwise()
+			}
+
+			if overplaps {
+				break
+			}
+			unknownScanner = unknownScanner.RotateXClockwise()
+		}
+
+		if !overplaps {
+			log.Debug("Scanner does not overlap known region.")
+			unknownScanners = append(unknownScanners[1:], unknownScanners[0])
+		} else {
+			unknownScanners = unknownScanners[1:]
+		}
+	}
+
+	farthestDistance := 0
+
+	for _, position1 := range knownScanners {
+		for _, position2 := range knownScanners {
+			distance := position1.ManhattanDistance(position2)
+
+			if distance > farthestDistance {
+				farthestDistance = distance
+			}
+		}
+	}
 
 	log.Info("Part 2 solved.")
-	return "Not implemented."
+	return strconv.Itoa(farthestDistance)
 }
 
 func parseScanner(text string) interface{} {

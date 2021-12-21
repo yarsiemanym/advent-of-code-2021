@@ -93,7 +93,7 @@ func Test_Point_SortByHash(t *testing.T) {
 
 func Test_Point_RotateX(t *testing.T) {
 	point := New3DPoint(1, 2, 3)
-	rotatedPoint := point.RotateX()
+	rotatedPoint := point.RotateXClockwise()
 
 	if rotatedPoint == nil {
 		t.Error("rotatedPoint is nil.")
@@ -114,7 +114,7 @@ func Test_Point_RotateX(t *testing.T) {
 
 func Test_Point_RotateY(t *testing.T) {
 	point := New3DPoint(1, 2, 3)
-	rotatedPoint := point.RotateY()
+	rotatedPoint := point.RotateYClockwise()
 
 	if rotatedPoint == nil {
 		t.Error("rotatedPoint is nil.")
@@ -135,7 +135,7 @@ func Test_Point_RotateY(t *testing.T) {
 
 func Test_Point_RotateZ(t *testing.T) {
 	point := New3DPoint(1, 2, 3)
-	rotatedPoint := point.RotateZ()
+	rotatedPoint := point.RotateZClockwise()
 
 	if rotatedPoint == nil {
 		t.Error("rotatedPoint is nil.")

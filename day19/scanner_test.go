@@ -11,7 +11,7 @@ func Test_Scanner_RotateAroundXAxis(t *testing.T) {
 		common.New3DPoint(1, 2, 3),
 	})
 
-	rotatedScanner := scanner.RotateX()
+	rotatedScanner := scanner.RotateXClockwise()
 
 	if rotatedScanner == nil {
 		t.Error("rotatedScanner is nil.")
@@ -35,7 +35,7 @@ func Test_Scanner_RotateAroundYAxis(t *testing.T) {
 		common.New3DPoint(1, 2, 3),
 	})
 
-	rotatedScanner := scanner.RotateY()
+	rotatedScanner := scanner.RotateYClockwise()
 
 	if rotatedScanner == nil {
 		t.Error("rotatedScanner is nil.")
@@ -59,7 +59,7 @@ func Test_Scanner_RotateAroundZAxis(t *testing.T) {
 		common.New3DPoint(1, 2, 3),
 	})
 
-	rotatedScanner := scanner.RotateZ()
+	rotatedScanner := scanner.RotateZClockwise()
 
 	if rotatedScanner == nil {
 		t.Error("rotatedScanner is nil.")
@@ -145,7 +145,7 @@ func Test_Scanner_GetOverlappingBeacons(t *testing.T) {
 		t.Errorf("Expected nil but got %s.", difference)
 	}
 
-	scanner0 = scanner0.RotateY().RotateY()
+	scanner0 = scanner0.RotateYClockwise().RotateYClockwise()
 	overlaps, difference = scanner0.DetectBeaconOverlap(scanner1)
 
 	if !overlaps {
@@ -182,7 +182,7 @@ func Test_Scanner_Merge(t *testing.T) {
 		common.New3DPoint(443, 580, 662),
 		common.New3DPoint(-789, 900, -551),
 		common.New3DPoint(459, -707, 401),
-	}).RotateY().RotateY()
+	}).RotateYClockwise().RotateYClockwise()
 
 	scanner1 := NewScanner(1, []*common.Point{
 		common.New3DPoint(686, 422, 578),

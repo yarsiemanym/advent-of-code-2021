@@ -58,16 +58,28 @@ func (point *Point) ManhattanDistance(otherPoint *Point) int {
 	return AbsInt(point.x-otherPoint.x) + AbsInt(point.y-otherPoint.y) + AbsInt(point.z-otherPoint.z)
 }
 
-func (point *Point) RotateX() *Point {
+func (point *Point) RotateXClockwise() *Point {
 	return New3DPoint(point.X(), point.Z(), 0-point.Y())
 }
 
-func (point *Point) RotateY() *Point {
+func (point *Point) RotateXCounterClockwise() *Point {
+	return New3DPoint(point.X(), 0-point.Z(), point.Y())
+}
+
+func (point *Point) RotateYClockwise() *Point {
 	return New3DPoint(0-point.Z(), point.Y(), point.X())
 }
 
-func (point *Point) RotateZ() *Point {
+func (point *Point) RotateYCounterClockwise() *Point {
+	return New3DPoint(point.Z(), point.Y(), 0-point.X())
+}
+
+func (point *Point) RotateZClockwise() *Point {
 	return New3DPoint(point.Y(), 0-point.X(), point.Z())
+}
+
+func (point *Point) RotateZCounterClockwise() *Point {
+	return New3DPoint(0-point.Y(), point.X(), point.Z())
 }
 
 func (point *Point) String() string {
