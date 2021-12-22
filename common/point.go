@@ -89,6 +89,56 @@ func (point *Point) RotateZCounterClockwise() *Point {
 	return New3DPoint(0-point.Y(), point.X(), point.Z())
 }
 
+// Only orthagonally adjacent, excluding self.
+func (point *Point) GetVonNeumannNeighbors() []*Point {
+	return []*Point{
+		New2DPoint(point.x, point.y+1),
+		New2DPoint(point.x-1, point.y),
+		New2DPoint(point.x+1, point.y),
+		New2DPoint(point.x, point.y-1),
+	}
+}
+
+// Only orthagonally adjacent, excluding self.
+func (point *Point) GetVonNeumannNeighborhood() []*Point {
+	return []*Point{
+		New2DPoint(point.x, point.y+1),
+		New2DPoint(point.x-1, point.y),
+		New2DPoint(point.x, point.y),
+		New2DPoint(point.x+1, point.y),
+		New2DPoint(point.x, point.y-1),
+	}
+}
+
+// Both orthagonally and diagonally adjacent, including self.
+func (point *Point) GetMooreNeighbors() []*Point {
+	return []*Point{
+		New2DPoint(point.x-1, point.y-1),
+		New2DPoint(point.x, point.y-1),
+		New2DPoint(point.x+1, point.y-1),
+		New2DPoint(point.x-1, point.y),
+		New2DPoint(point.x+1, point.y),
+		New2DPoint(point.x-1, point.y+1),
+		New2DPoint(point.x, point.y+1),
+		New2DPoint(point.x+1, point.y+1),
+	}
+}
+
+// Both orthagonally and diagonally adjacent, including self.
+func (point *Point) GetMooreNeighborhood() []*Point {
+	return []*Point{
+		New2DPoint(point.x-1, point.y-1),
+		New2DPoint(point.x, point.y-1),
+		New2DPoint(point.x+1, point.y-1),
+		New2DPoint(point.x-1, point.y),
+		New2DPoint(point.x, point.y),
+		New2DPoint(point.x+1, point.y),
+		New2DPoint(point.x-1, point.y+1),
+		New2DPoint(point.x, point.y+1),
+		New2DPoint(point.x+1, point.y+1),
+	}
+}
+
 func (point *Point) String() string {
 	return fmt.Sprintf("(%d,%d,%d)", point.x, point.y, point.z)
 }
