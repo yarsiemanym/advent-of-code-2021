@@ -18,7 +18,7 @@ func Test_Point_Move(t *testing.T) {
 		z: -1,
 	}
 
-	end := start.Move(slope)
+	end := start.Add(slope)
 
 	if end.x != 4 {
 		t.Errorf("Expected 4 but got %v.", end.x)

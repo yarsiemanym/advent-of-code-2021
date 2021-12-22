@@ -1,19 +1,36 @@
 package day19
 
 import (
+	"github.com/Workiva/go-datastructures/set"
 	"github.com/yarsiemanym/advent-of-code-2021/common"
 )
 
 type Scanner struct {
-	id      int
-	beacons []*common.Point
+	id          int
+	fingerprint map[float64][]*common.Point
+	beacons     []*common.Point
 }
 
 func NewScanner(id int, beacons []*common.Point) *Scanner {
 	return &Scanner{
-		id:      id,
-		beacons: beacons,
+		id:          id,
+		fingerprint: fingerprint(beacons),
+		beacons:     beacons,
 	}
+}
+
+func fingerprint(beacons []*common.Point) map[float64][]*common.Point {
+	distances := map[float64][]*common.Point{}
+
+	for i := 0; i < len(beacons); i++ {
+		beacon1 := beacons[i]
+		for j := i + 1; j < len(beacons); j++ {
+			beacon2 := beacons[j]
+			distance := beacon1.Distance(beacon2)
+			distances[distance] = []*common.Point{beacon1, beacon2}
+		}
+	}
+	return distances
 }
 
 func (scanner *Scanner) Id() int {
@@ -84,28 +101,62 @@ func (scanner *Scanner) RotateZCounterClockwise() *Scanner {
 	return NewScanner(scanner.Id(), rotatedPoints)
 }
 
-func (scanner *Scanner) DetectBeaconOverlap(other *Scanner) (bool, *common.Point) {
-	for _, anchor1 := range scanner.Beacons() {
-		for _, anchor2 := range other.Beacons() {
-			referenceDifference := anchor1.Difference(anchor2)
-			overlappingBeacons := []*common.Point{}
+func (scanner *Scanner) DetectOverlap(other *Scanner) bool {
+	sharedPoints := set.New()
 
-			for _, beacon1 := range scanner.Beacons() {
-				for _, beacon2 := range other.Beacons() {
-					difference := beacon1.Difference(beacon2)
-					if *difference == *referenceDifference {
-						overlappingBeacons = append(overlappingBeacons, beacon2)
-					}
+	for distance := range scanner.fingerprint {
+		points, exists := other.fingerprint[distance]
+
+		if exists {
+			sharedPoints.Add(*points[0])
+			sharedPoints.Add(*points[1])
+		}
+	}
+
+	return sharedPoints.Len() >= 12
+}
+
+func (scanner *Scanner) Align(other *Scanner) (bool, *Scanner, *common.Point) {
+	originalAlignment := other
+	for x := 0; x < 4; x++ {
+		for y := 0; y < 4; y++ {
+			for z := 0; z < 4; z++ {
+				aligned, difference := scanner.IsAligned(other)
+
+				if aligned {
+					return aligned, other, difference
 				}
+
+				other = other.RotateZClockwise()
 			}
 
-			if len(overlappingBeacons) >= 12 {
-				return true, referenceDifference
-			}
+			other = other.RotateYClockwise()
+		}
+
+		other = other.RotateXClockwise()
+	}
+
+	return false, originalAlignment, nil
+}
+
+func (scanner *Scanner) IsAligned(other *Scanner) (bool, *common.Point) {
+	differences := map[common.Point]int{}
+
+	for _, beacon1 := range scanner.Beacons() {
+		for _, beacon2 := range other.Beacons() {
+			difference := beacon2.Subtract(beacon1)
+			differences[*difference] = differences[*difference] + 1
+		}
+	}
+
+	for difference, count := range differences {
+		if count >= 12 {
+			return true, &difference
 		}
 	}
 
 	return false, nil
+
 }
 
 func (scanner *Scanner) Merge(other *Scanner, difference *common.Point) *Scanner {
@@ -113,7 +164,7 @@ func (scanner *Scanner) Merge(other *Scanner, difference *common.Point) *Scanner
 	copy(newBeacons, scanner.Beacons())
 
 	for _, beacon1 := range other.Beacons() {
-		newBeacon := beacon1.Move(difference)
+		newBeacon := beacon1.Subtract(difference)
 		duplicate := false
 		for _, beacon2 := range scanner.Beacons() {
 			if *newBeacon == *beacon2 {

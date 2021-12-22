@@ -29,49 +29,33 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 func solvePart1(scanners []*Scanner) string {
 	log.Info("Solving part 1.")
 
-	knownRegion := scanners[0]
-	unknownRegions := scanners[1:]
+	globalMap := scanners[0]
+	unknownScanners := scanners[1:]
 
-	for len(unknownRegions) > 0 {
-		unknownRegion := unknownRegions[0]
-		log.Debugf("Analyzing scanner %d.", unknownRegion.Id())
-		overplaps := false
-
-		for x := 0; x < 4; x++ {
-			for y := 0; y < 4; y++ {
-				for z := 0; z < 4; z++ {
-					var difference *common.Point
-					overplaps, difference = knownRegion.DetectBeaconOverlap(unknownRegion)
-					if overplaps {
-						log.Debug("Overlap detected! Merging beacons.")
-						knownRegion = knownRegion.Merge(unknownRegion, difference)
-						break
-					}
-					unknownRegion = unknownRegion.RotateZClockwise()
-
-				}
-
-				if overplaps {
-					break
-				}
-				unknownRegion = unknownRegion.RotateYClockwise()
-			}
-
-			if overplaps {
-				break
-			}
-			unknownRegion = unknownRegion.RotateXClockwise()
-		}
+	for len(unknownScanners) > 0 {
+		unknownScanner := unknownScanners[0]
+		log.Debugf("Analyzing scanner %d.", unknownScanner.Id())
+		overplaps := globalMap.DetectOverlap(unknownScanner)
 
 		if !overplaps {
 			log.Debug("Scanner does not overlap known region.")
-			unknownRegions = append(unknownRegions[1:], unknownRegions[0])
-		} else {
-			unknownRegions = unknownRegions[1:]
+			unknownScanners = append(unknownScanners[1:], unknownScanners[0])
+			continue
 		}
+
+		aligned, unknownScanner, difference := globalMap.Align(unknownScanner)
+
+		if !aligned {
+			log.Debugf("Could not align scanner %d with the scanner %d.", unknownScanner.Id(), globalMap.Id())
+			unknownScanners = append(unknownScanners[1:], unknownScanners[0])
+			continue
+		}
+
+		globalMap = globalMap.Merge(unknownScanner, difference)
+		unknownScanners = unknownScanners[1:]
 	}
 
-	beaconsCount := len(knownRegion.Beacons())
+	beaconsCount := len(globalMap.Beacons())
 
 	log.Info("Part 1 solved.")
 	return strconv.Itoa(beaconsCount)
@@ -80,48 +64,32 @@ func solvePart1(scanners []*Scanner) string {
 func solvePart2(scanners []*Scanner) string {
 	log.Info("Solving part 2.")
 
-	gobalMap := scanners[0]
+	globalMap := scanners[0]
 	unknownScanners := scanners[1:]
 	knownScanners := map[int]*common.Point{}
 
 	for len(unknownScanners) > 0 {
 		unknownScanner := unknownScanners[0]
 		log.Debugf("Analyzing scanner %d.", unknownScanner.Id())
-		overplaps := false
-
-		for x := 0; x < 4; x++ {
-			for y := 0; y < 4; y++ {
-				for z := 0; z < 4; z++ {
-					var difference *common.Point
-					overplaps, difference = gobalMap.DetectBeaconOverlap(unknownScanner)
-					if overplaps {
-						log.Debug("Overlap detected! Merging beacons.")
-						gobalMap = gobalMap.Merge(unknownScanner, difference)
-						knownScanners[unknownScanner.Id()] = difference
-						break
-					}
-					unknownScanner = unknownScanner.RotateZClockwise()
-
-				}
-
-				if overplaps {
-					break
-				}
-				unknownScanner = unknownScanner.RotateYClockwise()
-			}
-
-			if overplaps {
-				break
-			}
-			unknownScanner = unknownScanner.RotateXClockwise()
-		}
+		overplaps := globalMap.DetectOverlap(unknownScanner)
 
 		if !overplaps {
 			log.Debug("Scanner does not overlap known region.")
 			unknownScanners = append(unknownScanners[1:], unknownScanners[0])
-		} else {
-			unknownScanners = unknownScanners[1:]
+			continue
 		}
+
+		aligned, unknownScanner, difference := globalMap.Align(unknownScanner)
+
+		if !aligned {
+			log.Debugf("Could not align scanner %d with the scanner %d.", unknownScanner.Id(), globalMap.Id())
+			unknownScanners = append(unknownScanners[1:], unknownScanners[0])
+			continue
+		}
+
+		globalMap = globalMap.Merge(unknownScanner, difference)
+		knownScanners[unknownScanner.Id()] = difference
+		unknownScanners = unknownScanners[1:]
 	}
 
 	farthestDistance := 0

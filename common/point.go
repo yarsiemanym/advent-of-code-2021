@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"math"
 )
 
 type Point struct {
@@ -38,15 +39,15 @@ func (point *Point) Z() int {
 	return point.z
 }
 
-func (point *Point) Move(slope *Point) *Point {
+func (point *Point) Add(other *Point) *Point {
 	return &Point{
-		x: point.X() + slope.X(),
-		y: point.Y() + slope.Y(),
-		z: point.Z() + slope.Z(),
+		x: point.X() + other.X(),
+		y: point.Y() + other.Y(),
+		z: point.Z() + other.Z(),
 	}
 }
 
-func (point *Point) Difference(other *Point) *Point {
+func (point *Point) Subtract(other *Point) *Point {
 	return &Point{
 		x: point.X() - other.X(),
 		y: point.Y() - other.Y(),
@@ -56,6 +57,12 @@ func (point *Point) Difference(other *Point) *Point {
 
 func (point *Point) ManhattanDistance(otherPoint *Point) int {
 	return AbsInt(point.x-otherPoint.x) + AbsInt(point.y-otherPoint.y) + AbsInt(point.z-otherPoint.z)
+}
+
+func (point *Point) Distance(otherPoint *Point) float64 {
+	diff := point.Subtract(otherPoint)
+	dist := math.Sqrt(math.Pow(float64(diff.X()), 2) + math.Pow(float64(diff.Y()), 2) + math.Pow(float64(diff.Z()), 2))
+	return dist
 }
 
 func (point *Point) RotateXClockwise() *Point {
