@@ -297,7 +297,7 @@ After step 10, there have been a total of `204` flashes. Fast forwarding, here i
     6789998766
     
 
-After 100 steps, there have been a total of `_1656_` flashes.
+After 100 steps, there have been a total of `1656` flashes.
 
 Given the starting energy levels of the dumbo octopuses in your cavern, simulate 100 steps. _How many total flashes are there after 100 steps?_
 
@@ -308,7 +308,7 @@ Your puzzle answer was `1717`.
 
 It seems like the individual flashes aren't bright enough to navigate. However, you might have a better option: the flashes seem to be _synchronizing_!
 
-In the example above, the first time all octopuses flash simultaneously is step `_195_`:
+In the example above, the first time all octopuses flash simultaneously is step `195`:
 
     After step 193:
     5877777777
