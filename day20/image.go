@@ -57,9 +57,9 @@ func (image *Image) Width() int {
 	return image.plane.Span().End().X() + 1
 }
 
-func (image *Image) GetPixelAt(point *common.Point) uint64 {
+func (image *Image) GetPixelAt(point *common.Point, fill uint64) uint64 {
 	if point.X() < 0 || point.X() >= image.Width() || point.Y() < 0 || point.Y() >= image.Height() {
-		return 0
+		return fill
 	}
 
 	value := image.plane.GetValueAt(point)
@@ -75,7 +75,7 @@ func (image *Image) CountIlluminatedPixels() uint64 {
 	illuminatedPixels := uint64(0)
 
 	for _, point := range image.plane.GetAllPoints() {
-		illuminatedPixels += image.GetPixelAt(point)
+		illuminatedPixels += image.GetPixelAt(point, 0)
 	}
 
 	return illuminatedPixels
@@ -87,7 +87,7 @@ func (image *Image) String() string {
 	for y := 0; y < image.Height(); y++ {
 		for x := 0; x < image.Width(); x++ {
 			point := common.New2DPoint(x, y)
-			pixel := image.GetPixelAt(point)
+			pixel := image.GetPixelAt(point, 0)
 			switch pixel {
 			case 1:
 				output += vt100.Sprint(" ", vt100.YellowBackgroundAttribute)

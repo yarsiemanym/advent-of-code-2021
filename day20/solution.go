@@ -24,11 +24,9 @@ func solvePart1(enhancer *ImageEnhancer, image *Image) string {
 	log.Info("Solving part 1.")
 
 	log.Debugf("Image\n%s", image)
-
-	image = enhancer.Enhance(image)
+	image = enhancer.EnhanceImage(image)
 	log.Debugf("Image\n%s", image)
-
-	image = enhancer.Enhance(image)
+	image = enhancer.EnhanceImage(image)
 	log.Debugf("Image\n%s", image)
 
 	log.Info("Part 1 solved.")
