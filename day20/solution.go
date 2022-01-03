@@ -16,7 +16,7 @@ func Solve(puzzle *common.Puzzle) common.Answer {
 		Year:  puzzle.Year,
 		Day:   puzzle.Day,
 		Part1: solvePart1(enhancer, image),
-		Part2: solvePart2(),
+		Part2: solvePart2(enhancer, image),
 	}
 }
 
@@ -25,7 +25,6 @@ func solvePart1(enhancer *ImageEnhancer, image *Image) string {
 
 	log.Debugf("Image\n%s", image)
 	image = enhancer.EnhanceImage(image)
-	log.Debugf("Image\n%s", image)
 	image = enhancer.EnhanceImage(image)
 	log.Debugf("Image\n%s", image)
 
@@ -33,13 +32,19 @@ func solvePart1(enhancer *ImageEnhancer, image *Image) string {
 	return strconv.FormatUint(image.CountIlluminatedPixels(), 10)
 }
 
-func solvePart2() string {
+func solvePart2(enhancer *ImageEnhancer, image *Image) string {
 	log.Info("Solving part 2.")
 
-	// TODO: implement part 2 solution
+	log.Debugf("Image\n%s", image)
+
+	for i := 0; i < 50; i++ {
+		image = enhancer.EnhanceImage(image)
+	}
+
+	log.Debugf("Image\n%s", image)
 
 	log.Info("Part 2 solved.")
-	return "Not implemented."
+	return strconv.FormatUint(image.CountIlluminatedPixels(), 10)
 }
 
 func parseInput(text string) (*ImageEnhancer, *Image) {
